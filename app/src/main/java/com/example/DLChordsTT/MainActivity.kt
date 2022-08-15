@@ -1,4 +1,4 @@
-package com.example.dlchordstt1
+package com.example.DLChordsTT
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.dlchordstt1.ui.theme.DLChordsTheme
+import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

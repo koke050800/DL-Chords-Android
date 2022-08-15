@@ -1,4 +1,4 @@
-package com.example.dlchordstt1.ui.theme
+package com.example.DLChordsTT.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Shapes

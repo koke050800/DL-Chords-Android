@@ -1,4 +1,4 @@
-package com.example.dlchordstt1
+package com.example.DLChordsTT
 
 import org.junit.Test
 

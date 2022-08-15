@@ -1,4 +1,4 @@
-package com.example.dlchordstt1.features.lists_music.ui.components
+package com.example.DLChordsTT.features.lists_music.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -10,11 +10,10 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.dlchordstt1.ui.theme.DLChordsTheme
+import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
 @Preview(showBackground = true)

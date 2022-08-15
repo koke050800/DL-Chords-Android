@@ -1,4 +1,4 @@
-package com.example.dlchordstt1.ui.theme
+package com.example.DLChordsTT.ui.theme
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
