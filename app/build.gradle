@@ -49,6 +49,15 @@ dependencies {
 
     //constantes
     def accompanist_version = '0.20.0'
+    def coroutines_version = '1.5.2-native-mt'
+    def activity_version = '1.4.0'
+    def fragment_version = "1.3.6"
+    def retrofit_version = '2.9.0'
+    def moshi_version = '1.12.0'
+    def hilt_version = '2.40.1'
+    def paging_version = "3.0.1"
+    def room_version = "2.3.0"
+    def work_version = "2.7.0"
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation "androidx.compose.ui:ui:$compose_version"
@@ -64,4 +73,29 @@ dependencies {
 
     //Dependencias de compose agregadas
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+
+    // Dependencias de Compose
+    implementation "androidx.compose.ui:ui:$compose_version"
+    implementation "androidx.compose.ui:ui-tooling:$compose_version"
+    implementation "androidx.compose.ui:ui-viewbinding:$compose_version"
+    implementation "androidx.compose.foundation:foundation:$compose_version"
+    implementation "androidx.compose.material:material:$compose_version"
+    implementation "androidx.compose.material:material-icons-core:$compose_version"
+    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0-alpha03'
+    implementation "androidx.activity:activity-compose:$activity_version"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
+    implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-swiperefresh:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-placeholder-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-navigation-material:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$accompanist_version"
+    implementation "io.coil-kt:coil-compose:1.3.2"
+    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
+
 }
