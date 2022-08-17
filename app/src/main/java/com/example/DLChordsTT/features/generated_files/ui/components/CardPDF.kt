@@ -8,6 +8,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.rounded.FileDownload
+import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,7 +61,7 @@ fun CardPDF() {
                         }
                     ) {
                         Icon(
-                            Icons.Default.Info,
+                            Icons.Rounded.Visibility,
                             contentDescription = "MenuAlmacenados"
                         )
                     }
@@ -69,7 +72,7 @@ fun CardPDF() {
                         }
                     ) {
                         Icon(
-                            Icons.Default.ArrowDropDown,
+                            Icons.Rounded.FileDownload,
                             contentDescription = "MenuAlmacenados"
                         )
                     }
