@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.ui.components.SwitchOptions
 import com.example.DLChordsTT.features.ui.components.ToggleOptionSwitch
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+//import com.google.accompanist.pager.ExperimentalPagerApi
+//import com.google.accompanist.pager.HorizontalPager
+//import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-
+/*
 @OptIn(ExperimentalPagerApi::class, InternalCoroutinesApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun AudioListSection(
@@ -82,3 +82,4 @@ fun AudioListSection(
         }
     }
 }
+*/
