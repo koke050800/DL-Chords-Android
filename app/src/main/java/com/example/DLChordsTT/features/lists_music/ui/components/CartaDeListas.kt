@@ -48,6 +48,7 @@ fun CartaListaAlmacenados() {
                     ) {
                         Icon(
                             Icons.Default.MoreVert,
+                            tint = DLChordsTheme.colors.primary,
                             contentDescription = "MenuAlmacenados"
                         )
                     }
