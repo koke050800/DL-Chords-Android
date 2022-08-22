@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.DLChordsTT.features.lists_music.ui.navigation.Destinations.*
+import com.example.DLChordsTT.features.lists_music.navigation.Destinations.*
 
 @Composable
 fun NavigationHost(

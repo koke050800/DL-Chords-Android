@@ -4,12 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.DLChordsTT.features.lists_music.ui.components.BottomNavigationBar
-import com.example.DLChordsTT.features.lists_music.ui.navigation.Destinations.*
+import com.example.DLChordsTT.features.lists_music.navigation.Destinations.*
 import com.example.DLChordsTT.features.lists_music.ui.screens.NavigationHost
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 

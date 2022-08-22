@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.lists_music.ui.navigation
+package com.example.DLChordsTT.features.lists_music.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*

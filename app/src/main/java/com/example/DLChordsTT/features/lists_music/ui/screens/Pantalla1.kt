@@ -13,16 +13,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.DLChordsTT.features.lists_music.navigation.Destinations
+import com.example.DLChordsTT.ui.theme.DLChordsTheme
+
 
 @Composable
 fun Pantalla1(){
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize(),
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -30,5 +33,13 @@ fun Pantalla1(){
             text = "PANTALLA 1",
             style = TextStyle(color = Color.Black, fontSize = 42.sp, fontWeight = FontWeight.Black)
         )
+    }
+}
+
+@Preview
+@Composable
+fun StoredListPreview(){
+    DLChordsTheme {
+        Pantalla1()
     }
 }
