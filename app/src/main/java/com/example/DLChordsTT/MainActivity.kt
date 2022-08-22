@@ -1,5 +1,6 @@
 package com.example.DLChordsTT
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,10 @@ class MainActivity : ComponentActivity() {
                 //NavigationHost(navController = )
             }
         }
+
+
     }
+
+
 }
 
