@@ -13,22 +13,22 @@ object DLChordsDarkTheme : DLChordsColors {
     override val warning = Color(0xFFFFE082)
     override val danger = Color(0xFFEF9A9A)
 
-    override val toolbar = Color(0xFF272727)
+    override val toolbar = primaryColor.s300
     override val onToolbar = Color.White
 
     override val divider = Color(0xFF595959)
 
     override val isLight = false
 
-    override val primary = primaryColor.s200
-    override val primaryVariant = primaryColor.s500
+    override val primary = primaryColor.s300
+    override val primaryVariant = primaryColor.s600
     override val onPrimary = Color.Black
 
-    override val secondary = secondaryColor.s200
-    override val secondaryVariant = secondaryColor.s500
+    override val secondary = secondaryColor.s300
+    override val secondaryVariant = secondaryColor.s600
     override val onSecondary = Color.Black
 
-    override val background = Color(0xFF383838)
+    override val background = Color(0xFF939191)
 
     //override val background = Color(0xFF121212)
     override val onBackground = primaryText
@@ -38,6 +38,8 @@ object DLChordsDarkTheme : DLChordsColors {
 
     override val error = Color(0xFFE57373)
     override val onError = Color.Black
+
+    override val cardColor = Color(0xFFF5F2F2)
 
     override fun toColors() = Colors(
         primary,

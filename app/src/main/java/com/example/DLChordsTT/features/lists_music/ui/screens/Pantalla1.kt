@@ -17,10 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun Pantalla1(
-    navegarPantalla2: (String) -> Unit
-) {
-    var textValue by remember { mutableStateOf("") }
+fun Pantalla1(){
 
     Column(
         modifier = Modifier
@@ -33,15 +30,5 @@ fun Pantalla1(
             text = "PANTALLA 1",
             style = TextStyle(color = Color.Black, fontSize = 42.sp, fontWeight = FontWeight.Black)
         )
-
-        TextField(
-            value = textValue,
-            onValueChange = { textValue = it },
-            label = { Text("Introducir Texto") }
-        )
-
-        Button(onClick = { navegarPantalla2(textValue) }) {
-            Text("Enviar")
-        }
     }
 }
