@@ -74,6 +74,8 @@ interface DLChordsColors {
 
     val divider: Color
 
+    val cardColor: Color
+
     fun toColors(): Colors
 }
 
