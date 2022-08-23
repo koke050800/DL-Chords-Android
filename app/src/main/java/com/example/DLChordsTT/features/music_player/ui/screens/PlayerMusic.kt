@@ -18,6 +18,7 @@ import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.round
 
@@ -26,19 +27,20 @@ import kotlin.math.round
 @Preview(showBackground = true)
 fun PlayerMusicStored() {
     DLChordsTheme {
-        com.example.DLChordsTT.features.music_player.ui.components.TopAppBar()
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(20.dp),
 
         ) {
+            TopAppBarPlayer(textOnTop = "Audio_01_Como_La_Flor")
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
                     .width(254.dp)
                     .align(Alignment.CenterHorizontally)
-                    .padding(top = 60.dp, bottom = 25.dp),
+                    .padding(top = 38.dp, bottom = 25.dp),
 
             ) {
                 Image(

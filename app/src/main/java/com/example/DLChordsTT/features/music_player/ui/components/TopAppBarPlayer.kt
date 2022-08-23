@@ -18,37 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
-
-fun TopAppBar(){
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = "Audio_01_Como_La_Flor",
-                        style = DLChordsTheme.typography.h5,
-                        color = DLChordsTheme.colors.primary
-                    )
-                },
-                backgroundColor = DLChordsTheme.colors.background,
-                navigationIcon = {
-                    IconButton(onClick = {  }) {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBack,
-                            contentDescription = "Back"
-                        )
-                    }
-                }
-            )
-        }
-    ){}
-}
-@Composable
 fun TopAppBarPlayer(textOnTop: String) {
-
-    var textOnSearchBar by remember {
-        mutableStateOf("")
-    }
 
     Row(modifier = Modifier.fillMaxWidth()) {
 
@@ -63,30 +33,13 @@ fun TopAppBarPlayer(textOnTop: String) {
                 )
             }
         }
-        Text(
-            text = "Audio_01_Como_La_Flor",
-            style = DLChordsTheme.typography.h5,
-            color = DLChordsTheme.colors.primary
-        )
-        /*OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(0.87f)
-                .height(56.dp),
-            value = textOnSearchBar,
-            onValueChange = { textOnSearchBar = it },
-            label = { Text(text = "Buscar por nombre", style = DLChordsTheme.typography.caption) },
-            placeholder = { Text("") },
-            leadingIcon = {
-                IconButton(onClick = { }, enabled = false) {
-                    Icon(
-                        imageVector = Icons.Filled.Search,
-                        contentDescription = "Botón para buscar canciones por nombre"
-                    )
-                }
-            },
-            singleLine = true,
-            shape = RoundedCornerShape(32.dp),
-        )*/
+        Box(modifier = Modifier.align(Alignment.CenterVertically).fillMaxWidth(0.87f)){
+            Text(
+                text = textOnTop,
+                style = DLChordsTheme.typography.h5,
+                color = DLChordsTheme.colors.primary
+            )
+        }
     }
 }
 
@@ -94,6 +47,6 @@ fun TopAppBarPlayer(textOnTop: String) {
 @Composable
 fun TopAppBarPlayerPreview() {
     DLChordsTheme {
-        TopAppBarPlayer("")
+        TopAppBarPlayer("Audio_01_Como_La_Flor")
     }
 }
