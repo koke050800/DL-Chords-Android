@@ -1,62 +1,66 @@
 package com.example.DLChordsTT.features.lists_music.ui.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.icons.filled.SortByAlpha
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 
 @Composable
-fun SearchAndSortBar(textOfSearch:String ){
+fun SearchAndSortBar(textOnSearchBar: String) {
 
-    var createdDate by remember {
+    var textOnSearchBar by remember {
         mutableStateOf("")
     }
 
-    TextField(
-        value = createdDate,
-
-
-
-        onValueChange = { createdDate = it },
-
-        label = { Text("Buscar por nombre") },
-        placeholder = { Text("") },
-        leadingIcon = {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth(0.87f)
+                .height(56.dp),
+            value = textOnSearchBar,
+            onValueChange = { textOnSearchBar = it },
+            label = { Text(text = "Buscar por nombre", style = DLChordsTheme.typography.caption) },
+            placeholder = { Text("") },
+            leadingIcon = {
+                IconButton(onClick = { }, enabled = false) {
+                    Icon(
+                        imageVector = Icons.Filled.Search,
+                        contentDescription = "Botón para buscar canciones por nombre"
+                    )
+                }
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(32.dp),
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+        ) {
             IconButton(onClick = { }) {
                 Icon(
-                    imageVector = Icons.Filled.Search,
-                    contentDescription = "Botón para buscar canciones por nombre"
+                    imageVector = Icons.Filled.SortByAlpha,
+                    contentDescription = "Ordenar ascendente y descendente"
                 )
             }
-        },
-        modifier = Modifier.border(
-            BorderStroke(
-                width = 4.dp,
-                brush = Brush.horizontalGradient(listOf(DLChordsTheme.colors.primary, DLChordsTheme.colors.secondary))
-            ),
-            shape =  DLChordsTheme.shapes.large
-        ),
-    )
-
+        }
+    }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun SearchAndSortBarPreview(){
+fun SearchAndSortBarPreview() {
     DLChordsTheme {
         SearchAndSortBar("")
     }
