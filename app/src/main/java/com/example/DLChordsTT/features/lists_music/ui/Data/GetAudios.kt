@@ -7,10 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.platform.LocalContext
 import java.io.File
 
-class GetAudios : AppCompatActivity( ) {
-    var MusicListMA: ArrayList<Music> = getAllAudio()
+class GetAudios : AppCompatActivity() {
 
-}
+    var MusicListMA: ArrayList<Music> = getAllAudio()
 
 @SuppressLint("Range")
 private fun getAllAudio(): ArrayList<Music> {
@@ -25,7 +24,6 @@ private fun getAllAudio(): ArrayList<Music> {
         MediaStore.Audio.Media.DATE_ADDED,
         MediaStore.Audio.Media.DATA
     )
-    val context : Context
     val cursor = applicationContext.contentResolver.query(
         MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection,
         null, MediaStore.Audio.Media.DATE_ADDED + " DESC", null
@@ -57,4 +55,5 @@ private fun getAllAudio(): ArrayList<Music> {
         cursor.close()
     }
     return templist
+}
 }
