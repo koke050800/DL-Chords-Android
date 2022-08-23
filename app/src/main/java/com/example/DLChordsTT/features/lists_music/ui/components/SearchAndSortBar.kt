@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.SortByAlpha
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Green
 import androidx.compose.ui.graphics.Color.Companion.Red
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -30,20 +31,14 @@ fun SearchAndSortBar(textOnSearchBar: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 24.dp)
+            .padding(top = 24.dp, bottom = 16.dp)
     ) {
 
-        Box(
-            modifier = Modifier
-                .background(
-                    DLChordsTheme.colors.cardColor,
-                    shape = RoundedCornerShape(32.dp)
-                )
-                .fillMaxWidth(0.87f)
-                .height(60.dp)
-        ) {
+        OutlinedTextFieldBackground(DLChordsTheme.colors.cardColor) {
             OutlinedTextField(
-                modifier = Modifier.fillMaxSize(1f),
+                modifier = Modifier
+                    .fillMaxWidth(0.87f)
+                    .height(64.dp),
                 value = textOnSearchBar,
                 onValueChange = { textOnSearchBar = it },
                 label = {
@@ -81,6 +76,28 @@ fun SearchAndSortBar(textOnSearchBar: String) {
                 )
             }
         }
+    }
+}
+@Composable
+fun OutlinedTextFieldBackground(
+    color: Color,
+    content: @Composable () -> Unit
+) {
+    // This box just wraps the background and the OutlinedTextField
+    Box {
+        // This box works as background
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .padding(top = 8.dp) // adding some space to the label
+                .background(
+                    color,
+                    // rounded corner to match with the OutlinedTextField
+                    shape = RoundedCornerShape(32.dp)
+                )
+        )
+        // OutlineTextField will be the content...
+        content()
     }
 }
 

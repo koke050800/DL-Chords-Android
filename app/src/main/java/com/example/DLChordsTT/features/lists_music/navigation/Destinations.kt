@@ -9,6 +9,6 @@ sealed class Destinations(
     val title: String,
     val icon: ImageVector
 ) {
-    object Pantalla1: Destinations("pantalla1", "Pantalla 1", Icons.Filled.MusicNote)
-    object Pantalla2: Destinations("pantalla2", "Pantalla 2", Icons.Filled.LibraryMusic)
+    object Pantalla1: Destinations("pantalla1", "Almacenados", Icons.Filled.MusicNote)
+    object Pantalla2: Destinations("pantalla2", "Procesados", Icons.Filled.LibraryMusic)
 }

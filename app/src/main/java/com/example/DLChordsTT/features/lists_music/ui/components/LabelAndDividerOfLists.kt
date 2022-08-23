@@ -13,7 +13,7 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
 fun LabelAndDividerOfLists(label: String = "Label"){
-    Row() {
+    Row(Modifier.padding(bottom = 16.dp)) {
         Text(
             text = label,
             style = DLChordsTheme.typography.body2,

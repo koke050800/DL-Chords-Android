@@ -2,10 +2,7 @@ package com.example.DLChordsTT.features.lists_music.ui.screens
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,24 +21,21 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
 fun Pantalla1() {
-
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
+            .fillMaxHeight(0.93f)
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchAndSortBar(textOnSearchBar = "")
-        LabelAndDividerOfLists(label = "Audios Almacenados")
-        LazyColumn(modifier = Modifier.padding(top = 16.dp)) {
+        LazyColumn() {
+            item { LabelAndDividerOfLists(label = "Audios Almacenados") }
             // Add 5 items
-            items(8) { index ->
+            items(12) { index ->
                 CartaListaAlmacenados()
             }
-
-
         }
-
     }
 }
 
