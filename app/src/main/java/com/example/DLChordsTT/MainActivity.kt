@@ -1,10 +1,16 @@
 package com.example.DLChordsTT
 
-import android.content.Context
-import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
+import com.example.DLChordsTT.features.lists_music.navigation.Destinations
+import com.example.DLChordsTT.features.lists_music.ui.components.BottomNavigationBar
+import com.example.DLChordsTT.features.lists_music.ui.screens.NavigationHost
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 class MainActivity : ComponentActivity() {
@@ -13,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DLChordsTheme() {
-                //NavigationHost(navController = )
+                MainScreen()
             }
         }
 
@@ -26,8 +32,8 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     val navigationItems = listOf(
-        StoredAudios,
-        Pantalla2,
+        Destinations.StoredAudios,
+        Destinations.Pantalla2,
 
     )
 
