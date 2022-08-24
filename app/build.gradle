@@ -100,5 +100,4 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-
 }

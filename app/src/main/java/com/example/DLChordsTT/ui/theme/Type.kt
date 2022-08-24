@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.sp
 
 val Card = FontFamily(
     Font(
+
         R.font.card,
         style = FontStyle.Normal,
         weight = FontWeight.Normal
