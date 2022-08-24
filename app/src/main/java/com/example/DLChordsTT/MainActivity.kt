@@ -27,7 +27,7 @@ fun MainScreen() {
     val navController = rememberNavController()
 
     val navigationItems = listOf(
-        Pantalla1,
+        StoredAudios,
         Pantalla2,
 
     )

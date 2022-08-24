@@ -1,26 +1,37 @@
 package com.example.DLChordsTT.features.lists_music.ui.screens
 
+import android.os.Bundle
+import androidx.activity.compose.setContent
+//import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.DLChordsTT.features.lists_music.navigation.Destinations
 import com.example.DLChordsTT.features.lists_music.ui.components.CartaListaAlmacenados
 import com.example.DLChordsTT.features.lists_music.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.lists_music.ui.components.SearchAndSortBar
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+/*@AndroidEntryPoint
+class StoredAudiosActivity: AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setContent {
+            DLChordsTheme(){
+                StoredAudiosScreen()
+            }
+        }
+    }
+}*/
 
 @Composable
-fun Pantalla1() {
+fun StoredAudiosScreen() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,6 +54,6 @@ fun Pantalla1() {
 @Composable
 fun StoredListPreview() {
     DLChordsTheme {
-        Pantalla1()
+        StoredAudiosScreen()
     }
 }

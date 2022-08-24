@@ -48,7 +48,6 @@ android {
 dependencies {
 
 
-
     //constantes
     def accompanist_version = '0.20.0'
     def coroutines_version = '1.5.2-native-mt'
