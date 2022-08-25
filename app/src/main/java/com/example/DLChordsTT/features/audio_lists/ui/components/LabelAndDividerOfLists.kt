@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.lists_music.ui.components
+package com.example.DLChordsTT.features.audio_lists.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row

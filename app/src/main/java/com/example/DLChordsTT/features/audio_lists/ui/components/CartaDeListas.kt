@@ -1,7 +1,6 @@
-package com.example.DLChordsTT.features.lists_music.ui.components
+package com.example.DLChordsTT.features.audio_lists.ui.components
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -10,15 +9,15 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import com.example.DLChordsTT.features.audio_lists.data.Audio
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import kotlin.math.floor
 
 @Composable
-@Preview(showBackground = true)
-fun CartaListaAlmacenados(title: String = "Titulo de Audio", duration: String = "01:11 min") {
+fun CartaListaAlmacenados(audio: Audio) {
     DLChordsTheme() {
         Card(
             modifier = Modifier
@@ -35,9 +34,9 @@ fun CartaListaAlmacenados(title: String = "Titulo de Audio", duration: String = 
                         .padding(8.dp)
                         .align(Alignment.CenterVertically)
                 ) {
-                    Text(text = title, style = DLChordsTheme.typography.subtitle1, color = DLChordsTheme.colors.primaryText, maxLines = 1)
+                    Text(text = audio.displayName, style = DLChordsTheme.typography.subtitle1, color = DLChordsTheme.colors.primaryText, maxLines = 1)
                     Spacer(modifier = Modifier.padding(vertical = 2.dp))
-                    Text(text = duration, style = DLChordsTheme.typography.subtitle2, color = DLChordsTheme.colors.secondaryText)
+                    Text(text = timeStampToDuration(audio.duration.toLong()), style = DLChordsTheme.typography.subtitle2, color = DLChordsTheme.colors.secondaryText)
                 }
                 Box(
                     modifier = Modifier
@@ -59,5 +58,36 @@ fun CartaListaAlmacenados(title: String = "Titulo de Audio", duration: String = 
             }
         }
     }
+}
 
+private fun timeStampToDuration(position: Long): String {
+    val totalSeconds = floor(position / 1E3).toInt()
+    val minutes = totalSeconds / 60
+    val remainingSeconds = totalSeconds - (minutes * 60)
+
+    return if (position < 0) {
+        "--:--"
+    } else {
+        if (minutes < 10) "0%d:%02d".format(
+            minutes,
+            remainingSeconds
+        ) else "%d:%02d".format(minutes, remainingSeconds)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartaListaAlmacenadosPreview() {
+    DLChordsTheme() {
+        val audioObjectPreview = Audio(
+            uri = "".toUri(),
+            displayName = "Me iré con ella",
+            id = 0L,
+            artist = "Santa Fe Klan",
+            data = "",
+            duration = 467491,
+            title = "TITLE"
+        )
+        CartaListaAlmacenados(audio = audioObjectPreview)
+    }
 }

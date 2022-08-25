@@ -8,9 +8,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
-import com.example.DLChordsTT.features.lists_music.navigation.Destinations
-import com.example.DLChordsTT.features.lists_music.ui.components.BottomNavigationBar
-import com.example.DLChordsTT.features.lists_music.ui.screens.NavigationHost
+import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
+import com.example.DLChordsTT.features.audio_lists.ui.components.BottomNavigationBar
+import com.example.DLChordsTT.features.audio_lists.ui.screens.NavigationHost
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.lists_music.ui.components
+package com.example.DLChordsTT.features.audio_lists.ui.components
 
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.DLChordsTT.features.lists_music.navigation.Destinations
+import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
