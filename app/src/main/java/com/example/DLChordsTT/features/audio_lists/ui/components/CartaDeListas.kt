@@ -25,7 +25,7 @@ fun CartaListaAlmacenados(audio: Audio) {
                 .fillMaxWidth(1f),
             shape = RoundedCornerShape(4.dp),
             backgroundColor = DLChordsTheme.colors.cardColor,
-            border = BorderStroke(1.dp,DLChordsTheme.colors.divider),
+            border = BorderStroke(1.dp, DLChordsTheme.colors.divider),
         ) {
             Row(Modifier.padding(horizontal = 0.dp)) {
                 Column(
@@ -34,9 +34,18 @@ fun CartaListaAlmacenados(audio: Audio) {
                         .padding(8.dp)
                         .align(Alignment.CenterVertically)
                 ) {
-                    Text(text = audio.displayName, style = DLChordsTheme.typography.subtitle1, color = DLChordsTheme.colors.primaryText, maxLines = 1)
+                    Text(
+                        text = audio.displayName,
+                        style = DLChordsTheme.typography.subtitle1,
+                        color = DLChordsTheme.colors.primaryText,
+                        maxLines = 1
+                    )
                     Spacer(modifier = Modifier.padding(vertical = 2.dp))
-                    Text(text = timeStampToDuration(audio.duration.toLong()), style = DLChordsTheme.typography.subtitle2, color = DLChordsTheme.colors.secondaryText)
+                    Text(
+                        text = timeStampToDuration(audio.duration.toLong()),
+                        style = DLChordsTheme.typography.subtitle2,
+                        color = DLChordsTheme.colors.secondaryText
+                    )
                 }
                 Box(
                     modifier = Modifier

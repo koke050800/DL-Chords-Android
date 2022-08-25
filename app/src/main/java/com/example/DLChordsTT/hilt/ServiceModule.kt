@@ -1,5 +1,5 @@
 package com.example.DLChordsTT.hilt
-
+/*
 import android.content.Context
 import com.google.android.exoplayer2.C
 import com.google.android.exoplayer2.ExoPlayer
@@ -8,7 +8,7 @@ import com.google.android.exoplayer2.database.StandaloneDatabaseProvider
 import com.google.android.exoplayer2.upstream.DefaultDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.NoOpCacheEvictor
-import com.google.android.exoplayer2.upstream.cache.SimpleCache
+import com.google.android.exoplayer2.upstream.cache.SimpleCache*/
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,7 +21,7 @@ import java.io.File
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
-    @Provides
+    /*@Provides
     @ServiceScoped
     fun provideAudioAttributes(): AudioAttributes =
         AudioAttributes.Builder()
@@ -62,5 +62,5 @@ object ServiceModule {
             setCache(cache)
             setUpstreamDataSourceFactory(dataSource)
         }
-    }
+    }*/
 }

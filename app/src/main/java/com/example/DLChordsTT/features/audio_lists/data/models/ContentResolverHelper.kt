@@ -76,11 +76,17 @@ constructor(@ApplicationContext val context: Context) {
                             id
                         )
 
-                        audioList += Audio(
+                        val audioTemp = Audio(
                             uri, displayName, id, artist, data, duration, title
                         )
 
-
+                        if (audioTemp.data.contains("/storage/emulated/0/Music/DLChords")) {
+                            if (audioTemp.data.substring(audioTemp.data.length - 4).equals(".mp3")
+                                || (audioTemp.data.substring(audioTemp.data.length - 5).equals(".flac"))
+                            ) {
+                                audioList += audioTemp
+                            }
+                        }
                     }
 
                 }

@@ -9,5 +9,5 @@ data class Audio(
     val artist:String,
     val data:String,
     val duration:Int,
-    val title:String
+    val title:String,
 )

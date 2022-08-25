@@ -3,7 +3,8 @@ package com.example.DLChordsTT.features.audio_lists.ui.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.*
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -15,6 +16,22 @@ import com.example.DLChordsTT.features.audio_lists.ui.components.LabelAndDivider
 import com.example.DLChordsTT.features.audio_lists.ui.components.SearchAndSortBar
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
+/*
+@AndroidEntryPoint
+class StoredAudioActivity : AppCompatActivity() {
+    private lateinit var audioViewModel: AudioViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val audioViewModel: AudioViewModel by viewModels()
+        val storedAudiosList = audioViewModel.storedAudioList
+
+        setContent {
+            StoredAudiosScreen(storedAudiosList)
+        }
+    }
+}*/
 
 @Composable
 fun StoredAudiosScreen(storedAudioList: List<Audio>) {
@@ -28,12 +45,34 @@ fun StoredAudiosScreen(storedAudioList: List<Audio>) {
         SearchAndSortBar(textOnSearchBar = "")
         LazyColumn() {
             item { LabelAndDividerOfLists(label = "Audios Almacenados") }
-            items(storedAudioList) { audioElementList: Audio ->
-                CartaListaAlmacenados(audio = audioElementList)
-                /*AudioItem(
-                    audio = audioElementList,
-                    onItemClick = { onItemClick.invoke(audioElementList)},
-                )*/
+            if (storedAudioList.isNotEmpty()){
+                items(storedAudioList) { audioElementList: Audio ->
+                    CartaListaAlmacenados(audio = audioElementList)
+                    /*AudioItem(
+                        audio = audioElementList,
+                        onItemClick = { onItemClick.invoke(audioElementList)},
+                    )*/
+                }
+            } else {
+                item {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Column(modifier = Modifier.fillMaxSize().align(Alignment.Center)) {
+                            Text(
+                                text = "No hay audios almacenados en la carpeta \"DLChords\"",
+                                style = DLChordsTheme.typography.h5,
+                                color = DLChordsTheme.colors.primaryText,
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            )
+                            Text(
+                                text = "Esta carpeta esta ubicada en\n\"/storage/emulated/0/Music/DLChords\"",
+                                style = DLChordsTheme.typography.h5,
+                                color = DLChordsTheme.colors.primaryText,
+                                modifier = Modifier.padding(vertical = 16.dp)
+                            )
+                        }
+
+                    }
+                }
             }
         }
     }
