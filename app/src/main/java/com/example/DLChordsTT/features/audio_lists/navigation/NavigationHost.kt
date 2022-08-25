@@ -5,12 +5,13 @@ import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.DLChordsTT.features.audio_lists.data.Audio
+import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.navigation.Destinations.*
 
 @Composable
 fun NavigationHost(
-    navController: NavHostController
+    navController: NavHostController,
+    storedAudiosList: List<Audio>
 ) {
     var audioListForPreview = mutableListOf<Audio>()
 
@@ -28,7 +29,7 @@ fun NavigationHost(
     )
     NavHost(navController = navController, startDestination = StoredAudios.route) {
         composable(StoredAudios.route) {
-            StoredAudiosScreen(audioListForPreview)
+            StoredAudiosScreen(storedAudiosList)
         }
         composable(Pantalla2.route) {
             Pantalla2(audioListForPreview)

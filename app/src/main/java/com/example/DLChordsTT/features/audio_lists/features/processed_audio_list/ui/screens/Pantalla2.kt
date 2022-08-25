@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import com.example.DLChordsTT.features.audio_lists.data.Audio
+import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.ui.components.CartaListaAlmacenados
 import com.example.DLChordsTT.features.audio_lists.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.audio_lists.ui.components.SearchAndSortBar
