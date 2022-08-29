@@ -1,18 +1,12 @@
 package com.example.DLChordsTT.features.generated_files.database.model
 
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.util.Log
-import androidx.activity.viewModels
-import androidx.annotation.WorkerThread
-import androidx.core.net.toUri
-import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewModel
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -31,6 +25,7 @@ constructor(@ApplicationContext val context: Context) {
         duration = 267491,
         title = "TITLE"
     ))
+
 init{
     getBDAudioData()
    // addfiles()
@@ -86,6 +81,7 @@ fun addfiles(){
     fun añadir( dataBaseAudios: List<AudioProc> ) {
 
         println(" Hola en añadir " + dataBaseAudios.size)
+
         this.dataBaseAudios = dataBaseAudios
         println(" Hola en añadir " + this.dataBaseAudios.size)
         println(" Hola y datos " + this.dataBaseAudios.toString())

@@ -24,9 +24,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+            val audioprocViewModel: AudioProcViewModel by viewModels()
+            val procAudiosList = audioprocViewModel.processedAudioList
 
 
    setContent {
@@ -40,8 +44,7 @@ class MainActivity : ComponentActivity() {
                     val audioViewModel: AudioViewModel by viewModels()
                     val storedAudiosList = audioViewModel.storedAudioList
 
-                    val audioprocViewModel: AudioProcViewModel by viewModels()
-                    val procAudiosList = audioprocViewModel.processedAudioList
+
 
                          /*var storedAudiosList = mutableListOf<Audio>()
 
