@@ -31,8 +31,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-            val audioprocViewModel: AudioProcViewModel by viewModels()
-            val procAudiosList = audioprocViewModel.processedAudioList
+
 
 
    setContent {
@@ -44,12 +43,12 @@ class MainActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-                    val storedAudiosList = audioViewModel.storedAudioList
+                    val audioprocViewModel: AudioProcViewModel by viewModels()
 
-                println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
+              //  println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
 
 
-                    MainScreen(audioViewModel = audioViewModel, processedAudiosList = procAudiosList )
+                    MainScreen(audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel )
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -63,7 +62,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(audioViewModel: AudioViewModel,processedAudiosList: MutableList<AudioProc>) {
+fun MainScreen(audioViewModel: AudioViewModel,audioprocViewModel: AudioProcViewModel) {
     val navController = rememberNavController()
     val navigationItems = listOf(
         Destinations.StoredAudios,
@@ -78,7 +77,7 @@ fun MainScreen(audioViewModel: AudioViewModel,processedAudiosList: MutableList<A
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHost(navController, audioViewModel = audioViewModel, processedAudiosList = processedAudiosList)
+        NavigationHost(navController, audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel)
     }
 }
 

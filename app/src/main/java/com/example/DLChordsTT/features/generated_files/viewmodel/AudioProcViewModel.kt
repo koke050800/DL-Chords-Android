@@ -1,46 +1,56 @@
 package com.example.DLChordsTT.features.generated_files.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.data.repositories.AudioRepository
 import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.features.generated_files.database.repositories.AudioProcRepository
+import com.google.accompanist.swiperefresh.SwipeRefreshState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AudioProcViewModel  @Inject constructor(
-private val repository: AudioProcRepository
+class AudioProcViewModel @Inject constructor(
+    private val audioprocRepository: AudioProcRepository
 ) : ViewModel() {
     var processedAudioList = mutableListOf<AudioProc>()
+    val isRefreshing = SwipeRefreshState(false)
+    val isLoading = mutableStateOf(false)
 
     init {
-        viewModelScope.launch {
-            processedAudioList += getProcAudios()
-        }
+        isLoading.value = true
+        getProcAudios()
     }
 
-    private suspend fun getProcAudios(): List<AudioProc> {
-        println("Estoy en viewmodel y " + repository.getDataBase().size)
-        var processedAudioList =  repository.getDataBase()
-        println("Estoy en view con la variable y " + repository.getDataBase().size)
 
-
-        return repository.getDataBase().map {
-            it.copy(
-                duration = it.duration,
-                data = it.data,
-                artist = it.artist,
-                displayName = it.displayName,
-                id = it.id,
-                title = it.title,
-                id_file =  it.id_file,
-                )
+    fun getProcAudios() = viewModelScope.launch {
+        if (!isLoading.value) {
+            isRefreshing.isRefreshing = true
         }
+        kotlin.runCatching {
+            audioprocRepository.getDataBase()
+        }.onSuccess {
+            processedAudioList.clear()
+            processedAudioList.addAll(it.map {
 
+                it.copy(
+                    duration = it.duration,
+                    data = it.data,
+                    artist = it.artist,
+                    displayName = it.displayName,
+                    id = it.id,
+                    title = it.title,
+                    id_file = it.id_file,
+                )
+            })
+        }.onFailure { println("Falle al extraer datos de BD") }
+
+        isRefreshing.isRefreshing = false
+        isLoading.value = false
 
     }
 
