@@ -7,34 +7,20 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.ui.components.CartaListaAlmacenados
 import com.example.DLChordsTT.features.audio_lists.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.audio_lists.ui.components.SearchAndSortBar
+import com.example.DLChordsTT.features.audio_lists.view_models.AudioViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
-
-/*
-@AndroidEntryPoint
-class StoredAudioActivity : AppCompatActivity() {
-    private lateinit var audioViewModel: AudioViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val audioViewModel: AudioViewModel by viewModels()
-        val storedAudiosList = audioViewModel.storedAudioList
-
-        setContent {
-            StoredAudiosScreen(storedAudiosList)
-        }
-    }
-}*/
+import com.google.accompanist.swiperefresh.SwipeRefresh
 
 @Composable
-fun StoredAudiosScreen(storedAudioList: List<Audio>) {
+fun StoredAudiosScreen(audioViewModel: AudioViewModel = hiltViewModel()) {
+    var storedAudioList = audioViewModel.storedAudioList
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -43,34 +29,44 @@ fun StoredAudiosScreen(storedAudioList: List<Audio>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         SearchAndSortBar(textOnSearchBar = "")
-        LazyColumn() {
-            item { LabelAndDividerOfLists(label = "Audios Almacenados") }
-            if (storedAudioList.isNotEmpty()){
-                items(storedAudioList) { audioElementList: Audio ->
-                    CartaListaAlmacenados(audio = audioElementList)
-                    /*AudioItem(
-                        audio = audioElementList,
-                        onItemClick = { onItemClick.invoke(audioElementList)},
-                    )*/
-                }
-            } else {
-                item {
-                    Box(modifier = Modifier.fillMaxSize()) {
-                        Column(modifier = Modifier.fillMaxSize().align(Alignment.Center)) {
-                            Text(
-                                text = "No hay audios almacenados en la carpeta \"DLChords\"",
-                                style = DLChordsTheme.typography.h5,
-                                color = DLChordsTheme.colors.primaryText,
-                                modifier = Modifier.padding(vertical = 16.dp)
-                            )
-                            Text(
-                                text = "Esta carpeta esta ubicada en\n\"/storage/emulated/0/Music/DLChords\"",
-                                style = DLChordsTheme.typography.h5,
-                                color = DLChordsTheme.colors.primaryText,
-                                modifier = Modifier.padding(vertical = 16.dp)
-                            )
+        SwipeRefresh(
+            state = audioViewModel.isRefreshing,
+            onRefresh = {
+                audioViewModel.getStoredAudios2()
+            }
+        ) {
+            LazyColumn() {
+                item { LabelAndDividerOfLists(label = "Audios Almacenados") }
+                if (storedAudioList.isNotEmpty()) {
+                    items(storedAudioList) { audioElementList: Audio ->
+                        CartaListaAlmacenados(audio = audioElementList)
+                        /*AudioItem(
+                            audio = audioElementList,
+                            onItemClick = { onItemClick.invoke(audioElementList)},
+                        )*/
+                    }
+                } else {
+                    item {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .align(Alignment.Center)
+                            ) {
+                                Text(
+                                    text = "No hay audios almacenados en la carpeta \"DLChords\"",
+                                    style = DLChordsTheme.typography.h5,
+                                    color = DLChordsTheme.colors.primaryText,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+                                Text(
+                                    text = "Esta carpeta esta ubicada en\n\"/storage/emulated/0/Music/DLChords\"",
+                                    style = DLChordsTheme.typography.h5,
+                                    color = DLChordsTheme.colors.primaryText,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+                            }
                         }
-
                     }
                 }
             }
@@ -78,25 +74,3 @@ fun StoredAudiosScreen(storedAudioList: List<Audio>) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun StoredListPreview() {
-    var audioListForPreview = mutableListOf<Audio>()
-
-    for (i in 0..12) audioListForPreview.add(
-        index = i,
-        Audio(
-            uri = "".toUri(),
-            displayName = "Me iré con ella",
-            id = 0L,
-            artist = "Santa Fe Klan",
-            data = "",
-            duration = 765454,
-            title = "TITLE"
-        ),
-    )
-
-    DLChordsTheme {
-        StoredAudiosScreen(audioListForPreview)
-    }
-}

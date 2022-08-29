@@ -6,14 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
 import com.example.DLChordsTT.features.audio_lists.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_lists.ui.screens.NavigationHost
@@ -38,24 +37,7 @@ class MainActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-                    val storedAudiosList = audioViewModel.storedAudioList
-                    /*var storedAudiosList = mutableListOf<Audio>()
-
-                    for (i in 0..12) storedAudiosList.add(
-                        index = i,
-                        Audio(
-                            uri = "".toUri(),
-                            displayName = "Me iré con ella2",
-                            id = 0L,
-                            artist = "Santa Fe Klan",
-                            data = "",
-                            duration = 267491,
-                            title = "TITLE"
-                        ),
-                    )*/
-                    MainScreen(storedAudiosList)
-
-
+                    MainScreen(audioViewModel)
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -67,15 +49,14 @@ class MainActivity : ComponentActivity() {
 
     }
 }
-@OptIn(ExperimentalMaterialApi::class)
+
 @Composable
-fun MainScreen(storedAudiosList: List<Audio>) {
+fun MainScreen(audioViewModel: AudioViewModel) {
     val navController = rememberNavController()
 
     val navigationItems = listOf(
         Destinations.StoredAudios,
-        Destinations.Pantalla2,
-
+        Destinations.Pantalla2
     )
 
     Scaffold(
@@ -83,8 +64,8 @@ fun MainScreen(storedAudiosList: List<Audio>) {
         isFloatingActionButtonDocked = false,
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
-    ){
-        NavigationHost(navController,storedAudiosList)
+    ) {
+        NavigationHost(navController, audioViewModel = audioViewModel)
     }
 }
 
