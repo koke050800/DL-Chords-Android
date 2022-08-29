@@ -10,5 +10,5 @@ sealed class Destinations(
     val icon: ImageVector
 ) {
     object StoredAudios: Destinations("storedaudios", "Almacenados", Icons.Filled.MusicNote)
-    object Pantalla2: Destinations("pantalla2", "Procesados", Icons.Filled.LibraryMusic)
+    object ProcessedAudios: Destinations("processedaudios", "Procesados", Icons.Filled.LibraryMusic)
 }

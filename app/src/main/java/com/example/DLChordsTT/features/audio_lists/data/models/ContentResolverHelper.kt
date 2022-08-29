@@ -1,11 +1,20 @@
 package com.example.DLChordsTT.features.audio_lists.data.models
 
 import android.content.ContentUris
+import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.database.Cursor
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.core.net.toUri
+import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
@@ -33,6 +42,7 @@ constructor(@ApplicationContext val context: Context) {
     fun getCellphoneAudioData(): List<Audio> {
         return getCursorData()
     }
+
 
 
     private fun getCursorData(): MutableList<Audio> {

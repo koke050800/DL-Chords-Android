@@ -13,8 +13,64 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.DLChordsTT.features.audio_lists.data.models.Audio
+import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.floor
+
+@Composable
+fun CartaListaProcesados(audio: AudioProc) {
+
+        DLChordsTheme() {
+        Card(
+            modifier = Modifier
+                .height(64.dp)
+                .fillMaxWidth(1f),
+            shape = RoundedCornerShape(4.dp),
+            backgroundColor = DLChordsTheme.colors.cardColor,
+            border = BorderStroke(1.dp, DLChordsTheme.colors.divider),
+        ) {
+            Row(Modifier.padding(horizontal = 0.dp)) {
+                Column(
+                    modifier = Modifier
+                        .weight(0.80f)
+                        .padding(8.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    Text(
+                        text = audio.displayName,
+                        style = DLChordsTheme.typography.subtitle1,
+                        color = DLChordsTheme.colors.primaryText,
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 2.dp))
+                    Text(
+                        text = timeStampToDuration(audio.duration.toLong()),
+                        style = DLChordsTheme.typography.subtitle2,
+                        color = DLChordsTheme.colors.secondaryText
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .align(Alignment.CenterVertically)
+                ) {
+                    IconButton(
+                        onClick = {
+                            //TODO
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.MoreVert,
+                            tint = DLChordsTheme.colors.primary,
+                            contentDescription = "MenuProcesados"
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun CartaListaAlmacenados(audio: Audio) {
@@ -98,5 +154,22 @@ fun CartaListaAlmacenadosPreview() {
             title = "TITLE"
         )
         CartaListaAlmacenados(audio = audioObjectPreview)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartaListaProcesadosPreview() {
+    DLChordsTheme() {
+        val audioObjectPreview = AudioProc(
+           // uri = "".toUri(),
+            displayName = "Me iré con ella",
+            id = 0L,
+            artist = "Santa Fe Klan",
+            data = "",
+            duration = 467491,
+            title = "TITLE"
+        )
+        CartaListaProcesados(audio = audioObjectPreview)
     }
 }

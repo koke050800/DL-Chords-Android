@@ -17,6 +17,8 @@ import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
 import com.example.DLChordsTT.features.audio_lists.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_lists.ui.screens.NavigationHost
 import com.example.DLChordsTT.features.audio_lists.view_models.AudioViewModel
+import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
+import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -28,7 +30,11 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+
+
+
+
+   setContent {
             DLChordsTheme {
 
                 val permissionState = rememberPermissionState(
@@ -37,7 +43,12 @@ class MainActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-                    MainScreen(audioViewModel)
+                    val audioprocViewModel: AudioProcViewModel by viewModels()
+
+              //  println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
+
+
+                    MainScreen(audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel )
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -51,13 +62,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(audioViewModel: AudioViewModel) {
+fun MainScreen(audioViewModel: AudioViewModel,audioprocViewModel: AudioProcViewModel) {
     val navController = rememberNavController()
-
     val navigationItems = listOf(
         Destinations.StoredAudios,
-        Destinations.Pantalla2
+        Destinations.ProcessedAudios,
+
     )
+
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController, items = navigationItems) },
@@ -65,7 +77,7 @@ fun MainScreen(audioViewModel: AudioViewModel) {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHost(navController, audioViewModel = audioViewModel)
+        NavigationHost(navController, audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel)
     }
 }
 
