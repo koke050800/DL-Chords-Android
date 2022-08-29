@@ -3,6 +3,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -48,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.hilt:hilt-work:1.0.0'
+
 
 
     //constantes
@@ -79,7 +80,8 @@ dependencies {
 
     //Dependencias de compose agregadas
     implementation "com.google.accompanist:accompanist-systemuicontroller:$accompanist_version"
-
+    implementation 'androidx.hilt:hilt-work:1.0.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.0.5'
     // Dependencias de Compose
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"

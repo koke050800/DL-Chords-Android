@@ -1,19 +1,22 @@
 package com.example.DLChordsTT.features.audio_lists.ui.screens
 
 import androidx.compose.runtime.Composable
-import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.navigation.Destinations.*
+import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
+
 
 @Composable
 fun NavigationHost(
     navController: NavHostController,
-    storedAudiosList: List<Audio>
+    storedAudiosList: List<Audio>,
+    processedAudiosList: MutableList<AudioProc>
 ) {
-    var audioListForPreview = mutableListOf<Audio>()
+
+ /*   var audioListForPreview = mutableListOf<Audio>()
 
     for (i in 0..12) audioListForPreview.add(
         index = i,
@@ -26,13 +29,15 @@ fun NavigationHost(
             duration = 267491,
             title = "TITLE"
         ),
-    )
+    )*/
     NavHost(navController = navController, startDestination = StoredAudios.route) {
         composable(StoredAudios.route) {
             StoredAudiosScreen(storedAudiosList)
         }
-        composable(Pantalla2.route) {
-            Pantalla2(audioListForPreview)
+        composable(ProcessedAudios.route) {
+            println("Tamañoooou  "+ processedAudiosList.size)
+            ProcessedAudiosScreen(processedAudiosList)
+
         }
     }
 }

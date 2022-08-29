@@ -9,15 +9,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.core.net.toUri
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.DLChordsTT.features.audio_lists.data.models.Audio
 import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
 import com.example.DLChordsTT.features.audio_lists.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_lists.ui.screens.NavigationHost
 import com.example.DLChordsTT.features.audio_lists.view_models.AudioViewModel
+import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
+import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -25,11 +24,12 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
+
+
+   setContent {
             DLChordsTheme {
 
                 val permissionState = rememberPermissionState(
@@ -39,7 +39,11 @@ class MainActivity : ComponentActivity() {
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
                     val storedAudiosList = audioViewModel.storedAudioList
-                    /*var storedAudiosList = mutableListOf<Audio>()
+
+                    val audioprocViewModel: AudioProcViewModel by viewModels()
+                    val procAudiosList = audioprocViewModel.processedAudioList
+
+                         /*var storedAudiosList = mutableListOf<Audio>()
 
                     for (i in 0..12) storedAudiosList.add(
                         index = i,
@@ -53,7 +57,9 @@ class MainActivity : ComponentActivity() {
                             title = "TITLE"
                         ),
                     )*/
-                    MainScreen(storedAudiosList)
+
+                    println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
+                    MainScreen(storedAudiosList, procAudiosList)
 
 
                 } else {
@@ -67,16 +73,18 @@ class MainActivity : ComponentActivity() {
 
     }
 }
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainScreen(storedAudiosList: List<Audio>) {
+fun MainScreen(storedAudiosList: List<Audio>, processedAudiosList: MutableList<AudioProc>) {
     val navController = rememberNavController()
-
     val navigationItems = listOf(
         Destinations.StoredAudios,
-        Destinations.Pantalla2,
+        Destinations.ProcessedAudios,
 
     )
+
 
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController, items = navigationItems) },
@@ -84,7 +92,8 @@ fun MainScreen(storedAudiosList: List<Audio>) {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ){
-        NavigationHost(navController,storedAudiosList)
+
+        NavigationHost(navController,storedAudiosList, processedAudiosList)
     }
 }
 
