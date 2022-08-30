@@ -22,6 +22,8 @@ import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewMo
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,7 +32,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val audioprocViewModel: AudioProcViewModel by viewModels()
 
 
 
@@ -43,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-                    val audioprocViewModel: AudioProcViewModel by viewModels()
+
 
               //  println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
 
