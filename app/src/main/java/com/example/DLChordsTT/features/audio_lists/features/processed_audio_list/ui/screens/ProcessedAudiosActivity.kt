@@ -25,7 +25,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 @Composable
 fun ProcessedAudiosScreen(audioProcViewModel: AudioProcViewModel = hiltViewModel()) {
     var processedAudioList = audioProcViewModel.processedAudioList
-
+        println("Aca andooou" +  processedAudioList.size)
     Column(
         modifier = Modifier
             .fillMaxWidth()

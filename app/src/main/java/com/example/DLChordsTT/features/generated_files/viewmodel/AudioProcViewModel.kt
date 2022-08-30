@@ -1,11 +1,8 @@
 package com.example.DLChordsTT.features.generated_files.viewmodel
 
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.DLChordsTT.features.audio_lists.data.models.Audio
-import com.example.DLChordsTT.features.audio_lists.data.repositories.AudioRepository
 import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.features.generated_files.database.repositories.AudioProcRepository
 import com.google.accompanist.swiperefresh.SwipeRefreshState
@@ -24,6 +21,8 @@ class AudioProcViewModel @Inject constructor(
     init {
         isLoading.value = true
         getProcAudios()
+        println("Estoy en init del Proc viewmodel ${processedAudioList.size}")
+        processedAudioList.forEach { println("-->${it.displayName} \n") }
     }
 
 
@@ -34,9 +33,10 @@ class AudioProcViewModel @Inject constructor(
         kotlin.runCatching {
             audioprocRepository.getDataBase()
         }.onSuccess {
+            println("Tamañito--> ${it.size}")
             processedAudioList.clear()
-            processedAudioList.addAll(it.map {
 
+            processedAudioList.addAll(it.map {
                 it.copy(
                     duration = it.duration,
                     data = it.data,
