@@ -1,45 +1,33 @@
 package com.example.DLChordsTT.features.generated_files.database.repositories
 
-import android.content.ContentValues
-import android.util.Log
-import com.example.DLChordsTT.features.audio_lists.data.models.Audio
-import com.example.DLChordsTT.features.audio_lists.data.models.ContentResolverHelper
 import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
-import com.example.DLChordsTT.features.generated_files.database.model.ContentResolverHelperProc
-import com.example.DLChordsTT.features.generated_files.database.model.ResponseFirebaseObject
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import dagger.Provides
-import kotlinx.coroutines.Dispatchers
+import com.example.DLChordsTT.features.generated_files.database.model.Result
+import com.google.firebase.firestore.CollectionReference
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
-class AudioProcRepository @Inject
+class AudioProcRepository
+@Inject
 constructor(
-   // private val contentResolverHelperProc: ContentResolverHelperProc,
-    val productRef: DatabaseReference
+    private val processedAudioList: CollectionReference
 ) {
-   /* suspend fun getDataBase(): List<AudioProc> = withContext(Dispatchers.IO) {
-        println("Lista en el repo....${contentResolverHelperProc.getDataBD().size}")
-        contentResolverHelperProc.getDataBD()
-    }*/
-
-
-    suspend fun getResponseFromRealtimeDatabaseUsingCoroutines(): ResponseFirebaseObject {
-        val response = ResponseFirebaseObject()
+    fun getProcessedAudioList(): Flow<Result<List<AudioProc>>> = flow {
         try {
-            response.products = productRef.get().await().children.map { snapShot ->
-                snapShot.getValue(AudioProc::class.java)!!
+            emit(Result.Loading<List<AudioProc>>())
+
+            val processedAudioList = processedAudioList.get().await().map{ audioOfDB ->
+                audioOfDB.toObject(AudioProc::class.java)
+
             }
-        } catch (exception: Exception) {
-            response.exception = exception
+            println("\n\n  ------ ${processedAudioList.get(0).artist}    \n\n")
+            emit(Result.Success<List<AudioProc>>(data = processedAudioList))
+        }catch (e: Exception){
+            emit(Result.Error<List<AudioProc>>(message = e.localizedMessage ?: "Error Desconocido"))
         }
-        return response
     }
 }

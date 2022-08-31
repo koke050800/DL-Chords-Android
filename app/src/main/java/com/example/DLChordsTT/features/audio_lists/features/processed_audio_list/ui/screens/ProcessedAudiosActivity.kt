@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +21,13 @@ import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
 fun ProcessedAudiosScreen(audioProcViewModel: AudioProcViewModel = hiltViewModel()) {
-    var processedAudioList = audioProcViewModel.processedAudioList
-        println("Aca andooou" +  processedAudioList.size)
+    var processedAudioList = audioProcViewModel.state.value.audioProcessedList
+        println("Tamañítoooooou" +  processedAudioList.size)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,9 +37,9 @@ fun ProcessedAudiosScreen(audioProcViewModel: AudioProcViewModel = hiltViewModel
     ) {
         SearchAndSortBar(textOnSearchBar = "")
         SwipeRefresh(
-            state = audioProcViewModel.isRefreshing,
+            state = rememberSwipeRefreshState(isRefreshing = audioProcViewModel.isRefreshing.collectAsState().value),
             onRefresh = {
-                audioProcViewModel.getProcessedAudios()
+                audioProcViewModel::getAudiosProcessedBD
             }
         ) {
             LazyColumn() {

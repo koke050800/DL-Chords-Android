@@ -71,8 +71,6 @@ fun MainScreen(audioViewModel: AudioViewModel,audioprocViewModel: AudioProcViewM
         Destinations.ProcessedAudios,
 
     )
-
-
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController, items = navigationItems) },
         isFloatingActionButtonDocked = false,
