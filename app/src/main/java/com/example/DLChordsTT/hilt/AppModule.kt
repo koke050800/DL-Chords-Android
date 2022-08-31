@@ -20,5 +20,5 @@ object AppModule {
     @Singleton
     fun provideAudioProcessedList(
         firestore: FirebaseFirestore
-    ) = firestore.collection("audios")
+    ) = firestore.collection("AudioProc")
 }

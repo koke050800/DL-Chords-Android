@@ -17,13 +17,10 @@ import com.example.DLChordsTT.features.audio_lists.navigation.Destinations
 import com.example.DLChordsTT.features.audio_lists.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_lists.ui.screens.NavigationHost
 import com.example.DLChordsTT.features.audio_lists.view_models.AudioViewModel
-import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.features.generated_files.viewmodel.AudioProcViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +47,7 @@ class MainActivity : ComponentActivity() {
               //  println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
 
 
-                    MainScreen(audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel )
+                    MainScreen(audioViewModel = audioViewModel)
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -64,7 +61,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(audioViewModel: AudioViewModel,audioprocViewModel: AudioProcViewModel) {
+fun MainScreen(audioViewModel: AudioViewModel) {
     val navController = rememberNavController()
     val navigationItems = listOf(
         Destinations.StoredAudios,
@@ -77,7 +74,7 @@ fun MainScreen(audioViewModel: AudioViewModel,audioprocViewModel: AudioProcViewM
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHost(navController, audioViewModel = audioViewModel, audioprocViewModel = audioprocViewModel)
+        NavigationHost(navController, audioViewModel = audioViewModel)
     }
 }
 

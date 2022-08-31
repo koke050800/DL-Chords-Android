@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id 'kotlin-android'
 }
 
 android {
@@ -49,7 +50,9 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.firebase:firebase-firestore-ktx:24.2.2'
+    // Firebase Bom
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
 
     //CONSTANTES
