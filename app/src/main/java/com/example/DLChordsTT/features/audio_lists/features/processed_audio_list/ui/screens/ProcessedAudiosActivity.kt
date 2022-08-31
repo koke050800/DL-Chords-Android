@@ -37,7 +37,7 @@ fun ProcessedAudiosScreen(audioProcViewModel: AudioProcViewModel = hiltViewModel
         SwipeRefresh(
             state = audioProcViewModel.isRefreshing,
             onRefresh = {
-                audioProcViewModel.getProcAudios()
+                audioProcViewModel.getProcessedAudios()
             }
         ) {
             LazyColumn() {

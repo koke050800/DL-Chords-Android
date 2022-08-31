@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val audioprocViewModel: AudioProcViewModel by viewModels()
+
 
 
 
@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-
+                    val audioprocViewModel: AudioProcViewModel by viewModels()
 
               //  println("HEY HEY aqui esta el tamaño antes de main" + procAudiosList.size)
 

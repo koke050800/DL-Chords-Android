@@ -75,8 +75,10 @@ constructor(@ApplicationContext val context: Context) {
 
         myRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val value = snapshot.getValue()
-                Log.d(ContentValues.TAG, "Value is: " + value)
+                val value = snapshot.getValue<List<AudioProc>>()
+                value?.let { audioListProcessed.addAll(it) }
+                println(" ******** Lista OnDataChange ******* " + audioListProcessed.size +" >> "+ audioListProcessed.get(0).displayName)
+                /*Log.d(ContentValues.TAG, "Value is: " + value)
                     snapshot.children.forEach { println("Hola foreach_ ${it.getValue<AudioProc>()}" )
                         var audio : AudioProc? = it.getValue(AudioProc::class.java)
                         println("var audio: ${audio?.artist}")
@@ -88,7 +90,7 @@ constructor(@ApplicationContext val context: Context) {
 
                     }
                 println("Estoy vacia ??? ${audioListProcessed.isEmpty()}")
-                println(" pa calar " + audioListProcessed.size)
+                println(" pa calar " + audioListProcessed.size)*/
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -101,7 +103,7 @@ constructor(@ApplicationContext val context: Context) {
         )
 
 
-        println(" Antes del return " + audioListProcessed.size)
+        println(" ----------- Lista antes de return -----------> " + audioListProcessed.size)
 
         return audioListProcessed
     }

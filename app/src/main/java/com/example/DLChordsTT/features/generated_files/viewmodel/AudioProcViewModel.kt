@@ -1,12 +1,15 @@
 package com.example.DLChordsTT.features.generated_files.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.generated_files.database.model.AudioProc
 import com.example.DLChordsTT.features.generated_files.database.repositories.AudioProcRepository
 import com.google.accompanist.swiperefresh.SwipeRefreshState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,7 +23,7 @@ class AudioProcViewModel @Inject constructor(
 
     init {
         isLoading.value = true
-        getProcAudios()
+        getProcessedAudios()
         println("Estoy en init del Proc viewmodel ${processedAudioList.size}")
         processedAudioList.forEach { println("-->${it.displayName} \n") }
     }
@@ -54,4 +57,24 @@ class AudioProcViewModel @Inject constructor(
 
     }
 
+    val responseLiveData = liveData(Dispatchers.IO){
+        emit(audioprocRepository.getResponseFromRealtimeDatabaseUsingCoroutines())
+    }
+
+    fun getProcessedAudios(){
+        processedAudioList.clear()
+
+        responseLiveData.value?.products?.let { products ->
+            products.forEach{ product ->
+                processedAudioList.add(product)
+            }
+        }
+
+        responseLiveData.value?.exception?.let { exception ->
+            exception.message?.let {
+                Log.e("RealtimeDatabaseTag", it)
+            }
+        }
+
+    }
 }
