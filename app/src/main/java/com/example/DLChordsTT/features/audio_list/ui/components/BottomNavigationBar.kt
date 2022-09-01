@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.DLChordsTT.features.audio_list.features.navigation.Destinations
+import com.example.DLChordsTT.features.audio_list.navigation.Destinations
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable

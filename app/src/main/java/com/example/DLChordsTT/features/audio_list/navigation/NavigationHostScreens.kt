@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.audio_list.ui.screens
+package com.example.DLChordsTT.features.audio_list.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -6,10 +6,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.DLChordsTT.features.audio_list.features.navigation.Destinations.*
+import com.example.DLChordsTT.features.audio_list.navigation.Destinations.*
 
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
+import com.example.DLChordsTT.features.audio_list.ui.screens.ProcessedAudiosScreen
+import com.example.DLChordsTT.features.audio_list.ui.screens.StoredAudiosScreen
 
 
 @Composable

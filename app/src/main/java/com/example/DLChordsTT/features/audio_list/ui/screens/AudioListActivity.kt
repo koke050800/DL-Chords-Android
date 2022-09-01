@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.audio_list.features.ui.screens
+package com.example.DLChordsTT.features.audio_list.ui.screens
 
 import android.Manifest
 import android.os.Bundle
@@ -13,9 +13,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.navigation.compose.rememberNavController
-import com.example.DLChordsTT.features.audio_list.features.navigation.Destinations
+import com.example.DLChordsTT.features.audio_list.navigation.Destinations
 import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
-import com.example.DLChordsTT.features.audio_list.ui.screens.NavigationHostScreens
+import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScreens
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
