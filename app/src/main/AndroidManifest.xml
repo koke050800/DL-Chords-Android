@@ -17,7 +17,7 @@
 
 
         <activity
-            android:name="com.example.DLChordsTT.features.audio_list.features.ui.screens.AudioListActivity"
+            android:name="com.example.DLChordsTT.features.audio_list.ui.screens.AudioListActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.DLChordsTT1">
