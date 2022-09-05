@@ -51,6 +51,10 @@ class AudioListActivity : ComponentActivity() {
 
     }
 }
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun MainScreen(storedAudiosList: List<Audio>, onItemClick: (Audio) -> Unit) {
+    val navController = rememberNavController()
 
 @Composable
 fun MainScreen(audioViewModel: AudioViewModel) {

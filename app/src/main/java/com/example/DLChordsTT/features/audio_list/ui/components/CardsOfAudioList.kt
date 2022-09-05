@@ -1,6 +1,8 @@
 package com.example.DLChordsTT.features.audio_list.ui.components
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -9,21 +11,35 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_lists.data.models.Audio
+import com.example.DLChordsTT.features.music_player.ui.screens.PlayerMusicActivity
+
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import com.google.android.exoplayer2.Player
 import kotlin.math.floor
 
 @Composable
 fun StoredCard(audio: Audio) {
+fun CartaListaAlmacenados(audio: Audio, indexAudio: Int) {
+    val context = LocalContext.current
+    val sendAudio = Intent(context,PlayerMusicActivity::class.java)
+    sendAudio.putExtra("AudioId",indexAudio)
+
     DLChordsTheme() {
         Card(
             modifier = Modifier
                 .height(64.dp)
-                .fillMaxWidth(1f),
+                .fillMaxWidth(1f)
+                //.clickable { onItemClick.invoke(audio.id) }
+                .clickable { startActivity(context,sendAudio,null) }
+               ,
             shape = RoundedCornerShape(4.dp),
             backgroundColor = DLChordsTheme.colors.cardColor,
             border = BorderStroke(1.dp, DLChordsTheme.colors.divider),
@@ -170,5 +186,6 @@ fun CartaListaProcesadosPreview() {
             title = "TITLE"
         )
         ProcessedCard(audio = audioObjectPreview)
+        CartaListaAlmacenados(audio = audioObjectPreview,1)
     }
 }
