@@ -28,7 +28,7 @@ fun Pantalla2(storedAudioList: List<Audio>) {
         LazyColumn() {
             item { LabelAndDividerOfLists(label = "Audios Procesados") }
             items(storedAudioList) { audioElementList: Audio ->
-                CartaListaAlmacenados(audio = audioElementList)
+                CartaListaAlmacenados(audio = audioElementList,1)
             }
         }
     }

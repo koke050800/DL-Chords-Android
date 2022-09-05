@@ -13,19 +13,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role.Companion.Button
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.DLChordsTT.features.audio_lists.data.models.Audio
+import com.example.DLChordsTT.features.audio_lists.view_models.AudioViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.round
 
 
 @Composable
-@Preview(showBackground = true)
-fun PlayerMusicStored() {
+fun PlayerMusicStored(
+    progress: Float,
+    onProgressChange: (Float) -> Unit,
+    audio: Audio,
+    audioViewModel: AudioViewModel
+) {
+
     DLChordsTheme {
 
         Column(
@@ -33,8 +41,8 @@ fun PlayerMusicStored() {
                 .fillMaxWidth()
                 .padding(20.dp),
 
-        ) {
-            TopAppBarPlayer(textOnTop = "Audio_01_Como_La_Flor")
+            ) {
+            TopAppBarPlayer(textOnTop = audio.displayName, audio = audio, audioViewModel = audioViewModel)
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
@@ -42,22 +50,21 @@ fun PlayerMusicStored() {
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
 
-            ) {
+                ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),
                     "Player",
                 )
             }
             val range = 0f..100f
-            var selection by remember { mutableStateOf(50f) }
             Slider(
                 modifier = Modifier
                     .fillMaxWidth(.7f)
                     .align(Alignment.CenterHorizontally)
                     .padding(bottom = 40.dp),
-                value = selection,
+                value = progress,
                 valueRange = range,
-                onValueChange = { selection = it },
+                onValueChange = { onProgressChange.invoke(it) },
                 colors = SliderDefaults.colors(
                     thumbColor = DLChordsTheme.colors.secondaryText,
                     activeTrackColor = DLChordsTheme.colors.secondaryText
@@ -102,7 +109,7 @@ fun PlayerMusicStored() {
                 elevation = ButtonDefaults.elevation(0.dp, 0.dp),
                 contentPadding = PaddingValues(20.dp, 12.dp),
 
-            ) {
+                ) {
                 Text(
                     text = "AUDIO COMPLETO",
                     style = DLChordsTheme.typography.button,
@@ -111,5 +118,7 @@ fun PlayerMusicStored() {
                 )
             }
         }
+
     }
+    //audioViewModel.playAudio(audio)
 }

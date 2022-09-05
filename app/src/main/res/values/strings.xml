@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">DL ChordsTT</string>
+    <string name="title_activity_player_stored_music">PlayerStoredMusicActivity</string>
+    <string name="title_activity_player_music">PlayerMusicActivity</string>
 </resources>

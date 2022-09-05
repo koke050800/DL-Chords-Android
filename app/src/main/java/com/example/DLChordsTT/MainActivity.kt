@@ -39,6 +39,7 @@ class MainActivity : ComponentActivity() {
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
                     val storedAudiosList = audioViewModel.storedAudioList
+                    println("Size ${storedAudiosList.size}")
                     /*var storedAudiosList = mutableListOf<Audio>()
 
                     for (i in 0..12) storedAudiosList.add(
@@ -53,7 +54,8 @@ class MainActivity : ComponentActivity() {
                             title = "TITLE"
                         ),
                     )*/
-                    MainScreen(storedAudiosList)
+
+                    MainScreen(storedAudiosList = storedAudiosList, onItemClick = {})
 
 
                 } else {
@@ -69,7 +71,7 @@ class MainActivity : ComponentActivity() {
 }
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MainScreen(storedAudiosList: List<Audio>) {
+fun MainScreen(storedAudiosList: List<Audio>, onItemClick: (Audio) -> Unit) {
     val navController = rememberNavController()
 
     val navigationItems = listOf(

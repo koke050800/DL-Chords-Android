@@ -35,6 +35,7 @@ class StoredAudioActivity : AppCompatActivity() {
 
 @Composable
 fun StoredAudiosScreen(storedAudioList: List<Audio>) {
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -47,7 +48,7 @@ fun StoredAudiosScreen(storedAudioList: List<Audio>) {
             item { LabelAndDividerOfLists(label = "Audios Almacenados") }
             if (storedAudioList.isNotEmpty()){
                 items(storedAudioList) { audioElementList: Audio ->
-                    CartaListaAlmacenados(audio = audioElementList)
+                    CartaListaAlmacenados(audio = audioElementList, indexAudio = storedAudioList.indexOf(audioElementList))
                     /*AudioItem(
                         audio = audioElementList,
                         onItemClick = { onItemClick.invoke(audioElementList)},
