@@ -39,7 +39,7 @@ fun StoredAudiosScreen(audioViewModel: AudioViewModel = hiltViewModel()) {
                 item { LabelAndDividerOfLists(label = "Audios Almacenados") }
                 if (storedAudioList.isNotEmpty()) {
                     items(storedAudioList) { audioElementList: Audio ->
-                        StoredCard(audio = audioElementList)
+                        StoredCard(audio = audioElementList, indexAudio = storedAudioList.indexOf(audioElementList))
                     }
                 } else {
                     item {

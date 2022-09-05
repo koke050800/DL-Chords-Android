@@ -13,6 +13,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.navigation.compose.rememberNavController
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.navigation.Destinations
 import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScreens
@@ -51,10 +52,6 @@ class AudioListActivity : ComponentActivity() {
 
     }
 }
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun MainScreen(storedAudiosList: List<Audio>, onItemClick: (Audio) -> Unit) {
-    val navController = rememberNavController()
 
 @Composable
 fun MainScreen(audioViewModel: AudioViewModel) {

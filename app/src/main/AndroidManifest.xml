@@ -26,12 +26,12 @@
         </intent-filter>
     </activity>
     <activity
-        android:name="com.example.DLChordsTT.features.music_player.ui.screens.PlayerMusicActivity"
+        android:name="com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity"
         android:exported="false"
         android:label="@string/title_activity_player_music"
         android:theme="@style/Theme.DLChordsTT1" />
     <service
-        android:name="com.example.DLChordsTT.features.music_player.ui.service.MusicPlayerService"
+        android:name="com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.MusicPlayerService"
         android:exported="false">
         <intent-filter>
             <action android:name="android.media.browser.MediaBrowserService" />

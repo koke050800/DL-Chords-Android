@@ -3,7 +3,7 @@ package com.example.DLChordsTT.features.music_player.ui.exoplayer
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
-import com.example.DLChordsTT.features.audio_lists.data.repositories.AudioRepository
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.ui.screens.AudioRepository
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.source.ConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ProgressiveMediaSource

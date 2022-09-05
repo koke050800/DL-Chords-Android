@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.music_player.ui.constants
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models
 
 object K {
     const val PLAYBACK_NOTIFICATION_CHANNEL_ID = "sdfsdfsdfdssdfsdds"

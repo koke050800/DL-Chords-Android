@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.music_player.ui.exoplayer
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.exoplayer
 
 import android.content.ComponentName
 import android.content.Context
@@ -7,9 +7,10 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import androidx.compose.runtime.mutableStateOf
-import com.example.DLChordsTT.features.audio_lists.data.models.Audio
-import com.example.DLChordsTT.features.music_player.ui.constants.K
-import com.example.DLChordsTT.features.music_player.ui.service.MusicPlayerService
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.K
+import com.example.DLChordsTT.features.music_player.ui.exoplayer.currentPosition
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.MusicPlayerService
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

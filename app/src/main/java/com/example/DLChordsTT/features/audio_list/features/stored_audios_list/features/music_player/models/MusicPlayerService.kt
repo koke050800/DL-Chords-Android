@@ -1,7 +1,6 @@
-package com.example.DLChordsTT.features.music_player.ui.service
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models
 
 
-import DLChordsTT.R
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
@@ -13,10 +12,8 @@ import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.media.MediaBrowserServiceCompat
-import com.example.DLChordsTT.features.music_player.ui.constants.K
 import com.example.DLChordsTT.features.music_player.ui.exoplayer.MediaSource
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.PlaybackException
