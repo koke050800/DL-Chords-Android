@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.compose.runtime.MutableState
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -27,18 +28,21 @@ constructor(@ApplicationContext val context: Context) {
         "${MediaStore.Audio.AudioColumns.IS_MUSIC} = ?"
     private var selectionArg = arrayOf("1")
 
-    private val sortOrder = "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
+    private var sortOrder = "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
 
 
     @WorkerThread
-    fun getCellphoneAudioData(): List<Audio> {
-        return getCursorData()
+    fun getCellphoneAudioData(isDescendingSort: MutableState<Boolean>): List<Audio> {
+        return getCursorData(isDescendingSort)
     }
 
 
 
-    private fun getCursorData(): MutableList<Audio> {
+    private fun getCursorData(isDescendingSort: MutableState<Boolean>): MutableList<Audio> {
         val audioList = mutableListOf<Audio>()
+
+        if (isDescendingSort.value) sortOrder =
+            "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} DESC" else "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
 
         mCursor = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

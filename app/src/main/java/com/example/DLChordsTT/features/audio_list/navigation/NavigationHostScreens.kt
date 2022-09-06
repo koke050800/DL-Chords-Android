@@ -17,11 +17,11 @@ import com.example.DLChordsTT.features.audio_list.ui.screens.StoredAudiosScreen
 @Composable
 fun NavigationHostScreens(
     navController: NavHostController,
-    audioViewModel: AudioViewModel,
 ) {
     NavHost(navController = navController, startDestination = StoredAudios.route) {
         composable(StoredAudios.route) {
-            StoredAudiosScreen(audioViewModel = audioViewModel)
+            val audioStoredViewModel: AudioViewModel = hiltViewModel()
+            StoredAudiosScreen(audioStoredViewModel = audioStoredViewModel)
         }
         composable(ProcessedAudios.route) {
             val audioProcessedViewModel: AudioProcViewModel = hiltViewModel()

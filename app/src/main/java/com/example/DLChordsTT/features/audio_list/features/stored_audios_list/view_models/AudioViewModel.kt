@@ -37,9 +37,9 @@ class AudioViewModel @Inject constructor(
     var currentPlayBackPosition by mutableStateOf(0L)
     private var updatePosition = true
     private val playbackState = serviceConnection.plaBackState
-
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
+    val isDescendingSort = mutableStateOf(false)
 
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
@@ -81,7 +81,7 @@ class AudioViewModel @Inject constructor(
             isRefreshing.isRefreshing = true
         }
         kotlin.runCatching {
-            audioRepository.getCellphoneAudioData()
+            audioRepository.getCellphoneAudioData(isDescendingSort)
         }.onSuccess {
             storedAudioList.clear()
             storedAudioList.addAll(it.map {

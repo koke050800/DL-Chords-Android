@@ -32,14 +32,12 @@ class AudioListActivity : ComponentActivity() {
 
         setContent {
             DLChordsTheme {
-
                 val permissionState = rememberPermissionState(
                     permission = Manifest.permission.READ_EXTERNAL_STORAGE
                 )
 
                 if (permissionState.hasPermission) {
-                    val audioViewModel: AudioViewModel by viewModels()
-                    MainScreen(audioViewModel = audioViewModel)
+                    MainScreen()
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -48,13 +46,11 @@ class AudioListActivity : ComponentActivity() {
 
             }
         }
-
-
     }
 }
 
 @Composable
-fun MainScreen(audioViewModel: AudioViewModel) {
+fun MainScreen() {
     val navController = rememberNavController()
     val navigationItems = listOf(
         Destinations.StoredAudios,
@@ -66,7 +62,7 @@ fun MainScreen(audioViewModel: AudioViewModel) {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHostScreens(navController, audioViewModel = audioViewModel)
+        NavigationHostScreens(navController)
     }
 }
 

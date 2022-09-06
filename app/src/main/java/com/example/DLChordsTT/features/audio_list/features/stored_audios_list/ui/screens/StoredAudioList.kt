@@ -5,10 +5,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.ui.components.StoredCard
 import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerOfLists
@@ -16,11 +20,14 @@ import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import okhttp3.internal.cache.DiskLruCache
+import java.util.*
 
 @Composable
-fun StoredAudiosScreen(audioViewModel: AudioViewModel = hiltViewModel()) {
-    var storedAudioList = audioViewModel.storedAudioList
-
+fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
+    var storedAudioList = audioStoredViewModel.storedAudioList
+    val textState = remember { mutableStateOf(TextFieldValue("")) }
+    var isDescendingSort = audioStoredViewModel.isDescendingSort
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -28,18 +35,39 @@ fun StoredAudiosScreen(audioViewModel: AudioViewModel = hiltViewModel()) {
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchAndSortBar(textOnSearchBar = "")
+        SearchAndSortBar(state = textState, isDescendingSort = isDescendingSort)
         SwipeRefresh(
-            state = audioViewModel.isRefreshing,
+            state = audioStoredViewModel.isRefreshing,
             onRefresh = {
-                audioViewModel.getStoredAudios2()
+                audioStoredViewModel.getStoredAudios2()
             }
         ) {
             LazyColumn() {
                 item { LabelAndDividerOfLists(label = "Audios Almacenados") }
                 if (storedAudioList.isNotEmpty()) {
-                    items(storedAudioList) { audioElementList: Audio ->
-                        StoredCard(audio = audioElementList, indexAudio = storedAudioList.indexOf(audioElementList))
+
+                    val searchedText = textState.value.text
+                    var storedAudioListFiltered = if (searchedText.isEmpty()) {
+                        storedAudioList
+                    } else {
+                        val resultList = SnapshotStateList<Audio>()
+                        for (audioStored in storedAudioList) {
+                            if (audioStored.displayName.lowercase(Locale.getDefault())
+                                    .contains(searchedText.lowercase(Locale.getDefault()))
+                            ) {
+                                resultList.add(audioStored)
+                            }
+                        }
+                        resultList
+                    }
+
+
+
+                    items(storedAudioListFiltered) { audioElementList: Audio ->
+                        StoredCard(
+                            audio = audioElementList,
+                            indexAudio = storedAudioList.indexOf(audioElementList)
+                        )
                     }
                 } else {
                     item {

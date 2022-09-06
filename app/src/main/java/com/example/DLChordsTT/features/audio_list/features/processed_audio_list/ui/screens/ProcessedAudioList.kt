@@ -33,7 +33,7 @@ fun ProcessedAudiosScreen(
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchAndSortBar(textOnSearchBar = "")
+        //SearchAndSortBar(textOnSearchBar = "")
         SwipeRefresh(
             state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
             onRefresh = refreshData,
