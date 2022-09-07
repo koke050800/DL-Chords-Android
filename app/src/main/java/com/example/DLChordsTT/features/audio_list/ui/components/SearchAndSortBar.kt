@@ -3,6 +3,7 @@ package com.example.DLChordsTT.features.audio_list.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,8 +12,11 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SortByAlpha
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,9 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchAndSortBar(state: MutableState<TextFieldValue>, isDescendingSort: MutableState<Boolean>) {
-
+fun SearchAndSortBar(state: MutableState<TextFieldValue>, focusManager: FocusManager, isPressedSortButton: MutableState<Boolean>, onClick: () -> Unit) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -72,6 +77,11 @@ fun SearchAndSortBar(state: MutableState<TextFieldValue>, isDescendingSort: Muta
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done
                 ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                        focusManager.clearFocus()
+                    }),
                 singleLine = true,
                 shape = RoundedCornerShape(32.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -85,7 +95,7 @@ fun SearchAndSortBar(state: MutableState<TextFieldValue>, isDescendingSort: Muta
             modifier = Modifier
                 .align(Alignment.CenterVertically)
         ) {
-            IconButton(onClick = { if (isDescendingSort.value) isDescendingSort.value = false else isDescendingSort.value = true }) {
+            IconButton(onClick = onClick) {
                 Icon(
                     imageVector = Icons.Filled.SortByAlpha,
                     contentDescription = "Ordenar ascendente y descendente"

@@ -30,6 +30,7 @@ class AudioViewModel @Inject constructor(
     var storedAudioList = mutableStateListOf<Audio>()
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
+    val isLoadingStoredList = mutableStateOf(false)
     val isPlaying = mutableStateOf(false)
     val currentPlayingAudio = serviceConnection.currentPlayingAudio
     private val isConnected = serviceConnection.isConnected
@@ -39,7 +40,7 @@ class AudioViewModel @Inject constructor(
     private val playbackState = serviceConnection.plaBackState
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
-    val isDescendingSort = mutableStateOf(false)
+    val isPressedSortButton = mutableStateOf(false)
 
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
@@ -62,26 +63,27 @@ class AudioViewModel @Inject constructor(
     var currentAudioProgress = mutableStateOf(0f)
 
     init {
-
         isLoading.value = true
-        getStoredAudios2()
-        //conectToMediaPlayerService()
-
-
+        getStoredAudios()
     }
 
 
-    fun conectToMediaPlayerService() = viewModelScope.launch {
-
+    fun changeOrderOfStoredAudioList() {
+        if (storedAudioList.isNotEmpty()) {
+            val sortList =  storedAudioList.reversed()
+            storedAudioList.clear()
+            storedAudioList.addAll(sortList)
+        }
     }
 
 
-    fun getStoredAudios2() = viewModelScope.launch {
-        if (!isLoading.value) {
+    fun getStoredAudios() = viewModelScope.launch {
+        isLoadingStoredList.value = true
+        if (!isLoadingStoredList.value) {
             isRefreshing.isRefreshing = true
         }
         kotlin.runCatching {
-            audioRepository.getCellphoneAudioData(isDescendingSort)
+            audioRepository.getCellphoneAudioData()
         }.onSuccess {
             storedAudioList.clear()
             storedAudioList.addAll(it.map {
@@ -109,7 +111,7 @@ class AudioViewModel @Inject constructor(
         }.onFailure { println("Falle al buscar los audios del telefono") }
 
         isRefreshing.isRefreshing = false
-        isLoading.value = false
+        isLoadingStoredList.value = false
     }
 
     fun playAudio(currentAudio: Audio) {

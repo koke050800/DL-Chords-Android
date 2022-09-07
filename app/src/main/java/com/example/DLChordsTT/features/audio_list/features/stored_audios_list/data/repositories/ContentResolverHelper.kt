@@ -32,17 +32,14 @@ constructor(@ApplicationContext val context: Context) {
 
 
     @WorkerThread
-    fun getCellphoneAudioData(isDescendingSort: MutableState<Boolean>): List<Audio> {
-        return getCursorData(isDescendingSort)
+    fun getCellphoneAudioData(): List<Audio> {
+        return getCursorData()
     }
 
 
 
-    private fun getCursorData(isDescendingSort: MutableState<Boolean>): MutableList<Audio> {
+    private fun getCursorData(): MutableList<Audio> {
         val audioList = mutableListOf<Audio>()
-
-        if (isDescendingSort.value) sortOrder =
-            "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} DESC" else "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
 
         mCursor = context.contentResolver.query(
             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

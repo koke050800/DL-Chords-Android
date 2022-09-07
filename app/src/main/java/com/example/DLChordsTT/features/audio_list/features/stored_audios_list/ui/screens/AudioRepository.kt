@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class AudioRepository @Inject
 constructor(private val contentResolverHelper: ContentResolverHelper) {
-    suspend fun getCellphoneAudioData(isDescendingSort: MutableState<Boolean>):List<Audio> = withContext(Dispatchers.IO){
-        contentResolverHelper.getCellphoneAudioData(isDescendingSort)
+    suspend fun getCellphoneAudioData():List<Audio> = withContext(Dispatchers.IO){
+        contentResolverHelper.getCellphoneAudioData()
     }
 }

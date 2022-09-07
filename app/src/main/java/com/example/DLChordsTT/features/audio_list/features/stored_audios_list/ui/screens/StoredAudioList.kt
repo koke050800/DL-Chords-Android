@@ -5,12 +5,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
@@ -20,14 +20,15 @@ import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
-import okhttp3.internal.cache.DiskLruCache
 import java.util.*
 
 @Composable
 fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
     var storedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    var isDescendingSort = audioStoredViewModel.isDescendingSort
+    var isPressedSortButton = audioStoredViewModel.isPressedSortButton
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,17 +36,24 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SearchAndSortBar(state = textState, isDescendingSort = isDescendingSort)
+        SearchAndSortBar(
+            state = textState,
+            focusManager = focusManager,
+            isPressedSortButton = isPressedSortButton,
+            onClick = {
+                isPressedSortButton.value = !isPressedSortButton.value
+                audioStoredViewModel.changeOrderOfStoredAudioList()
+            }
+        )
         SwipeRefresh(
             state = audioStoredViewModel.isRefreshing,
             onRefresh = {
-                audioStoredViewModel.getStoredAudios2()
+                audioStoredViewModel.getStoredAudios()
             }
         ) {
             LazyColumn() {
                 item { LabelAndDividerOfLists(label = "Audios Almacenados") }
                 if (storedAudioList.isNotEmpty()) {
-
                     val searchedText = textState.value.text
                     var storedAudioListFiltered = if (searchedText.isEmpty()) {
                         storedAudioList
@@ -60,9 +68,6 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                         }
                         resultList
                     }
-
-
-
                     items(storedAudioListFiltered) { audioElementList: Audio ->
                         StoredCard(
                             audio = audioElementList,
