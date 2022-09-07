@@ -64,6 +64,7 @@ class AudioViewModel @Inject constructor(
 
     init {
         isLoading.value = true
+        isLoadingStoredList.value = true
         getStoredAudios()
     }
 
@@ -78,7 +79,7 @@ class AudioViewModel @Inject constructor(
 
 
     fun getStoredAudios() = viewModelScope.launch {
-        isLoadingStoredList.value = true
+
         if (!isLoadingStoredList.value) {
             isRefreshing.isRefreshing = true
         }
