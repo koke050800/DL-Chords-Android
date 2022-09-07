@@ -26,7 +26,6 @@ import java.util.*
 fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
     var storedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    var isPressedSortButton = audioStoredViewModel.isPressedSortButton
     val focusManager = LocalFocusManager.current
 
     Column(
@@ -39,9 +38,7 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
         SearchAndSortBar(
             state = textState,
             focusManager = focusManager,
-            isPressedSortButton = isPressedSortButton,
             onClick = {
-                isPressedSortButton.value = !isPressedSortButton.value
                 audioStoredViewModel.changeOrderOfStoredAudioList()
             }
         )

@@ -40,7 +40,6 @@ class AudioViewModel @Inject constructor(
     private val playbackState = serviceConnection.plaBackState
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
-    val isPressedSortButton = mutableStateOf(false)
 
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {

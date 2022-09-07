@@ -26,7 +26,7 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun SearchAndSortBar(state: MutableState<TextFieldValue>, focusManager: FocusManager, isPressedSortButton: MutableState<Boolean>, onClick: () -> Unit) {
+fun SearchAndSortBar(state: MutableState<TextFieldValue>, focusManager: FocusManager, onClick: () -> Unit) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = Modifier
