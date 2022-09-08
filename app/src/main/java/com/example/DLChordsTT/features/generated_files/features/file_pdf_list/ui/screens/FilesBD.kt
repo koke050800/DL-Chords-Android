@@ -34,7 +34,7 @@ fun FilesBDScreen( audioName:String
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.93f)
+            .fillMaxHeight(1f)
             .padding(horizontal = 16.dp),
               horizontalAlignment = Alignment.CenterHorizontally
     ) {

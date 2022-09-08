@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -63,7 +64,7 @@ fun MainScreen(generatedFilesViewModel:GeneratedFilesViewModel) {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHostScreens(navController,  generatedFilesViewModel = generatedFilesViewModel)
+        NavigationHostScreens(navController, generatedFilesViewModel = generatedFilesViewModel)
     }
 }
 
