@@ -4,23 +4,21 @@ import android.Manifest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.foundation.layout.Box
-import androidx.compose.material.FabPosition
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.navigation.Destinations
-import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScreens
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,22 +30,23 @@ class AudioListActivity : ComponentActivity() {
 
         setContent {
             DLChordsTheme {
-                val permissionState = rememberPermissionState(
-                    permission = Manifest.permission.READ_EXTERNAL_STORAGE
+                val permissionState = rememberMultiplePermissionsState(
+                    listOf(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                    )
                 )
 
-                if (permissionState.hasPermission) {
+                if (permissionState.allPermissionsGranted) {
                     MainScreen()
                 } else {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(text = "Sin permiso para acceder al almacenamiento")
-                    }
+                    PermissionScreen(permissionState)
                 }
-
             }
+
         }
     }
 }
+
 
 @Composable
 fun MainScreen() {
@@ -63,6 +62,47 @@ fun MainScreen() {
         backgroundColor = MaterialTheme.colors.background
     ) {
         NavigationHostScreens(navController)
+    }
+}
+
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun PermissionScreen(permissionState: MultiplePermissionsState) {
+    Scaffold(
+        isFloatingActionButtonDocked = false,
+        backgroundColor = MaterialTheme.colors.background
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "Hacen falta permisos para que la aplicacion funcione correctamente, por favor haga click en el boton de abajo para otorgar dichos permisos.",
+                modifier = Modifier.padding(vertical = 32.dp)
+            )
+            Button(
+                onClick = {
+                    permissionState.launchMultiplePermissionRequest() },
+                modifier = Modifier
+                    .fillMaxWidth(.8f)
+                    .padding(bottom = 40.dp),
+                shape = CircleShape,
+                elevation = ButtonDefaults.elevation(0.dp, 0.dp),
+                contentPadding = PaddingValues(20.dp, 12.dp),
+
+                ) {
+                Text(
+                    text = "Dar permisos",
+                    style = DLChordsTheme.typography.button,
+                    maxLines = 1,
+                    color = DLChordsTheme.colors.surface
+                )
+            }
+        }
     }
 }
 
