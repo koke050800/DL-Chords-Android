@@ -18,6 +18,7 @@ import com.example.DLChordsTT.features.audio_list.navigation.Destinations
 import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScreens
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -39,7 +40,9 @@ class AudioListActivity : ComponentActivity() {
 
                 if (permissionState.hasPermission) {
                     val audioViewModel: AudioViewModel by viewModels()
-                    MainScreen(audioViewModel = audioViewModel)
+                    val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
+
+                    MainScreen(audioViewModel = audioViewModel,generatedFilesViewModel)
                 } else {
                     Box(contentAlignment = Alignment.Center) {
                         Text(text = "Sin permiso para acceder al almacenamiento")
@@ -54,7 +57,7 @@ class AudioListActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(audioViewModel: AudioViewModel) {
+fun MainScreen(audioViewModel: AudioViewModel,generatedFilesViewModel:GeneratedFilesViewModel) {
     val navController = rememberNavController()
     val navigationItems = listOf(
         Destinations.StoredAudios,
@@ -66,7 +69,7 @@ fun MainScreen(audioViewModel: AudioViewModel) {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHostScreens(navController, audioViewModel = audioViewModel)
+        NavigationHostScreens(navController, audioViewModel = audioViewModel, generatedFilesViewModel = generatedFilesViewModel)
     }
 }
 
