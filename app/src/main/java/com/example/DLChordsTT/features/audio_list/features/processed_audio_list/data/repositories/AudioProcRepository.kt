@@ -2,6 +2,7 @@ package com.example.DLChordsTT.features.audio_list.features.processed_audio_list
 
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.Result
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Files
 import com.google.firebase.firestore.CollectionReference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -30,4 +31,14 @@ constructor(
             emit(Result.Error<List<AudioProc>>(message = e.localizedMessage ?: "Error Desconocido"))
         }
     }
+
+    fun addNewProcessedAudio(audioP : AudioProc){
+   try{
+       processedAudioList.document(""+audioP.id).set(audioP)
+   }catch (e: Exception){
+       e.printStackTrace()
+   }
+
+    }
+
 }

@@ -29,12 +29,26 @@ class AudioProcViewModel @Inject constructor(
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
 
-
-
     init {
         getAudiosProcessedBD()
     }
 
+
+    fun addNewAudioProc(audioP : AudioProc){
+
+        val audio = AudioProc(
+             id  = audioP.id,
+         id_file = audioP.id_file,
+         displayName = audioP.displayName,
+         artist = audioP.artist,
+         data = audioP.data,
+         duration = audioP.duration,
+         title = audioP.title,
+        )
+
+            audioprocRepository.addNewProcessedAudio(audio)
+
+    }
     fun getAudiosProcessedBD() {
         audioprocRepository.getProcessedAudioList().onEach { result ->
             when (result) {

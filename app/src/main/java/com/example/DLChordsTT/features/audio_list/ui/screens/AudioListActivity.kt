@@ -15,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.DLChordsTT.features.audio_list.navigation.Destinations
 import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScreens
 import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
@@ -37,7 +38,8 @@ class AudioListActivity : ComponentActivity() {
                 )
 
                 if (permissionState.allPermissionsGranted) {
-                    MainScreen()
+                    val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
+                    MainScreen(generatedFilesViewModel)
                 } else {
                     PermissionScreen(permissionState)
                 }
@@ -49,7 +51,7 @@ class AudioListActivity : ComponentActivity() {
 
 
 @Composable
-fun MainScreen() {
+fun MainScreen(generatedFilesViewModel:GeneratedFilesViewModel) {
     val navController = rememberNavController()
     val navigationItems = listOf(
         Destinations.StoredAudios,
@@ -61,7 +63,7 @@ fun MainScreen() {
         floatingActionButtonPosition = FabPosition.End,
         backgroundColor = MaterialTheme.colors.background
     ) {
-        NavigationHostScreens(navController)
+        NavigationHostScreens(navController,  generatedFilesViewModel = generatedFilesViewModel)
     }
 }
 

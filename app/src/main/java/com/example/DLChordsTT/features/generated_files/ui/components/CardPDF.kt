@@ -22,14 +22,49 @@ import androidx.compose.ui.unit.sp
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
-@Preview(showBackground = false)
-fun CardPDF() {
+fun joinCardsPDF(label: String = "Label", nCards : Int = 1){
+    Box(
+        modifier = Modifier
+            .padding(vertical = 16.dp)
+    ) {
+        Column() {
+            Row(Modifier.padding(bottom = 16.dp)) {
+                Text(
+                    text = label,
+                    style = DLChordsTheme.typography.h5,
+                    color = DLChordsTheme.colors.primaryText,
+                    modifier = Modifier.padding(end = 12.dp)
+                )
+            }
+            if (nCards == 1){
+            CardPDF("Letra ", "Disfruta de la letra del audio")}
+            else{
+
+                Row(modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 4.dp)) {
+                    CardPDF("Letra y Acordes", "Disfruta de los acordes y letra del audio")
+                    CardPDF("Acordes", "Disfruta de los acordes  del audio")
+                }
+
+
+            }
+        }
+
+    }
+
+
+
+
+}
+
+
+@Composable
+fun CardPDF(title:String, text :String) {
     DLChordsTheme() {
         Card(
             modifier = Modifier
                 .height(224.dp)
-                .width(160.dp),
-            backgroundColor = DLChordsTheme.colors.background,
+                .width(160.dp).padding(4.dp,0.dp),
+            backgroundColor = DLChordsTheme.colors.cardColor,
             shape = DLChordsTheme.shapes.medium
         ) {
             Column(horizontalAlignment = Alignment.End) {
@@ -39,21 +74,17 @@ fun CardPDF() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Letra y Acordes",
+                        text = title,
                         style = DLChordsTheme.typography.subtitle1,
                         maxLines = 1
-
                     )
                     Image()
                     Text(
-                        text = "Disfruta de los acordes y letra del audio",
+                        text = text,
                         fontSize = 12.sp,
                         maxLines = 3
                     )
-
-
-                }
-
+               }
                 Row(modifier = Modifier.height(24.dp)) {
                     IconButton(
                         onClick = {
@@ -62,10 +93,9 @@ fun CardPDF() {
                     ) {
                         Icon(
                             Icons.Rounded.Visibility,
-                            contentDescription = "MenuAlmacenados"
+                            contentDescription = "Visualizar"
                         )
                     }
-
                     IconButton(
                         onClick = {
                             //TODO
@@ -73,7 +103,7 @@ fun CardPDF() {
                     ) {
                         Icon(
                             Icons.Rounded.FileDownload,
-                            contentDescription = "MenuAlmacenados"
+                            contentDescription = "Descarga"
                         )
                     }
                 }

@@ -8,24 +8,28 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
+import com.example.DLChordsTT.features.audio_list.ui.screens.FilesBDScreen
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.floor
 
 @Composable
 fun StoredCard(audio: Audio, indexAudio: Int) {
-
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
+    var expanded by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -61,25 +65,38 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
                     .padding(8.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                IconButton(
-                    onClick = {
-                        //TODO
-                    }
-                ) {
+                IconButton(onClick = { expanded = true })
+                {
                     Icon(
                         Icons.Default.MoreVert,
                         tint = DLChordsTheme.colors.primary,
                         contentDescription = "MenuAlmacenados"
                     )
                 }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                        Text("Procesar Completo")
+                    }
+                    Divider()
+                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                        Text("Procear Fragmento")
+                    }
+                }
             }
         }
     }
 }
 
-
 @Composable
-fun ProcessedCard(audio: AudioProc) {
+fun ProcessedCard(audio: AudioProc,generatedFilesViewModel: GeneratedFilesViewModel) {
+    var expanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val pasarScreen = Intent(context, FilesBDActivity::class.java)
+pasarScreen.putExtra("AudioName",audio.title )
+
 
     Card(
         modifier = Modifier
@@ -114,17 +131,37 @@ fun ProcessedCard(audio: AudioProc) {
                     .padding(8.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                IconButton(
-                    onClick = {
-                        //TODO
-                    }
-                ) {
+                IconButton(onClick = { expanded = true })
+                {
                     Icon(
                         Icons.Default.MoreVert,
                         tint = DLChordsTheme.colors.primary,
-                        contentDescription = "MenuProcesados"
+                        contentDescription = "MenuAlmacenados"
                     )
                 }
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    DropdownMenuItem(onClick = { startActivity(context, pasarScreen, null) }) {
+                        Text("Mostrar PDF")
+                    }
+                    Divider()
+                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                        Text("Eliminar")
+                    }
+                }
+
+
+
+
+
+
+
+
+
+
+
             }
         }
     }

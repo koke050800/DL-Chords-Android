@@ -15,6 +15,7 @@ import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerO
 import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -25,6 +26,7 @@ fun ProcessedAudiosScreen(
     state: AudioProcessedListState,
     isRefreshing: Boolean,
     refreshData: () -> Unit,
+    generatedFilesViewModel : GeneratedFilesViewModel
 ) {
     Column(
         modifier = Modifier
@@ -42,7 +44,7 @@ fun ProcessedAudiosScreen(
                 item { LabelAndDividerOfLists(label = "Audios Procesados") }
                 if (state.audioProcessedList.isNotEmpty()) {
                     items(items = state.audioProcessedList) { audioElementList: AudioProc ->
-                        ProcessedCard(audio = audioElementList)
+                        ProcessedCard(audio = audioElementList,generatedFilesViewModel,)
                     }
                 } else {
                     item {

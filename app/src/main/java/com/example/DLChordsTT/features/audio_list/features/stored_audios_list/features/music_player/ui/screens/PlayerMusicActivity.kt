@@ -14,7 +14,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.screens.PlayerMusicStored
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -31,6 +33,8 @@ class PlayerMusicActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
         val storedAudiosList = audioViewModel.storedAudioList
+        val audioProcViewModel: AudioProcViewModel by viewModels()
+
         setContent {
             DLChordsTheme {
 
@@ -41,11 +45,15 @@ class PlayerMusicActivity : ComponentActivity() {
                             if (!audioViewModel.isPlaying.value) {
                                 audioViewModel.playAudio(storedAudiosList[musicData])
                             }
+                            val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
+
                             PlayerMusicStored(
                                 progress = audioViewModel.currentAudioProgress.value,
                                 onProgressChange = {},
                                 storedAudiosList[musicData],
-                                audioViewModel = audioViewModel
+                                audioViewModel = audioViewModel,
+                                audioProcViewModel = audioProcViewModel,
+                                generatedFilesViewModel = generatedFilesViewModel
                             )
                         }
                     } else {
