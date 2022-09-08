@@ -19,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerOfListsPDF
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
