@@ -21,23 +21,23 @@ constructor(
         try {
             emit(Result.Loading<List<AudioProc>>())
 
-            val processedAudioList = processedAudioList.get().await().map{ audioOfDB ->
+            val processedAudioList = processedAudioList.get().await().map { audioOfDB ->
                 audioOfDB.toObject(AudioProc::class.java)
-
             }
-            println("\n\n  ------ ${processedAudioList.get(0).artist}    \n\n")
+
             emit(Result.Success<List<AudioProc>>(data = processedAudioList))
-        }catch (e: Exception){
+
+        } catch (e: Exception) {
             emit(Result.Error<List<AudioProc>>(message = e.localizedMessage ?: "Error Desconocido"))
         }
     }
 
-    fun addNewProcessedAudio(audioP : AudioProc){
-   try{
-       processedAudioList.document(""+audioP.id).set(audioP)
-   }catch (e: Exception){
-       e.printStackTrace()
-   }
+    fun addNewProcessedAudio(audioP: AudioProc) {
+        try {
+            processedAudioList.document("" + audioP.id).set(audioP)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
