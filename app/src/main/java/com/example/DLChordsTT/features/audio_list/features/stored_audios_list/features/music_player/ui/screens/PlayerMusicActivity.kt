@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -31,6 +32,7 @@ class PlayerMusicActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
         val storedAudiosList = audioViewModel.storedAudioList
+
         setContent {
             DLChordsTheme {
 
@@ -38,7 +40,9 @@ class PlayerMusicActivity : ComponentActivity() {
                     if (!it) {
                         if (musicData != null && storedAudiosList.size != 0) {
 
+                            println("--**-*-*-*--*-*-////// ${storedAudiosList[musicData]}")
                             if (!audioViewModel.isPlaying.value) {
+                                println("///////////// ID DE SHIT $musicData")
                                 audioViewModel.playAudio(storedAudiosList[musicData])
                             }
                             PlayerMusicStored(
@@ -60,5 +64,7 @@ class PlayerMusicActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
 

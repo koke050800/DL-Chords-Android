@@ -20,6 +20,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.lang.Thread.sleep
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +31,10 @@ class AudioViewModel @Inject constructor(
     var storedAudioList = mutableStateListOf<Audio>()
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
+    val isLoadingStoredList = mutableStateOf(false)
     val isPlaying = mutableStateOf(false)
     val currentPlayingAudio = serviceConnection.currentPlayingAudio
+    var lastAudio by mutableStateOf(0L)
     private val isConnected = serviceConnection.isConnected
     lateinit var rootMediaId: String
     var currentPlayBackPosition by mutableStateOf(0L)
@@ -64,6 +67,7 @@ class AudioViewModel @Inject constructor(
     init {
 
         isLoading.value = true
+        isLoadingStoredList.value = true
         getStoredAudios2()
         //conectToMediaPlayerService()
 
@@ -77,7 +81,7 @@ class AudioViewModel @Inject constructor(
 
 
     fun getStoredAudios2() = viewModelScope.launch {
-        if (!isLoading.value) {
+        if (!isLoadingStoredList.value) {
             isRefreshing.isRefreshing = true
         }
         kotlin.runCatching {
@@ -109,31 +113,32 @@ class AudioViewModel @Inject constructor(
         }.onFailure { println("Falle al buscar los audios del telefono") }
 
         isRefreshing.isRefreshing = false
-        isLoading.value = false
+        isLoadingStoredList.value = false
     }
 
     fun playAudio(currentAudio: Audio) {
         isPlaying.value = true
+        var audioList = mutableStateListOf<Audio>()
         serviceConnection.playAudio(storedAudioList)
+        //serviceConnection.transportControl.
+        println("CURRENT AUDIO -------- $currentAudio")
         if (currentAudio.id == currentPlayingAudio.value?.id) {
             println("Hola neni")
             if (isAudioPlaying) {
                 println("Aqui ando pausando")
-                serviceConnection.transportControl.pause()
+                serviceConnection.transportControl.stop()
             } else {
                 serviceConnection.transportControl.play()
             }
 
         } else {
-            println("Hola zorco")
+            println("Hola zorco -------////////  ${currentAudio.id}")
             serviceConnection.transportControl
                 .playFromMediaId(
                     currentAudio.id.toString(),
                     null
                 )
         }
-
-
     }
 
     private fun updatePlayBack() {
@@ -144,14 +149,23 @@ class AudioViewModel @Inject constructor(
             if (currentPlayBackPosition != position) {
                 currentPlayBackPosition = position
             }
+            println("Duración del audio $currentDuration")
+            println("Duración del audio viejo ${playbackState.value?.state}")
 
             if (currentDuration > 0) {
+                if (lastAudio != currentDuration) {
+                    if (isAudioPlaying && (lastAudio > 80)) {
+                        
+                        currentPlayingAudio.value?.let { playAudio(it) }
+                    }
+                    lastAudio = currentDuration
+                } else {
 
+                }
                 try {
                     currentAudioProgress.value = (
                             currentPlayBackPosition.toFloat()
                                     / currentDuration.toFloat() * 100f
-
                             )
                 } catch (e: Exception) {
                     println(e.message)
@@ -173,6 +187,10 @@ class AudioViewModel @Inject constructor(
             object : MediaBrowserCompat.SubscriptionCallback() {}
         )
         updatePosition = false
+    }
+
+    fun refreshMediaService() {
+        onCleared()
     }
 
 }
