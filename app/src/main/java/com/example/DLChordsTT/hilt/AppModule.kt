@@ -16,9 +16,10 @@ object AppModule {
     @Singleton
     fun provideFirestoreInstance() = FirebaseFirestore.getInstance()
 
+
     @Provides
     @Singleton
-    fun provideAudioProcessedList(
-        firestore: FirebaseFirestore
-    ) = firestore.collection("AudioProc")
+    fun provideAudioProcessedList(firestore: FirebaseFirestore) = firestore.collection("AudioProc")
+
+
 }

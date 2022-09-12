@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.provider.MediaStore
 import android.util.Log
 import androidx.annotation.WorkerThread
+import androidx.compose.runtime.MutableState
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -27,7 +28,7 @@ constructor(@ApplicationContext val context: Context) {
         "${MediaStore.Audio.AudioColumns.IS_MUSIC} = ?"
     private var selectionArg = arrayOf("1")
 
-    private val sortOrder = "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
+    private var sortOrder = "${MediaStore.Audio.AudioColumns.DISPLAY_NAME} ASC"
 
 
     @WorkerThread

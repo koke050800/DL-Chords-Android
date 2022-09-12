@@ -40,7 +40,6 @@ class AudioViewModel @Inject constructor(
     var currentPlayBackPosition by mutableStateOf(0L)
     private var updatePosition = true
     private val playbackState = serviceConnection.plaBackState
-
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
 
@@ -65,22 +64,23 @@ class AudioViewModel @Inject constructor(
     var currentAudioProgress = mutableStateOf(0f)
 
     init {
-
         isLoading.value = true
         isLoadingStoredList.value = true
-        getStoredAudios2()
-        //conectToMediaPlayerService()
-
-
+        getStoredAudios()
     }
 
 
-    fun conectToMediaPlayerService() = viewModelScope.launch {
-
+    fun changeOrderOfStoredAudioList() {
+        if (storedAudioList.isNotEmpty()) {
+            val sortList =  storedAudioList.reversed()
+            storedAudioList.clear()
+            storedAudioList.addAll(sortList)
+        }
     }
 
 
-    fun getStoredAudios2() = viewModelScope.launch {
+    fun getStoredAudios() = viewModelScope.launch {
+
         if (!isLoadingStoredList.value) {
             isRefreshing.isRefreshing = true
         }

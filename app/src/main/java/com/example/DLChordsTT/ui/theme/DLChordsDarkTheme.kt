@@ -4,8 +4,8 @@ import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
 
 object DLChordsDarkTheme : DLChordsColors {
-    override val primaryText = Color(0xFFFFFFFF)
-    override val secondaryText = Color(0xFFB6B6B6)
+    override val primaryText = Color(0xFFFFFFDFF)
+    override val secondaryText = Color(0xFF8D8D8D)
     override val hintText = Color(0xFF686868)
 
     override val success = Color(0xFFA5D6A7)
@@ -16,7 +16,8 @@ object DLChordsDarkTheme : DLChordsColors {
     override val toolbar = primaryColor.s300
     override val onToolbar = Color.White
 
-    override val divider = Color(0xFF595959)
+    //override val divider = Color(0xFFF1ACAE)
+    override val divider = Color(0xFFEFD4D5)
 
     override val isLight = false
 
@@ -28,7 +29,7 @@ object DLChordsDarkTheme : DLChordsColors {
     override val secondaryVariant = secondaryColor.s600
     override val onSecondary = Color.Black
 
-    override val background = Color(0xFF939191)
+    override val background = Color(0xFF353535)
 
     //override val background = Color(0xFF121212)
     override val onBackground = primaryText
@@ -39,7 +40,7 @@ object DLChordsDarkTheme : DLChordsColors {
     override val error = Color(0xFFE57373)
     override val onError = Color.Black
 
-    override val cardColor = Color(0xFFF5F2F2)
+    override val cardColor = Color(0xFF252525)
 
     override fun toColors() = Colors(
         primary,

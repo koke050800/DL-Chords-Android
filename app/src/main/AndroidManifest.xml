@@ -3,16 +3,19 @@
     package="DLChordsTT">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.example.DLChordsTT.hilt.DLChordsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.DLChordsTT1">
-
+        android:theme="@style/Theme.DLChordsTT1"
+        android:requestLegacyExternalStorage="true"
+>
 
         <activity
             android:name="com.example.DLChordsTT.features.audio_list.ui.screens.AudioListActivity"
@@ -30,6 +33,12 @@
         android:exported="false"
         android:label="@string/title_activity_player_music"
         android:theme="@style/Theme.DLChordsTT1" />
+
+        <activity
+            android:name="com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity"
+            android:exported="false"
+            android:label="@string/title_activity_player_music"
+            android:theme="@style/Theme.DLChordsTT1" />
     <service
         android:name="com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.MusicPlayerService"
         android:exported="false">

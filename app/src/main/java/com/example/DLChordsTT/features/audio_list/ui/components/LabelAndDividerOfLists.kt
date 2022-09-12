@@ -18,6 +18,7 @@ fun LabelAndDividerOfLists(label: String = "Label"){
             text = label,
             style = DLChordsTheme.typography.body2,
             color = DLChordsTheme.colors.primary,
+
             modifier = Modifier.padding(end = 12.dp)
         )
         Box(modifier = Modifier.align(Alignment.CenterVertically)) {

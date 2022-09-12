@@ -12,9 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
@@ -24,7 +27,9 @@ fun PlayerMusicStored(
     progress: Float,
     onProgressChange: (Float) -> Unit,
     audio: Audio,
-    audioViewModel: AudioViewModel
+    audioViewModel: AudioViewModel,
+    audioProcViewModel: AudioProcViewModel,
+    generatedFilesViewModel: GeneratedFilesViewModel,
 ) {
 
     DLChordsTheme {
@@ -90,7 +95,32 @@ fun PlayerMusicStored(
             )
 
             Button(
-                onClick = {},
+                onClick = {
+             /////////Esto se hará cuando se termine de procesar el audio
+                    audioProcViewModel.addNewAudioProc(AudioProc(
+                         id = audio.id,
+                         id_file = audio.id,
+                     displayName = audio.displayName,
+                     artist = audio.artist,
+                     data = audio.data,
+                     duration = 344324,
+                     title = audio.title,
+
+                    ))
+
+
+generatedFilesViewModel.createPDF("Hola", "apoco si nena????? \n como has estado bebe \n hace cunato tiempo no nos vemos??")
+
+                   /* if(audioProcViewModel.state.error.isNotBlank()){
+
+
+                    }
+                    if(audioProcViewModel.state.isLoading){
+
+
+                    }*/
+
+                },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
                     .padding(vertical = 40.dp)
@@ -111,7 +141,20 @@ fun PlayerMusicStored(
                 )
             }
             Button(
-                onClick = {},
+                onClick = {
+                    ////////Esto se hará cuando se termine de procesar el audio
+                    audioProcViewModel.addNewAudioProc(AudioProc(
+                        id = audio.id,
+                        id_file = audio.id,
+                        displayName = audio.displayName,
+                        artist = audio.artist,
+                        data = audio.data,
+                        duration = 344324 ,
+                        title = audio.title,
+
+                        ))
+
+                },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
                     .padding(bottom = 40.dp)
