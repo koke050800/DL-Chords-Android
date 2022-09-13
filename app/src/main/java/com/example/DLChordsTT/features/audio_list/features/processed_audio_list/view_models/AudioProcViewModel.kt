@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,6 +29,7 @@ class AudioProcViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
 
+    val isDescending = mutableStateOf(true)
 
     init {
         getAudiosProcessedBD()
@@ -60,12 +62,20 @@ class AudioProcViewModel @Inject constructor(
                     _state.value = AudioProcessedListState(isLoading = true)
                 }
                 is Result.Success -> {
+                    var listProcessed = emptyList<AudioProc>()
+                    var sortList = emptyList<AudioProc>()
+
+                    if (result.data?.isNotEmpty() == true) {
+                        listProcessed =  result.data.sortedBy { it.title.lowercase(locale = Locale.getDefault()) }
+                        sortList = listProcessed.reversed()
+                    }
+
                     _state.value = AudioProcessedListState(
-                        audioProcessedList = result.data ?: emptyList<AudioProc>()
+                        audioProcessedList = listProcessed,
+                        audioProcessedListInverted = sortList
                     )
                 }
             }
         }.launchIn(viewModelScope)
     }
-
 }
