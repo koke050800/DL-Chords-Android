@@ -25,10 +25,11 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.floor
 
 @Composable
-fun StoredCard(audio: Audio, indexAudio: Int) {
+fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
+    sendAudio.putExtra("isAscending", isAscending)
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -91,11 +92,11 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc,generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val pasarScreen = Intent(context, FilesBDActivity::class.java)
-pasarScreen.putExtra("AudioName",audio.title )
+    pasarScreen.putExtra("AudioName", audio.title)
 
 
     Card(
@@ -151,17 +152,6 @@ pasarScreen.putExtra("AudioName",audio.title )
                         Text("Eliminar")
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
             }
         }
     }

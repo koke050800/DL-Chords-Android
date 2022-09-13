@@ -30,6 +30,7 @@ class AudioViewModel @Inject constructor(
     serviceConnection: MediaPlayerServiceConnection
 ) : ViewModel() {
     var storedAudioList = mutableStateListOf<Audio>()
+
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
     val isLoadingStoredList = mutableStateOf(false)
@@ -42,6 +43,8 @@ class AudioViewModel @Inject constructor(
     private val playbackState = serviceConnection.plaBackState
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
+
+    var isAscending = mutableStateOf(true)
 
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
@@ -101,10 +104,17 @@ class AudioViewModel @Inject constructor(
 
             if (storedAudioList.isNotEmpty()) {
                 var sortList = mutableStateListOf<Audio>()
-                sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+
+                if (isAscending.value) {
+                    sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+                } else {
+                    sortList.addAll(storedAudioList.sortedByDescending { it.title.lowercase(Locale.getDefault()) })
+                }
                 storedAudioList.clear()
                 storedAudioList.addAll(sortList)
             }
+
+
 
             isConnected.collect {
                 if (it) {

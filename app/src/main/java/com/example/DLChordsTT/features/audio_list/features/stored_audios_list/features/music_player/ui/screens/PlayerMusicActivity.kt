@@ -29,9 +29,13 @@ class PlayerMusicActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
         val musicData = receiveMusic?.getInt("AudioId")
+        val isAscending = receiveMusic?.getBoolean("isAscending")
 
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
+        if (isAscending != null) {
+            audioViewModel.isAscending.value = isAscending
+        }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
 
