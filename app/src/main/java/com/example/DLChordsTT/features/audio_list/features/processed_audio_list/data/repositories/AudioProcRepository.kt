@@ -20,12 +20,10 @@ constructor(
     fun getProcessedAudioList(): Flow<Result<List<AudioProc>>> = flow {
         try {
             emit(Result.Loading<List<AudioProc>>())
-
             val processedAudioList = processedAudioList.get().await().map{ audioOfDB ->
                 audioOfDB.toObject(AudioProc::class.java)
-
             }
-            println("\n\n  ------ ${processedAudioList.get(0).artist}    \n\n")
+          //  println("\n\n  ------ ${processedAudioList.get(0).artist}    \n\n")
             emit(Result.Success<List<AudioProc>>(data = processedAudioList))
         }catch (e: Exception){
             emit(Result.Error<List<AudioProc>>(message = e.localizedMessage ?: "Error Desconocido"))

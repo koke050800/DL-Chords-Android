@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -9,6 +10,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -78,20 +80,22 @@ fun PlayerMusicStored(
             Button(
                 onClick = {
              /////////Esto se hará cuando se termine de procesar el audio
-                    audioProcViewModel.addNewAudioProc(AudioProc(
-                         id = audio.id,
-                         id_file = audio.id,
-                     displayName = audio.displayName,
-                     artist = audio.artist,
-                     data = audio.data,
-                     duration = 344324,
-                     title = audio.title,
+                    val audioP = AudioProc(
+                        id = audio.id,
+                        displayName = audio.displayName,
+                        artist = audio.artist,
+                        data = audio.data,
+                        duration = audio.duration,
+                        title = audio.title,
+                        )
+                    audioProcViewModel.addNewAudioProc(audioP)
 
-                    ))
 
-
-generatedFilesViewModel.createPDF("Hola", "apoco si nena????? \n como has estado bebe \n hace cunato tiempo no nos vemos??")
-
+                    generatedFilesViewModel.createPDF(audioProc = audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","L")
+                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","LAI")
+                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","LAL")
+                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","AI")
+                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","AL")
                    /* if(audioProcViewModel.state.error.isNotBlank()){
 
 
@@ -126,7 +130,6 @@ generatedFilesViewModel.createPDF("Hola", "apoco si nena????? \n como has estado
                     ////////Esto se hará cuando se termine de procesar el audio
                     audioProcViewModel.addNewAudioProc(AudioProc(
                         id = audio.id,
-                        id_file = audio.id,
                         displayName = audio.displayName,
                         artist = audio.artist,
                         data = audio.data,
