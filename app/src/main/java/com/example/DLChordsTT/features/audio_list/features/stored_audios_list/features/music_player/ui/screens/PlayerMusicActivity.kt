@@ -30,7 +30,7 @@ class PlayerMusicActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
         val musicData = receiveMusic?.getInt("AudioId")
-
+        var cont = 0
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
         val storedAudiosList = audioViewModel.storedAudioList
@@ -38,15 +38,13 @@ class PlayerMusicActivity : ComponentActivity() {
 
         setContent {
             DLChordsTheme {
-
+                storedAudiosList.forEach { println(" ${it.displayName}") }
                 Crossfade(targetState = audioViewModel.isLoading.value) {
                     if (!it) {
                         if (musicData != null && storedAudiosList.size != 0) {
-
-                            println("--**-*-*-*--*-*-////// ${storedAudiosList[musicData]}")
-                            if (!audioViewModel.isPlaying.value) {
-                                println("///////////// ID DE SHIT $musicData")
-                                audioViewModel.playAudio(storedAudiosList[musicData])
+                            cont+=1
+                            if (!audioViewModel.isAudioPlaying && cont==1) {
+                                audioViewModel.playAudio(storedAudiosList[musicData],false)
                             }
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 

@@ -29,6 +29,7 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
+    sendAudio.putExtra("isDescending", true)
     var expanded by remember { mutableStateOf(false) }
 
     Card(

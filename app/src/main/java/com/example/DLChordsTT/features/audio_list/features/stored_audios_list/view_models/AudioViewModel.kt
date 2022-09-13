@@ -34,7 +34,6 @@ class AudioViewModel @Inject constructor(
     val isLoadingStoredList = mutableStateOf(false)
     val isPlaying = mutableStateOf(false)
     val currentPlayingAudio = serviceConnection.currentPlayingAudio
-    var lastAudio by mutableStateOf(0L)
     private val isConnected = serviceConnection.isConnected
     lateinit var rootMediaId: String
     var currentPlayBackPosition by mutableStateOf(0L)
@@ -54,8 +53,7 @@ class AudioViewModel @Inject constructor(
     }
 
     private val serviceConnection = serviceConnection.also {
-        println("Hola ya entre aquí")
-        updatePlayBack()
+        updatePlayBack(0L)
     }
 
     val currentDuration: Long
@@ -72,7 +70,7 @@ class AudioViewModel @Inject constructor(
 
     fun changeOrderOfStoredAudioList() {
         if (storedAudioList.isNotEmpty()) {
-            val sortList =  storedAudioList.reversed()
+            val sortList = storedAudioList.reversed()
             storedAudioList.clear()
             storedAudioList.addAll(sortList)
         }
@@ -116,32 +114,24 @@ class AudioViewModel @Inject constructor(
         isLoadingStoredList.value = false
     }
 
-    fun playAudio(currentAudio: Audio) {
-        isPlaying.value = true
-        var audioList = mutableStateListOf<Audio>()
+    fun playAudio(currentAudio: Audio, isBack: Boolean) {
         serviceConnection.playAudio(storedAudioList)
-        //serviceConnection.transportControl.
-        println("CURRENT AUDIO -------- $currentAudio")
         if (currentAudio.id == currentPlayingAudio.value?.id) {
-            println("Hola neni")
             if (isAudioPlaying) {
-                println("Aqui ando pausando")
                 serviceConnection.transportControl.stop()
-            } else {
-                serviceConnection.transportControl.play()
             }
-
         } else {
-            println("Hola zorco -------////////  ${currentAudio.id}")
-            serviceConnection.transportControl
-                .playFromMediaId(
-                    currentAudio.id.toString(),
-                    null
-                )
+            if (!isBack) {
+                serviceConnection.transportControl
+                    .playFromMediaId(
+                        currentAudio.id.toString(),
+                        null
+                    )
+            }
         }
     }
 
-    private fun updatePlayBack() {
+    private fun updatePlayBack(lastPosition: Long) {
 
         viewModelScope.launch {
             val position = playbackState.value?.currentPosition ?: 0
@@ -149,19 +139,15 @@ class AudioViewModel @Inject constructor(
             if (currentPlayBackPosition != position) {
                 currentPlayBackPosition = position
             }
-            println("Duración del audio $currentDuration")
-            println("Duración del audio viejo ${playbackState.value?.state}")
-
-            if (currentDuration > 0) {
-                if (lastAudio != currentDuration) {
-                    if (isAudioPlaying && (lastAudio > 80)) {
-                        
-                        currentPlayingAudio.value?.let { playAudio(it) }
-                    }
-                    lastAudio = currentDuration
-                } else {
-
+            if (lastPosition > position) {
+                currentPlayingAudio.value?.let {
+                    playAudio(
+                        it,
+                        true
+                    )
                 }
+            }
+            if (currentDuration > 0) {
                 try {
                     currentAudioProgress.value = (
                             currentPlayBackPosition.toFloat()
@@ -175,7 +161,7 @@ class AudioViewModel @Inject constructor(
             delay(K.PLAYBACK_UPDATE_INTERVAL)
 
             if (updatePosition) {
-                updatePlayBack()
+                updatePlayBack(position)
             }
         }
     }
