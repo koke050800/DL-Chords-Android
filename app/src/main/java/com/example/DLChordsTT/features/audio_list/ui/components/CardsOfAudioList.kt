@@ -48,7 +48,7 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = audio.displayName,
+                    text = audio.title,
                     style = DLChordsTheme.typography.subtitle1,
                     color = DLChordsTheme.colors.primaryText,
                     maxLines = 1
@@ -114,7 +114,7 @@ pasarScreen.putExtra("AudioName",audio.title )
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = audio.displayName,
+                    text = audio.title,
                     style = DLChordsTheme.typography.subtitle1,
                     color = DLChordsTheme.colors.primaryText,
                     maxLines = 1

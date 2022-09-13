@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
@@ -20,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -96,6 +98,14 @@ class AudioViewModel @Inject constructor(
 
                 )
             })
+
+            if (storedAudioList.isNotEmpty()) {
+                var sortList = mutableStateListOf<Audio>()
+                sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+                storedAudioList.clear()
+                storedAudioList.addAll(sortList)
+            }
+
             isConnected.collect {
                 if (it) {
                     println("EL COLLECT")

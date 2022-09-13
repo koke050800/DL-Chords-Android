@@ -74,7 +74,7 @@ fun ProcessedAudiosScreen(
                     } else {
                         val resultList = mutableListOf<AudioProc>()
                         for (audioProcessed in if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted) {
-                            if (audioProcessed.displayName.lowercase(Locale.getDefault())
+                            if (audioProcessed.title.lowercase(Locale.getDefault())
                                     .contains(searchedText.lowercase(Locale.getDefault()))
                             ) {
                                 resultList.add(audioProcessed)

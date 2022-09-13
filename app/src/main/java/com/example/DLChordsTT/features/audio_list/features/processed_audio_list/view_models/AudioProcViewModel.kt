@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -65,7 +66,7 @@ class AudioProcViewModel @Inject constructor(
                     var sortList = emptyList<AudioProc>()
 
                     if (result.data?.isNotEmpty() == true) {
-                        listProcessed =  result.data.sortedBy { it.displayName }
+                        listProcessed =  result.data.sortedBy { it.title.lowercase(locale = Locale.getDefault()) }
                         sortList = listProcessed.reversed()
                     }
 

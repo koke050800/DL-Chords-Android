@@ -57,7 +57,7 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                     } else {
                         val resultList = SnapshotStateList<Audio>()
                         for (audioStored in storedAudioList) {
-                            if (audioStored.displayName.lowercase(Locale.getDefault())
+                            if (audioStored.title.lowercase(Locale.getDefault())
                                     .contains(searchedText.lowercase(Locale.getDefault()))
                             ) {
                                 resultList.add(audioStored)
