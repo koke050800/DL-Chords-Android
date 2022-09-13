@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
@@ -21,6 +22,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.lang.Thread.sleep
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +31,7 @@ class AudioViewModel @Inject constructor(
     serviceConnection: MediaPlayerServiceConnection
 ) : ViewModel() {
     var storedAudioList = mutableStateListOf<Audio>()
+
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
     val isLoadingStoredList = mutableStateOf(false)
@@ -41,6 +44,8 @@ class AudioViewModel @Inject constructor(
     private val playbackState = serviceConnection.plaBackState
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
+
+    var isAscending = mutableStateOf(true)
 
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
@@ -96,6 +101,21 @@ class AudioViewModel @Inject constructor(
 
                 )
             })
+
+            if (storedAudioList.isNotEmpty()) {
+                var sortList = mutableStateListOf<Audio>()
+
+                if (isAscending.value) {
+                    sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+                } else {
+                    sortList.addAll(storedAudioList.sortedByDescending { it.title.lowercase(Locale.getDefault()) })
+                }
+                storedAudioList.clear()
+                storedAudioList.addAll(sortList)
+            }
+
+
+
             isConnected.collect {
                 if (it) {
                     println("EL COLLECT")

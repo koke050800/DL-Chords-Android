@@ -39,7 +39,9 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
             state = textState,
             focusManager = focusManager,
             onClick = {
-                audioStoredViewModel.changeOrderOfStoredAudioList()
+                audioStoredViewModel.isAscending.value =
+                    !audioStoredViewModel.isAscending.value
+                audioStoredViewModel.getStoredAudios()
             }
         )
         SwipeRefresh(
@@ -57,7 +59,7 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                     } else {
                         val resultList = SnapshotStateList<Audio>()
                         for (audioStored in storedAudioList) {
-                            if (audioStored.displayName.lowercase(Locale.getDefault())
+                            if (audioStored.title.lowercase(Locale.getDefault())
                                     .contains(searchedText.lowercase(Locale.getDefault()))
                             ) {
                                 resultList.add(audioStored)
@@ -68,7 +70,8 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                     items(storedAudioListFiltered) { audioElementList: Audio ->
                         StoredCard(
                             audio = audioElementList,
-                            indexAudio = storedAudioList.indexOf(audioElementList)
+                            indexAudio = storedAudioList.indexOf(audioElementList),
+                            isAscending = audioStoredViewModel.isAscending.value
                         )
                     }
                 } else {

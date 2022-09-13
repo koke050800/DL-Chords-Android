@@ -25,11 +25,11 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.floor
 
 @Composable
-fun StoredCard(audio: Audio, indexAudio: Int) {
+fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
-    sendAudio.putExtra("isDescending", true)
+    sendAudio.putExtra("isAscending", isAscending)
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -49,7 +49,7 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = audio.displayName,
+                    text = audio.title,
                     style = DLChordsTheme.typography.subtitle1,
                     color = DLChordsTheme.colors.primaryText,
                     maxLines = 1
@@ -92,12 +92,11 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc,generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val pasarScreen = Intent(context, FilesBDActivity::class.java)
-pasarScreen.putExtra("AudioName",audio.title )
-
+    val toScreenPDF = Intent(context, FilesBDActivity::class.java)
+    toScreenPDF.putExtra("AudioName", audio)
 
     Card(
         modifier = Modifier
@@ -115,7 +114,7 @@ pasarScreen.putExtra("AudioName",audio.title )
                     .align(Alignment.CenterVertically)
             ) {
                 Text(
-                    text = audio.displayName,
+                    text = audio.title,
                     style = DLChordsTheme.typography.subtitle1,
                     color = DLChordsTheme.colors.primaryText,
                     maxLines = 1
@@ -144,25 +143,14 @@ pasarScreen.putExtra("AudioName",audio.title )
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    DropdownMenuItem(onClick = { startActivity(context, pasarScreen, null) }) {
+                    DropdownMenuItem(onClick = { generatedFilesViewModel.toCardScreen(context,toScreenPDF) }) {
                         Text("Mostrar PDF")
                     }
                     Divider()
-                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                    DropdownMenuItem(onClick = { generatedFilesViewModel.deletePDF(audio) }) {
                         Text("Eliminar")
                     }
                 }
-
-
-
-
-
-
-
-
-
-
-
             }
         }
     }
