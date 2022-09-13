@@ -29,8 +29,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
-fun FilesBDScreen( audioName:String
-) {
+fun FilesBDScreen(audio:AudioProc,   generatedFilesViewModel: GeneratedFilesViewModel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -38,22 +37,22 @@ fun FilesBDScreen( audioName:String
             .padding(horizontal = 16.dp),
               horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopAppBarPDF("Archivos Generados - ${audioName}")
+        TopAppBarPDF("Archivos Generados - ${audio.title}")
 
         LazyColumn(
             modifier = Modifier
                 .padding(horizontal = 8.dp)
         ) {
             item {
-                joinCardsPDF("Letra", 1)
+                joinCardsPDF(audio,"Letra", 1,generatedFilesViewModel,)
             }
 
             item {
-                joinCardsPDF("Nomenclatura Inglesa", 2)
+                joinCardsPDF(audio,"Nomenclatura Inglesa", 2,generatedFilesViewModel)
             }
 
             item {
-                joinCardsPDF("Nomenclatura Latina", 2)
+                joinCardsPDF(audio,"Nomenclatura Latina", 2,generatedFilesViewModel,"L")
             }
 
 

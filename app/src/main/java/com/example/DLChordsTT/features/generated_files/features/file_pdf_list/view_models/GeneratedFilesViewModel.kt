@@ -1,9 +1,13 @@
 package com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Environment
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,18 +30,22 @@ import javax.inject.Inject
 class GeneratedFilesViewModel @Inject constructor(
     private val generatedFilesRepository: GeneratedFilesRepository,
 ) : ViewModel() {
-   private val _state: MutableState<AudioProcessedListState> = mutableStateOf(
-        AudioProcessedListState()
-    )
-    val state: State<AudioProcessedListState> = _state
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
-    fun createPDF(title:String,text:String){
-        generatedFilesRepository.createPDF(title,text)
+    fun createPDF(audioProc: AudioProc, text: String, pre: String) {
+        generatedFilesRepository.createPDF(audioProc = audioProc, text, pre)
+    }
+    fun deletePDF(audioProc: AudioProc) {
+        generatedFilesRepository.deleteData(audioProc = audioProc )
+    }
+    fun showPDF(url:String, context: Context) {
+        generatedFilesRepository.showData(url= url, context = context )
     }
 
+    fun toCardScreen(context: Context, toScreenPDF : Intent){
+        generatedFilesRepository.startCardScreen(context,toScreenPDF)
+    }
+    fun downloadPDF(url:String, context: Context) {
+        generatedFilesRepository.downloadData(url= url, context = context )
 
-
+    }
 }

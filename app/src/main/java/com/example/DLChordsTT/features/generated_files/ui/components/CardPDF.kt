@@ -1,28 +1,27 @@
 package com.example.DLChordsTT.features.generated_files.ui.components
 
+
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.FileDownload
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
+
+
 @Composable
-fun joinCardsPDF(label: String = "Label", nCards : Int = 1){
+fun joinCardsPDF(audio: AudioProc, label: String = "Label", nCards: Int = 1,generatedFilesViewModel : GeneratedFilesViewModel, pre: String = "E") {
     Box(
         modifier = Modifier
             .padding(vertical = 16.dp)
@@ -36,13 +35,37 @@ fun joinCardsPDF(label: String = "Label", nCards : Int = 1){
                     modifier = Modifier.padding(end = 12.dp)
                 )
             }
-            if (nCards == 1){
-            CardPDF("Letra ", "Disfruta de la letra del audio")}
-            else{
-                Row(modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 4.dp)) {
-                    CardPDF("Letra y Acordes", "Disfruta de los acordes y letra del audio")
-                    Spacer(modifier = Modifier.padding(horizontal = 12.dp))
-                    CardPDF("Acordes", "Disfruta de los acordes  del audio")
+            if (nCards == 1) {
+                CardPDF(audio.lyrics, "Letra ", "Disfruta de la letra del audio",generatedFilesViewModel)
+            } else {
+                if (pre.equals("E")) {
+                    Row(modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 4.dp)) {
+                        CardPDF(
+                            audio.chords_lyrics_e,
+                            "Letra y Acordes",
+                            "Disfruta de los acordes y letra del audio",generatedFilesViewModel
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 12.dp))
+                        CardPDF(
+                            audio.english_nomenclature,
+                            "Acordes",
+                            "Disfruta de los acordes  del audio",generatedFilesViewModel
+                        )
+                    }
+                } else {
+                    Row(modifier = Modifier.padding(0.dp, 4.dp, 0.dp, 4.dp)) {
+                        CardPDF(
+                            audio.chords_lyrics_l,
+                            "Letra y Acordes",
+                            "Disfruta de los acordes y letra del audio",generatedFilesViewModel
+                        )
+                        Spacer(modifier = Modifier.padding(horizontal = 12.dp))
+                        CardPDF(
+                            audio.latin_nomenclature,
+                            "Acordes",
+                            "Disfruta de los acordes  del audio",generatedFilesViewModel
+                        )
+                    }
                 }
             }
         }
@@ -50,13 +73,13 @@ fun joinCardsPDF(label: String = "Label", nCards : Int = 1){
     }
 
 
-
-
 }
 
 
 @Composable
-fun CardPDF(title:String, text :String) {
+fun CardPDF(url: String, title: String, text: String, generatedFilesViewModel: GeneratedFilesViewModel) {
+    val context = LocalContext.current
+
     DLChordsTheme() {
         Card(
             modifier = Modifier
@@ -83,11 +106,11 @@ fun CardPDF(title:String, text :String) {
                         fontSize = 12.sp,
                         maxLines = 3
                     )
-               }
+                }
                 Row(modifier = Modifier.height(24.dp)) {
                     IconButton(
                         onClick = {
-                            //TODO
+                            generatedFilesViewModel.showPDF(url, context)
                         }
                     ) {
                         Icon(
@@ -97,7 +120,7 @@ fun CardPDF(title:String, text :String) {
                     }
                     IconButton(
                         onClick = {
-                            //TODO
+                            generatedFilesViewModel.downloadPDF(url, context)
                         }
                     ) {
                         Icon(
@@ -106,10 +129,7 @@ fun CardPDF(title:String, text :String) {
                         )
                     }
                 }
-
             }
-
-
         }
     }
 
@@ -117,7 +137,7 @@ fun CardPDF(title:String, text :String) {
 
 @Composable
 fun ImageOfCardPDF(title: String) {
-    val elementOfPainter = when(title){
+    val elementOfPainter = when (title) {
         "Letra" -> DLChordsTT.R.drawable.lyrics_image
         "Letra y Acordes" -> DLChordsTT.R.drawable.lyrics_chords_image
         "Acordes" -> DLChordsTT.R.drawable.chords_image

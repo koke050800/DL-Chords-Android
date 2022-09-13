@@ -40,7 +40,7 @@ class AudioProcViewModel @Inject constructor(
 
         val audio = AudioProc(
              id  = audioP.id,
-         id_file = audioP.id_file,
+       //  id_file = audioP.id_file,
          displayName = audioP.displayName,
          artist = audioP.artist,
          data = audioP.data,
