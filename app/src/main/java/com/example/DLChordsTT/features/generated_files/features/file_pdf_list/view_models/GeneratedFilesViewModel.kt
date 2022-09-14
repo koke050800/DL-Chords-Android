@@ -30,12 +30,21 @@ import javax.inject.Inject
 class GeneratedFilesViewModel @Inject constructor(
     private val generatedFilesRepository: GeneratedFilesRepository,
 ) : ViewModel() {
+    private val _state: MutableState<AudioProcessedListState> = mutableStateOf(
+        AudioProcessedListState()
+    )
+        val state: State<AudioProcessedListState> = _state
 
-    fun createPDF(audioProc: AudioProc, text: String, pre: String) {
-        generatedFilesRepository.createPDF(audioProc = audioProc, text, pre)
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing
+    val isDescending = mutableStateOf(true)
+    val deletedElement = mutableStateOf(false)
+
+    fun createPDF(context: Context,audioProc: AudioProc, text: String, pre: String) {
+        generatedFilesRepository.createPDF(context,audioProc = audioProc, text, pre)
     }
     fun deletePDF(audioProc: AudioProc) {
-        generatedFilesRepository.deleteData(audioProc = audioProc )
+        generatedFilesRepository.deleteData(audioProc = audioProc)
     }
     fun showPDF(url:String, context: Context) {
         generatedFilesRepository.showData(url= url, context = context )

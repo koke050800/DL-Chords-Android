@@ -34,7 +34,7 @@ fun NavigationHostScreens(
                 state = state,
                 isRefreshing = isRefreshing.value,
                 refreshData = audioProcessedViewModel::getAudiosProcessedBD,
-                generatedFilesViewModel=generatedFilesViewModel,
+               generatedFilesViewModel=generatedFilesViewModel,
                 audioProcessedViewModel = audioProcessedViewModel
             )
 

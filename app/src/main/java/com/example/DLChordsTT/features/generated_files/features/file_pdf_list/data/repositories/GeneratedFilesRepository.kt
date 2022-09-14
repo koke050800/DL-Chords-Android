@@ -3,9 +3,11 @@ package com.example.DLChordsTT.features.generated_files.features.file_pdf_list.d
 import DLChordsTT.R
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -52,7 +54,16 @@ constructor(
     private val processedAudioList: CollectionReference
 
 ) {
-    fun addNewGeneratedFiles(audio: AudioProc, mUri: Uri, pre: String, file :File) {
+
+    fun addNewGeneratedFiles(
+        context: Context,
+        audio: AudioProc,
+        mUri: Uri,
+        pre: String,
+        file: File
+    ) {
+
+
 
         val folder: StorageReference = FirebaseStorage.getInstance().reference.child(audio.title)
         val path = mUri.lastPathSegment.toString()
@@ -97,7 +108,7 @@ constructor(
                         audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
                         audioP.lyrics = "${audio.lyrics}"
                     }
-                    else ->  {
+                    else -> {
                         audioP.latin_nomenclature = "${audio.latin_nomenclature}"
                         audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
                         audioP.english_nomenclature = "${audio.english_nomenclature}"
@@ -106,16 +117,24 @@ constructor(
                     }
                 }
                 file.delete()
+
                 try {
-                    processedAudioList.document("${audioP.id}").set(audioP)
+                    processedAudioList.document("${audioP.id}").set(audioP).addOnSuccessListener {
+
+
+
+                    }
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
         }
+
     }
 
-    fun createPDF(audioProc: AudioProc, textD: String, typePDF: String){
+
+
+    fun createPDF(context: Context, audioProc: AudioProc, textD: String, typePDF: String) {
         var pdfDocument = PdfDocument()
         var titulo = TextPaint()
         var text = TextPaint()
@@ -125,7 +144,7 @@ constructor(
 
         titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
         titulo.textSize = 20f
-        canvas.drawText(audioProc.displayName, 10f, 150f, titulo)
+        canvas.drawText("${audioProc.title}", 10f, 150f, titulo)
 
         text.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL))
         text.textSize = 14f
@@ -148,64 +167,69 @@ constructor(
         val file = File(Environment.getExternalStorageDirectory(), "${pre}_${audioProc.title}.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audioProc, file.toUri(), pre,file)
+            addNewGeneratedFiles(context, audio = audioProc, file.toUri(), pre, file)
         } catch (e: Exception) {
             e.printStackTrace()
         }
 
     }
 
-    fun deleteData(audioProc: AudioProc){
+    fun deleteData(audioProc: AudioProc) {
         try {
             processedAudioList.document("${audioProc.id}").delete()
         } catch (e: Exception) {
             e.printStackTrace()
         }
- if(audioProc.lyrics.isNotEmpty()) {
-     val folderL: StorageReference = FirebaseStorage.getInstance().reference.child(audioProc.title)
-         .child("L_${audioProc.title}.pdf")
-     val folderLAI: StorageReference =
-         FirebaseStorage.getInstance().reference.child(audioProc.title)
-             .child("LAI_${audioProc.title}.pdf")
-     val folderAI: StorageReference = FirebaseStorage.getInstance().reference.child(audioProc.title)
-         .child("AI_${audioProc.title}.pdf")
-     val folderLAL: StorageReference =
-         FirebaseStorage.getInstance().reference.child(audioProc.title)
-             .child("LAL_${audioProc.title}.pdf")
-     val folderAL: StorageReference = FirebaseStorage.getInstance().reference.child(audioProc.title)
-         .child("AL_${audioProc.title}.pdf")
-     folderL.delete()
-     folderLAI.delete()
-     folderAI.delete()
-     folderLAL.delete()
-     folderAL.delete()
- }
+        if (audioProc.lyrics.isNotEmpty()) {
+            val folderL: StorageReference =
+                FirebaseStorage.getInstance().reference.child(audioProc.title)
+                    .child("L_${audioProc.title}.pdf")
+            val folderLAI: StorageReference =
+                FirebaseStorage.getInstance().reference.child(audioProc.title)
+                    .child("LAI_${audioProc.title}.pdf")
+            val folderAI: StorageReference =
+                FirebaseStorage.getInstance().reference.child(audioProc.title)
+                    .child("AI_${audioProc.title}.pdf")
+            val folderLAL: StorageReference =
+                FirebaseStorage.getInstance().reference.child(audioProc.title)
+                    .child("LAL_${audioProc.title}.pdf")
+            val folderAL: StorageReference =
+                FirebaseStorage.getInstance().reference.child(audioProc.title)
+                    .child("AL_${audioProc.title}.pdf")
+            folderL.delete()
+            folderLAI.delete()
+            folderAI.delete()
+            folderLAL.delete()
+            folderAL.delete()
+        }
     }
 
-    fun showData(url:String, context: Context){
+    fun showData(url: String, context: Context) {
 
         val intent = Intent(Intent.ACTION_VIEW)
+        println("Este es el url${url}")
         intent.setDataAndType(Uri.parse(url), "application/pdf")
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        val newIntent = Intent.createChooser(intent, "Open File")
+        //val newIntent = Intent.createChooser(intent)
         try {
-            ContextCompat.startActivity(context, newIntent, null)
+            startActivity(context, intent, null)
+
         } catch (e: ActivityNotFoundException) {
-            // Instruct the user to install a PDF reader here, or something
+            println("Algo salió mal en show")
         }
     }
 
-    fun downloadData(url:String, context: Context){
+    fun downloadData(url: String, context: Context) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.setDataAndType(Uri.parse(url),null)
+        intent.setDataAndType(Uri.parse(url), null)
         try {
-            startActivity(context,intent,null)
+            startActivity(context, intent, null)
         } catch (e: ActivityNotFoundException) {
-            // Instruct the user to install a PDF reader here, or something
+            println("Algo salió mal en download")
         }
-
     }
-    fun startCardScreen(context: Context, toScreenPDF: Intent){
+
+    fun startCardScreen(context: Context, toScreenPDF: Intent) {
 
         startActivity(context, toScreenPDF, null)
 

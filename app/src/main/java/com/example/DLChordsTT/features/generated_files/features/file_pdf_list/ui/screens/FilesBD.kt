@@ -44,15 +44,15 @@ fun FilesBDScreen(audio:AudioProc,   generatedFilesViewModel: GeneratedFilesView
                 .padding(horizontal = 8.dp)
         ) {
             item {
-                joinCardsPDF(audio,"Letra", 1,generatedFilesViewModel,)
+                joinCardsPDF(audio = audio, label = "Letra", nCards = 1, generatedFilesViewModel = generatedFilesViewModel,)
             }
 
             item {
-                joinCardsPDF(audio,"Nomenclatura Inglesa", 2,generatedFilesViewModel)
+                joinCardsPDF(audio = audio, label = "Nomenclatura Inglesa", nCards = 2,generatedFilesViewModel = generatedFilesViewModel)
             }
 
             item {
-                joinCardsPDF(audio,"Nomenclatura Latina", 2,generatedFilesViewModel,"L")
+                joinCardsPDF(audio = audio, label = "Nomenclatura Latina", nCards =2,generatedFilesViewModel = generatedFilesViewModel,"L")
             }
 
 

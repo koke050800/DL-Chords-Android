@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
 import com.example.DLChordsTT.features.audio_list.ui.screens.FilesBDScreen
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
@@ -91,7 +92,7 @@ fun StoredCard(audio: Audio, indexAudio: Int) {
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel,audioProcessedViewModel:AudioProcViewModel, onClick:() -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val toScreenPDF = Intent(context, FilesBDActivity::class.java)
@@ -142,11 +143,17 @@ fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewM
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    DropdownMenuItem(onClick = { generatedFilesViewModel.toCardScreen(context,toScreenPDF) }) {
+                    DropdownMenuItem(onClick = {
+                        generatedFilesViewModel.toCardScreen(context,toScreenPDF) }) {
                         Text("Mostrar PDF")
                     }
                     Divider()
-                    DropdownMenuItem(onClick = { generatedFilesViewModel.deletePDF(audio) }) {
+                    DropdownMenuItem(onClick = {
+                        generatedFilesViewModel.deletePDF(audio)
+                        onClick()
+audioProcessedViewModel.deletedElement.value = true
+
+                    }) {
                         Text("Eliminar")
                     }
                 }

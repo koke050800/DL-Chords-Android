@@ -48,6 +48,7 @@ class PlayerMusicActivity : ComponentActivity() {
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
                             PlayerMusicStored(
+                                LocalContext.current,
                                 progress = audioViewModel.currentAudioProgress.value,
                                 onProgressChange = {},
                                 storedAudiosList[musicData],
