@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -29,21 +30,26 @@ class PlayerMusicActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
         val musicData = receiveMusic?.getInt("AudioId")
+        var cont = 0
+        val isAscending = receiveMusic?.getBoolean("isAscending")
 
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
+        if (isAscending != null) {
+            audioViewModel.isAscending.value = isAscending
+        }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
 
         setContent {
             DLChordsTheme {
-
+                storedAudiosList.forEach { println(" ${it.displayName}") }
                 Crossfade(targetState = audioViewModel.isLoading.value) {
                     if (!it) {
                         if (musicData != null && storedAudiosList.size != 0) {
-
-                            if (!audioViewModel.isPlaying.value) {
-                                audioViewModel.playAudio(storedAudiosList[musicData])
+                            cont+=1
+                            if (!audioViewModel.isAudioPlaying && cont==1) {
+                                audioViewModel.playAudio(storedAudiosList[musicData],false)
                             }
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
@@ -69,5 +75,7 @@ class PlayerMusicActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
 

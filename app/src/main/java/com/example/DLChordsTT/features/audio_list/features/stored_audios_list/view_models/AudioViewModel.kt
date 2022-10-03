@@ -21,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.lang.Exception
+import java.lang.Thread.sleep
 import java.util.*
 import javax.inject.Inject
 
@@ -30,6 +31,7 @@ class AudioViewModel @Inject constructor(
     serviceConnection: MediaPlayerServiceConnection
 ) : ViewModel() {
     var storedAudioList = mutableStateListOf<Audio>()
+
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
     val isLoadingStoredList = mutableStateOf(false)
@@ -43,6 +45,8 @@ class AudioViewModel @Inject constructor(
     val isAudioPlaying: Boolean
         get() = playbackState.value?.isPlaying == true
 
+    var isAscending = mutableStateOf(true)
+
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
         override fun onChildrenLoaded(
@@ -54,8 +58,7 @@ class AudioViewModel @Inject constructor(
     }
 
     private val serviceConnection = serviceConnection.also {
-        println("Hola ya entre aquí")
-        updatePlayBack()
+        updatePlayBack(0L)
     }
 
     val currentDuration: Long
@@ -72,7 +75,7 @@ class AudioViewModel @Inject constructor(
 
     fun changeOrderOfStoredAudioList() {
         if (storedAudioList.isNotEmpty()) {
-            val sortList =  storedAudioList.reversed()
+            val sortList = storedAudioList.reversed()
             storedAudioList.clear()
             storedAudioList.addAll(sortList)
         }
@@ -101,10 +104,17 @@ class AudioViewModel @Inject constructor(
 
             if (storedAudioList.isNotEmpty()) {
                 var sortList = mutableStateListOf<Audio>()
-                sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+
+                if (isAscending.value) {
+                    sortList.addAll(storedAudioList.sortedBy { it.title.lowercase(Locale.getDefault()) })
+                } else {
+                    sortList.addAll(storedAudioList.sortedByDescending { it.title.lowercase(Locale.getDefault()) })
+                }
                 storedAudioList.clear()
                 storedAudioList.addAll(sortList)
             }
+
+
 
             isConnected.collect {
                 if (it) {
@@ -124,31 +134,24 @@ class AudioViewModel @Inject constructor(
         isLoadingStoredList.value = false
     }
 
-    fun playAudio(currentAudio: Audio) {
-        isPlaying.value = true
+    fun playAudio(currentAudio: Audio, isBack: Boolean) {
         serviceConnection.playAudio(storedAudioList)
         if (currentAudio.id == currentPlayingAudio.value?.id) {
-            println("Hola neni")
             if (isAudioPlaying) {
-                println("Aqui ando pausando")
-                serviceConnection.transportControl.pause()
-            } else {
-                serviceConnection.transportControl.play()
+                serviceConnection.transportControl.stop()
             }
-
         } else {
-            println("Hola zorco")
-            serviceConnection.transportControl
-                .playFromMediaId(
-                    currentAudio.id.toString(),
-                    null
-                )
+            if (!isBack) {
+                serviceConnection.transportControl
+                    .playFromMediaId(
+                        currentAudio.id.toString(),
+                        null
+                    )
+            }
         }
-
-
     }
 
-    private fun updatePlayBack() {
+    private fun updatePlayBack(lastPosition: Long) {
 
         viewModelScope.launch {
             val position = playbackState.value?.currentPosition ?: 0
@@ -156,14 +159,19 @@ class AudioViewModel @Inject constructor(
             if (currentPlayBackPosition != position) {
                 currentPlayBackPosition = position
             }
-
+            if (lastPosition > position) {
+                currentPlayingAudio.value?.let {
+                    playAudio(
+                        it,
+                        true
+                    )
+                }
+            }
             if (currentDuration > 0) {
-
                 try {
                     currentAudioProgress.value = (
                             currentPlayBackPosition.toFloat()
                                     / currentDuration.toFloat() * 100f
-
                             )
                 } catch (e: Exception) {
                     println(e.message)
@@ -173,7 +181,7 @@ class AudioViewModel @Inject constructor(
             delay(K.PLAYBACK_UPDATE_INTERVAL)
 
             if (updatePosition) {
-                updatePlayBack()
+                updatePlayBack(position)
             }
         }
     }
@@ -185,6 +193,10 @@ class AudioViewModel @Inject constructor(
             object : MediaBrowserCompat.SubscriptionCallback() {}
         )
         updatePosition = false
+    }
+
+    fun refreshMediaService() {
+        onCleared()
     }
 
 }

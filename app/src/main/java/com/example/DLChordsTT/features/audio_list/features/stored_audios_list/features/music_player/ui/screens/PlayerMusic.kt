@@ -19,6 +19,7 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -60,19 +61,33 @@ fun PlayerMusicStored(
                 )
             }
             val range = 0f..100f
-            Slider(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth(.7f)
                     .align(Alignment.CenterHorizontally)
-                    .padding(bottom = 40.dp),
-                value = progress,
-                valueRange = range,
-                onValueChange = { onProgressChange.invoke(it) },
-                colors = SliderDefaults.colors(
-                    thumbColor = DLChordsTheme.colors.secondaryText,
-                    activeTrackColor = DLChordsTheme.colors.secondaryText
+                    .padding(bottom = 40.dp)
+            ) {
+                Slider(
+                    value = progress,
+                    valueRange = range,
+                    onValueChange = { onProgressChange.invoke(it) },
+                    colors = SliderDefaults.colors(
+                        thumbColor = DLChordsTheme.colors.secondaryText,
+                        activeTrackColor = DLChordsTheme.colors.secondaryText
+                    )
                 )
-            )
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = "0:00", style = DLChordsTheme.typography.caption)
+                    Spacer(modifier = Modifier.weight(1f))
+                    Text(
+                        text = timeStampToDuration(audio.duration.toLong()),
+                        style = DLChordsTheme.typography.caption
+                    )
+                }
+            }
+
             Text(
                 modifier = Modifier.padding(start = 45.dp),
                 textAlign = TextAlign.Left,

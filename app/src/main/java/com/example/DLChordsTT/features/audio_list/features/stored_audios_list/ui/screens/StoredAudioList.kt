@@ -39,7 +39,9 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
             state = textState,
             focusManager = focusManager,
             onClick = {
-                audioStoredViewModel.changeOrderOfStoredAudioList()
+                audioStoredViewModel.isAscending.value =
+                    !audioStoredViewModel.isAscending.value
+                audioStoredViewModel.getStoredAudios()
             }
         )
         SwipeRefresh(
@@ -68,7 +70,8 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                     items(storedAudioListFiltered) { audioElementList: Audio ->
                         StoredCard(
                             audio = audioElementList,
-                            indexAudio = storedAudioList.indexOf(audioElementList)
+                            indexAudio = storedAudioList.indexOf(audioElementList),
+                            isAscending = audioStoredViewModel.isAscending.value
                         )
                     }
                 } else {

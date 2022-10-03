@@ -28,7 +28,7 @@ fun TopAppBarPlayer(textOnTop: String, audio: Audio, audioViewModel: AudioViewMo
                 .align(Alignment.CenterVertically)
         ) {
             IconButton(onClick = {
-                audioViewModel?.playAudio(audio)
+                audioViewModel?.playAudio(audio, true)
                 activity?.finish()
                 audioViewModel?.isPlaying?.value = false
             }) {
@@ -38,9 +38,11 @@ fun TopAppBarPlayer(textOnTop: String, audio: Audio, audioViewModel: AudioViewMo
                 )
             }
         }
-        Box(modifier = Modifier
-            .align(Alignment.CenterVertically)
-            .fillMaxWidth(0.87f)) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.CenterVertically)
+                .fillMaxWidth(0.87f)
+        ) {
             Text(
                 text = textOnTop,
                 style = DLChordsTheme.typography.h5,

@@ -26,10 +26,11 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlin.math.floor
 
 @Composable
-fun StoredCard(audio: Audio, indexAudio: Int) {
+fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
+    sendAudio.putExtra("isAscending", isAscending)
     var expanded by remember { mutableStateOf(false) }
 
     Card(
@@ -163,7 +164,7 @@ audioProcessedViewModel.deletedElement.value = true
 }
 
 
-private fun timeStampToDuration(position: Long): String {
+    fun timeStampToDuration(position: Long): String {
     val totalSeconds = floor(position / 1E3).toInt()
     val minutes = totalSeconds / 60
     val remainingSeconds = totalSeconds - (minutes * 60)

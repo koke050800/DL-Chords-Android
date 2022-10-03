@@ -43,7 +43,7 @@ class MediaPlayerServiceConnection @Inject constructor(@ApplicationContext conte
         connect()
     }
     private var audioList = listOf<Audio>()
-
+    private var audioNew = mutableStateOf<Audio?>(null)
     val rootMediaId: String
         get() = mediaBrowser.root
 
@@ -51,12 +51,9 @@ class MediaPlayerServiceConnection @Inject constructor(@ApplicationContext conte
         get() = mediaControllerCompat.transportControls
 
 
-    fun playAudio(audios:List<Audio>){
-        println("Hola playing ${audios.size}")
+    fun playAudio(audios: List<Audio>){
         audioList = audios
-        println("Está conectado? ${mediaBrowser.isConnected}")
         mediaBrowser.sendCustomAction(K.START_MEDIA_PLAY_ACTION,null,null)
-        println("Aquiu toy ${audios.size}")
     }
 
     fun fastForward(seconds:Int = 10){
@@ -79,9 +76,7 @@ class MediaPlayerServiceConnection @Inject constructor(@ApplicationContext conte
         parentId:String,
         callBack: MediaBrowserCompat.SubscriptionCallback
     ){
-        println("Ta no se conecta ${mediaBrowser.isConnected}")
         mediaBrowser.subscribe(parentId,callBack)
-        println("ya se debió de conectar ${mediaBrowser.isConnected}")
     }
 
     fun unSubscribe(
