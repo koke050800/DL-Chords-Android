@@ -10,6 +10,7 @@ import com.example.DLChordsTT.features.audio_list.navigation.Destinations.*
 
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
 import com.example.DLChordsTT.features.audio_list.ui.screens.ProcessedAudiosScreen
 import com.example.DLChordsTT.features.audio_list.ui.screens.StoredAudiosScreen
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
@@ -23,7 +24,8 @@ fun NavigationHostScreens(
     NavHost(navController = navController, startDestination = StoredAudios.route) {
         composable(StoredAudios.route) {
             val audioStoredViewModel: AudioViewModel = hiltViewModel()
-            StoredAudiosScreen(audioStoredViewModel = audioStoredViewModel)
+            val fileApiViewModel: FileApiViewModel = hiltViewModel()
+            StoredAudiosScreen(audioStoredViewModel = audioStoredViewModel, fileApiViewModel = fileApiViewModel)
         }
         composable(ProcessedAudios.route) {
             val audioProcessedViewModel: AudioProcViewModel = hiltViewModel()

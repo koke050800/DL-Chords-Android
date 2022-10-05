@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.StoredCard
 import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
@@ -23,7 +24,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import java.util.*
 
 @Composable
-fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
+fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel, fileApiViewModel: FileApiViewModel) {
     var storedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val focusManager = LocalFocusManager.current
@@ -71,7 +72,8 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel) {
                         StoredCard(
                             audio = audioElementList,
                             indexAudio = storedAudioList.indexOf(audioElementList),
-                            isAscending = audioStoredViewModel.isAscending.value
+                            isAscending = audioStoredViewModel.isAscending.value,
+                            fileApiViewModel = fileApiViewModel
                         )
                     }
                 } else {

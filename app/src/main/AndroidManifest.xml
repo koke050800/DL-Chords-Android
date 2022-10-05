@@ -15,6 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.DLChordsTT1"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
 >
 
         <activity

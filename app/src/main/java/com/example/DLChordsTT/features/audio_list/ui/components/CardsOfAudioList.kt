@@ -1,6 +1,8 @@
 package com.example.DLChordsTT.features.audio_list.ui.components
 
 import android.content.Intent
+import android.os.Environment
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,20 +14,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
-import com.example.DLChordsTT.features.audio_list.ui.screens.FilesBDScreen
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import java.io.File
 import kotlin.math.floor
 
+
 @Composable
-fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
+fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean, fileApiViewModel: FileApiViewModel) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
@@ -78,7 +81,25 @@ fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    DropdownMenuItem(onClick = { /* Handle refresh! */ }) {
+                    DropdownMenuItem(onClick = {
+                        fileApiViewModel.uploadAudio(audio)
+
+                        /*val f = File(audio.data)
+                        if (f.isFile) {
+                            Toast.makeText(
+                                context,
+                                "Holaaas existo ${f.absolutePath}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            println(">>>>>>>>>>>>>>>>>>>>>>>>>>>;;;;;;;;;   "+f.name)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Holaaas no salgo",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }*/
+                    }) {
                         Text("Procesar Completo")
                     }
                     Divider()
