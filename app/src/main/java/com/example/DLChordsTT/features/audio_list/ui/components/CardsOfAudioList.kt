@@ -103,7 +103,7 @@ fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean, fileApiViewM
                         Text("Procesar Completo")
                     }
                     Divider()
-                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
+                    DropdownMenuItem(onClick = { fileApiViewModel.uploadAudioAndCut(audio, "3", "25") }) {
                         Text("Procear Fragmento")
                     }
                 }
