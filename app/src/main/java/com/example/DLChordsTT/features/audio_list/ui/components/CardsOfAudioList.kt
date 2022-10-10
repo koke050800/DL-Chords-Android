@@ -24,11 +24,18 @@ import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import java.io.File
+import java.util.*
 import kotlin.math.floor
 
 
 @Composable
-fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean, fileApiViewModel: FileApiViewModel) {
+fun StoredCard(
+    audio: Audio,
+    indexAudio: Int,
+    isAscending: Boolean,
+    fileApiViewModel: FileApiViewModel,
+    alreadyProccessedAudiosList : List<AudioProc>
+) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
@@ -82,23 +89,21 @@ fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean, fileApiViewM
                     onDismissRequest = { expanded = false }
                 ) {
                     DropdownMenuItem(onClick = {
-                        fileApiViewModel.uploadAudio(audio)
 
-                        /*val f = File(audio.data)
-                        if (f.isFile) {
-                            Toast.makeText(
-                                context,
-                                "Holaaas existo ${f.absolutePath}",
-                                Toast.LENGTH_LONG
-                            ).show()
-                            println(">>>>>>>>>>>>>>>>>>>>>>>>>>>;;;;;;;;;   "+f.name)
-                        } else {
-                            Toast.makeText(
-                                context,
-                                "Holaaas no salgo",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }*/
+
+                        var isAlreadyProcessed = false
+
+                       // for ()
+
+
+                        if (!isAlreadyProcessed){
+                            println("--------------------------- OK, AUN no se procesa")
+                            fileApiViewModel.uploadAudio(audio)
+                        }else{
+                            println("--------------------------- YA SE PROCESO")
+                        }
+
+
                     }) {
                         Text("Procesar Completo")
                     }

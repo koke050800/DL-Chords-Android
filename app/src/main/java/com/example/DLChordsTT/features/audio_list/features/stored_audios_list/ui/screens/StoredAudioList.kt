@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.StoredCard
@@ -24,10 +26,17 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import java.util.*
 
 @Composable
-fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel, fileApiViewModel: FileApiViewModel) {
+fun StoredAudiosScreen(
+    audioStoredViewModel: AudioViewModel,
+    fileApiViewModel: FileApiViewModel,
+    alreadyProccessedAudios: AudioProcViewModel,
+    stateAlreadyProccessedAudios : AudioProcessedListState,
+) {
     var storedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val focusManager = LocalFocusManager.current
+    var alreadyProccessedAudiosList =  stateAlreadyProccessedAudios.audioProcessedList
+
 
     Column(
         modifier = Modifier
@@ -49,6 +58,7 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel, fileApiViewModel: F
             state = audioStoredViewModel.isRefreshing,
             onRefresh = {
                 audioStoredViewModel.getStoredAudios()
+                alreadyProccessedAudios.getAudiosProcessedBD()
             }
         ) {
             LazyColumn() {
@@ -73,7 +83,8 @@ fun StoredAudiosScreen(audioStoredViewModel: AudioViewModel, fileApiViewModel: F
                             audio = audioElementList,
                             indexAudio = storedAudioList.indexOf(audioElementList),
                             isAscending = audioStoredViewModel.isAscending.value,
-                            fileApiViewModel = fileApiViewModel
+                            fileApiViewModel = fileApiViewModel,
+                            alreadyProccessedAudiosList = alreadyProccessedAudiosList,
                         )
                     }
                 } else {
