@@ -1,11 +1,10 @@
 package com.example.DLChordsTT.features.audio_list.ui.components
 
 import android.content.Intent
-import android.os.Environment
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -23,7 +22,6 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.fe
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
-import java.io.File
 import java.util.*
 import kotlin.math.floor
 
@@ -34,13 +32,14 @@ fun StoredCard(
     indexAudio: Int,
     isAscending: Boolean,
     fileApiViewModel: FileApiViewModel,
-    alreadyProccessedAudiosList : List<AudioProc>
+    alreadyProcessedAudiosList: List<AudioProc>
 ) {
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicActivity::class.java)
     sendAudio.putExtra("AudioId", indexAudio)
     sendAudio.putExtra("isAscending", isAscending)
-    var expanded by remember { mutableStateOf(false) }
+    var expandedMenu = remember { mutableStateOf(false) }
+    val openDialog = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -76,7 +75,7 @@ fun StoredCard(
                     .padding(8.dp)
                     .align(Alignment.CenterVertically)
             ) {
-                IconButton(onClick = { expanded = true })
+                IconButton(onClick = { expandedMenu.value = true })
                 {
                     Icon(
                         Icons.Default.MoreVert,
@@ -84,35 +83,16 @@ fun StoredCard(
                         contentDescription = "MenuAlmacenados"
                     )
                 }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    DropdownMenuItem(onClick = {
+                MenuStoredCards(
+                    audio = audio,
+                    fileApiViewModel = fileApiViewModel,
+                    alreadyProcessedAudiosList = alreadyProcessedAudiosList,
+                    expandedMenu = expandedMenu,
+                    openDialog = openDialog
+                )
 
-
-                        var isAlreadyProcessed = false
-
-                       // for ()
-
-
-                        if (!isAlreadyProcessed){
-                            println("--------------------------- OK, AUN no se procesa")
-                            fileApiViewModel.uploadAudio(audio)
-                        }else{
-                            println("--------------------------- YA SE PROCESO")
-                        }
-
-
-                    }) {
-                        Text("Procesar Completo")
-                    }
-                    Divider()
-                    DropdownMenuItem(onClick = { /* Handle settings! */ }) {
-                        Text("Procear Fragmento")
-                    }
-                }
             }
+            AlertDialogProcessedAudio(openDialog, expandedMenu)
         }
     }
 }
@@ -169,7 +149,12 @@ fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewM
                     expanded = expanded,
                     onDismissRequest = { expanded = false }
                 ) {
-                    DropdownMenuItem(onClick = { generatedFilesViewModel.toCardScreen(context,toScreenPDF) }) {
+                    DropdownMenuItem(onClick = {
+                        generatedFilesViewModel.toCardScreen(
+                            context,
+                            toScreenPDF
+                        )
+                    }) {
                         Text("Mostrar PDF")
                     }
                     Divider()
@@ -183,7 +168,7 @@ fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewM
 }
 
 
-    fun timeStampToDuration(position: Long): String {
+fun timeStampToDuration(position: Long): String {
     val totalSeconds = floor(position / 1E3).toInt()
     val minutes = totalSeconds / 60
     val remainingSeconds = totalSeconds - (minutes * 60)
@@ -195,5 +180,115 @@ fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewM
             minutes,
             remainingSeconds
         ) else "%d:%02d".format(minutes, remainingSeconds)
+    }
+}
+
+
+@Composable
+fun AlertDialogProcessedAudio(
+    openDialog: MutableState<Boolean>,
+    expandedMenu: MutableState<Boolean>
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        if (openDialog.value) {
+
+            AlertDialog(
+                onDismissRequest = {},
+                title = {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        Text(
+                            text = "Ya se procesó este audio",
+                            style = DLChordsTheme.typography.subtitle1
+                        )
+                    }
+                },
+                confirmButton = {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier.fillMaxWidth(1f)
+                    ) {
+                        Button(
+                            modifier = Modifier
+                                .fillMaxWidth(.55f)
+                                .padding(bottom = 4.dp),
+                            shape = CircleShape,
+                            onClick = {
+                                openDialog.value = false
+                                expandedMenu.value = false
+                            }) {
+                            Text(
+                                text = "Regresar",
+                                style = DLChordsTheme.typography.button,
+                                maxLines = 1,
+                                color = DLChordsTheme.colors.onPrimary
+                            )
+
+                        }
+                    }
+
+                },
+            )
+        }
+    }
+}
+
+@Composable
+fun MenuStoredCards(
+    audio: Audio,
+    fileApiViewModel: FileApiViewModel,
+    alreadyProcessedAudiosList: List<AudioProc>,
+    expandedMenu: MutableState<Boolean>,
+    openDialog: MutableState<Boolean>,
+) {
+    DropdownMenu(
+        expanded = expandedMenu.value,
+        onDismissRequest = { expandedMenu.value = false }
+    ) {
+        DropdownMenuItem(onClick = {
+            var isAlreadyProcessed = false
+
+            alreadyProcessedAudiosList.forEach {
+                if (it.title.lowercase(locale = Locale.getDefault())
+                    == audio.title.lowercase(locale = Locale.getDefault())
+                ) {
+                    isAlreadyProcessed = true
+                }
+            }
+
+            if (!isAlreadyProcessed) {
+                fileApiViewModel.uploadAudio(audio)
+            } else {
+                openDialog.value = true
+            }
+
+
+        }) {
+            Text("Procesar Completo")
+        }
+        Divider()
+        DropdownMenuItem(onClick = {
+            var isAlreadyProcessed = false
+
+            alreadyProcessedAudiosList.forEach {
+                if (it.title.lowercase(locale = Locale.getDefault())
+                    == audio.title.lowercase(locale = Locale.getDefault())
+                ) {
+                    isAlreadyProcessed = true
+                }
+            }
+
+            if (!isAlreadyProcessed) {
+                fileApiViewModel.uploadAudio(audio)
+            } else {
+                openDialog.value = true
+            }
+        }) {
+            Text("Procesar Fragmento")
+        }
     }
 }

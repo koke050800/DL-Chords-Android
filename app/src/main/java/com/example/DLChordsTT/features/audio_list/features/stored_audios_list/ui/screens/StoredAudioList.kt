@@ -84,7 +84,7 @@ fun StoredAudiosScreen(
                             indexAudio = storedAudioList.indexOf(audioElementList),
                             isAscending = audioStoredViewModel.isAscending.value,
                             fileApiViewModel = fileApiViewModel,
-                            alreadyProccessedAudiosList = alreadyProccessedAudiosList,
+                            alreadyProcessedAudiosList = alreadyProccessedAudiosList,
                         )
                     }
                 } else {

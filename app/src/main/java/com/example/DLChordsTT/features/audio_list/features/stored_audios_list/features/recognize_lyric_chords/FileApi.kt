@@ -11,7 +11,7 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import java.util.concurrent.TimeUnit
 
-private const val URL = "http://192.168.100.40:7000/"
+private const val URL = "http://192.168.100.40/"
 
 var client = OkHttpClient.Builder().connectTimeout(720, TimeUnit.SECONDS)
     .readTimeout(720, TimeUnit.SECONDS).build();
