@@ -12,7 +12,13 @@ class FileApiViewModel(
     fun uploadAudio(audio: Audio){
         val file = File(audio.data)
         viewModelScope.launch {
-            repository.uploadAudioAndObtainLyricChords(file = file.absoluteFile, audioName = audio.title)
+            repository.uploadAudioAndObtainLyricChords(file = file.absoluteFile)
+        }
+    }
+    fun uploadAudioAndCut(audio: Audio, time_initial: String, time_final: String){
+        val file = File(audio.data)
+        viewModelScope.launch {
+            repository.uploadAndCutAudioAndObtainLyricChords(file = file.absoluteFile, time_initial = time_initial, time_final= time_final)
         }
     }
 }

@@ -302,7 +302,7 @@ fun MenuStoredCards(
             }
 
             if (!isAlreadyProcessed) {
-                fileApiViewModel.uploadAudio(audio)
+                fileApiViewModel.uploadAudioAndCut(audio, "3", "25")
             } else {
                 openDialog.value = true
             }

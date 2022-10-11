@@ -6,6 +6,7 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.create
+import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -24,6 +25,17 @@ interface FileApi {
     suspend fun uploadAudio(
         @Part audioToConvert: MultipartBody.Part
     ):Response<ResponseBody>
+
+    @Multipart
+    @POST("cut-and-predict")
+    suspend fun uploadAudioAndCut(
+        @Header("time_initial") time_initial: String,
+        @Header("time_final") time_final: String,
+        @Part audioToConvert: MultipartBody.Part
+
+    ):Response<ResponseBody>
+
+    // @Header("Authorization") MultipartBody.Part token
 
     companion object {
         val instance by lazy {
