@@ -280,7 +280,14 @@ fun MenuStoredCards(
             }
 
             if (!isAlreadyProcessed) {
+                println("//////// ${fileApiViewModel.isScopeCompleted.value}")
                 fileApiViewModel.uploadAudio(audio)
+
+                if (fileApiViewModel.isScopeCompleted.value) {
+                    println("** RESPONSE ${fileApiViewModel.responseUploadAudio}")
+                }
+
+                println("////////2 ${fileApiViewModel.isScopeCompleted.value}")
             } else {
                 openDialog.value = true
             }

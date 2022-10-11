@@ -2,18 +2,15 @@ package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.f
 
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
-import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.HttpException
 import java.io.File
 import java.io.IOException
 
 class FileRepository {
 
-    suspend fun uploadAudioAndObtainLyricChords(file: File) {
+    suspend fun uploadAudioAndObtainLyricChords(file: File): String? {
         return try {
             val response = FileApi.instance.uploadAudio(
                 audioToConvert = MultipartBody.Part.createFormData(
@@ -34,22 +31,17 @@ class FileRepository {
                     )
                 )
 
-                println("----**-*-*-*-*-** "+prettyJson)
+                prettyJson
 
             } else {
-
-                println("----**-*-*-*-*-** "+response.code().toString())
-
+                response.code().toString()
             }
-
         } catch (ex: IOException) {
             ex.printStackTrace()
-            println(">>>>>>>>>>>>>>>   Error al leer el FILE")
-
+            null
         } catch (e: HttpException) {
             e.printStackTrace()
-            println(">>>>>>>>>>>>>>>   Error HTTP")
-
+            null
         }
     }
 
