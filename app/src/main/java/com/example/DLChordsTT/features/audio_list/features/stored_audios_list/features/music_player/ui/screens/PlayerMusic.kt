@@ -1,16 +1,16 @@
 package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -18,6 +18,7 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
@@ -32,7 +33,9 @@ fun PlayerMusicStored(
     audioViewModel: AudioViewModel,
     audioProcViewModel: AudioProcViewModel,
     generatedFilesViewModel: GeneratedFilesViewModel,
+    isAlreadyProcessed: Boolean,
 ) {
+    val openDialog = remember { mutableStateOf(false) }
 
     DLChordsTheme {
 
@@ -84,6 +87,8 @@ fun PlayerMusicStored(
                 }
             }
 
+            AlertDialogProcessedAudio(openDialog = openDialog)
+
             Text(
                 modifier = Modifier.padding(start = 45.dp),
                 textAlign = TextAlign.Left,
@@ -92,33 +97,61 @@ fun PlayerMusicStored(
                 maxLines = 1
             )
 
+
+
             Button(
                 onClick = {
-             /////////Esto se hará cuando se termine de procesar el audio
-                    val audioP = AudioProc(
-                        id = audio.id,
-                        displayName = audio.displayName,
-                        artist = audio.artist,
-                        data = audio.data,
-                        duration = audio.duration,
-                        title = audio.title,
+
+                    if (!isAlreadyProcessed) {
+                        /////////Esto se hará cuando se termine de procesar el audio
+                        val audioP = AudioProc(
+                            id = audio.id,
+                            displayName = audio.displayName,
+                            artist = audio.artist,
+                            data = audio.data,
+                            duration = audio.duration,
+                            title = audio.title,
                         )
-                    audioProcViewModel.addNewAudioProc(audioP)
+                        audioProcViewModel.addNewAudioProc(audioP)
 
 
-                    generatedFilesViewModel.createPDF(audioProc = audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","L")
-                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","LAI")
-                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","LAL")
-                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","AI")
-                    generatedFilesViewModel.createPDF(audioProc =audioP, "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??","AL")
-                   /* if(audioProcViewModel.state.error.isNotBlank()){
+                        generatedFilesViewModel.createPDF(
+                            audioProc = audioP,
+                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
+                            "L"
+                        )
+                        generatedFilesViewModel.createPDF(
+                            audioProc = audioP,
+                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
+                            "LAI"
+                        )
+                        generatedFilesViewModel.createPDF(
+                            audioProc = audioP,
+                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
+                            "LAL"
+                        )
+                        generatedFilesViewModel.createPDF(
+                            audioProc = audioP,
+                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
+                            "AI"
+                        )
+                        generatedFilesViewModel.createPDF(
+                            audioProc = audioP,
+                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
+                            "AL"
+                        )
+                        /* if(audioProcViewModel.state.error.isNotBlank()){
 
 
+                         }
+                         if(audioProcViewModel.state.isLoading){
+
+
+                         }*/
+
+                    } else {
+                        openDialog.value = true
                     }
-                    if(audioProcViewModel.state.isLoading){
-
-
-                    }*/
 
                 },
                 modifier = Modifier
@@ -142,16 +175,22 @@ fun PlayerMusicStored(
             }
             Button(
                 onClick = {
-                    ////////Esto se hará cuando se termine de procesar el audio
-                    audioProcViewModel.addNewAudioProc(AudioProc(
-                        id = audio.id,
-                        displayName = audio.displayName,
-                        artist = audio.artist,
-                        data = audio.data,
-                        duration = 344324 ,
-                        title = audio.title,
 
-                        ))
+                    if (!isAlreadyProcessed) {
+                        audioProcViewModel.addNewAudioProc(
+                            AudioProc(
+                                id = audio.id,
+                                displayName = audio.displayName,
+                                artist = audio.artist,
+                                data = audio.data,
+                                duration = 344324,
+                                title = audio.title,
+
+                                )
+                        )
+                    } else {
+                        openDialog.value = true
+                    }
 
                 },
                 modifier = Modifier

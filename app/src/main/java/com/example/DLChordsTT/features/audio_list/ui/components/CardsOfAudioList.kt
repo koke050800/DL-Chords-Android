@@ -45,7 +45,26 @@ fun StoredCard(
         modifier = Modifier
             .height(64.dp)
             .fillMaxWidth(1f)
-            .clickable { startActivity(context, sendAudio, null) },
+            .clickable {
+                var isAlreadyProcessed = false
+
+                alreadyProcessedAudiosList.forEach {
+                    if (it.title.lowercase(locale = Locale.getDefault())
+                        == audio.title.lowercase(locale = Locale.getDefault())
+                    ) {
+                        isAlreadyProcessed = true
+                    }
+                }
+
+                if (!isAlreadyProcessed) {
+                    sendAudio.putExtra("isAlreadyProcessed", false)
+                } else {
+                    sendAudio.putExtra("isAlreadyProcessed", true)
+                }
+
+                startActivity(context, sendAudio, null)
+
+            },
         shape = RoundedCornerShape(4.dp),
         backgroundColor = DLChordsTheme.colors.cardColor,
         border = BorderStroke(1.dp, DLChordsTheme.colors.divider),
@@ -187,7 +206,7 @@ fun timeStampToDuration(position: Long): String {
 @Composable
 fun AlertDialogProcessedAudio(
     openDialog: MutableState<Boolean>,
-    expandedMenu: MutableState<Boolean>
+    expandedMenu: MutableState<Boolean>? = null
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         if (openDialog.value) {
@@ -198,11 +217,11 @@ fun AlertDialogProcessedAudio(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
-                            .fillMaxWidth(1f)
+                            .fillMaxWidth(1.2f)
                             .padding(bottom = 8.dp)
                     ) {
                         Text(
-                            text = "Ya se procesó este audio",
+                            text = "Ya se procesó este audio, puede eliminar el resultado desde la lista de procesados.",
                             style = DLChordsTheme.typography.subtitle1
                         )
                     }
@@ -219,10 +238,10 @@ fun AlertDialogProcessedAudio(
                             shape = CircleShape,
                             onClick = {
                                 openDialog.value = false
-                                expandedMenu.value = false
+                                expandedMenu?.value = false
                             }) {
                             Text(
-                                text = "Regresar",
+                                text = "Entendido",
                                 style = DLChordsTheme.typography.button,
                                 maxLines = 1,
                                 color = DLChordsTheme.colors.onPrimary

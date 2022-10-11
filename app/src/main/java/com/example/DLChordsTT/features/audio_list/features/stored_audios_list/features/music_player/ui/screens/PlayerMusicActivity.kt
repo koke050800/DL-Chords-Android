@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -32,6 +34,8 @@ class PlayerMusicActivity : ComponentActivity() {
         val musicData = receiveMusic?.getInt("AudioId")
         var cont = 0
         val isAscending = receiveMusic?.getBoolean("isAscending")
+        val isAlreadyProcessed = receiveMusic?.getBoolean("isAlreadyProcessed") ?: false
+
 
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
@@ -59,7 +63,8 @@ class PlayerMusicActivity : ComponentActivity() {
                                 storedAudiosList[musicData],
                                 audioViewModel = audioViewModel,
                                 audioProcViewModel = audioProcViewModel,
-                                generatedFilesViewModel = generatedFilesViewModel
+                                generatedFilesViewModel = generatedFilesViewModel,
+                                isAlreadyProcessed = isAlreadyProcessed,
                             )
                         }
                     } else {
