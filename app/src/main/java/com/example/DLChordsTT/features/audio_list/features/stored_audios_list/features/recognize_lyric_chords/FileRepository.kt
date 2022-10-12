@@ -11,14 +11,16 @@ import java.io.IOException
 class FileRepository {
 
     suspend fun uploadAudioAndObtainLyricChords(file: File): String? {
-        return try {
+
             val response = FileApi.instance.uploadAudio(
                 audioToConvert = MultipartBody.Part.createFormData(
                     name = "file",
                     file.name,
                     file.asRequestBody()
                 )
-            )
+            ).await()
+
+            println("RESPONSE REPO:::: ${response.raw()}")
 
             if (response.isSuccessful) {
 
@@ -31,18 +33,12 @@ class FileRepository {
                     )
                 )
 
-                prettyJson
+                return prettyJson
 
             } else {
-                response.code().toString()
+                return response.code().toString()
             }
-        } catch (ex: IOException) {
-            ex.printStackTrace()
-            null
-        } catch (e: HttpException) {
-            e.printStackTrace()
-            null
-        }
+
     }
 
     suspend fun uploadAndCutAudioAndObtainLyricChords(file: File, time_initial: String, time_final: String) {

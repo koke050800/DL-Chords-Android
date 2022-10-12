@@ -22,6 +22,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.fe
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.floor
 
@@ -268,47 +269,58 @@ fun MenuStoredCards(
         expanded = expandedMenu.value,
         onDismissRequest = { expandedMenu.value = false }
     ) {
+        var isAlreadyProcessedInBD by remember {
+            mutableStateOf(false)
+        }
+
+        var scope = rememberCoroutineScope()
+
         DropdownMenuItem(onClick = {
-            var isAlreadyProcessed = false
+
+            isAlreadyProcessedInBD = false
 
             alreadyProcessedAudiosList.forEach {
                 if (it.title.lowercase(locale = Locale.getDefault())
                     == audio.title.lowercase(locale = Locale.getDefault())
                 ) {
-                    isAlreadyProcessed = true
+                    isAlreadyProcessedInBD = true
                 }
             }
 
-            if (!isAlreadyProcessed) {
-                println("//////// ${fileApiViewModel.isScopeCompleted.value}")
-                fileApiViewModel.uploadAudio(audio)
+            if (!isAlreadyProcessedInBD) {
 
-                if (fileApiViewModel.isScopeCompleted.value) {
-                    println("** RESPONSE ${fileApiViewModel.responseUploadAudio}")
+                scope.launch {
+                    fileApiViewModel.uploadAudio(audio)
                 }
 
-                println("////////2 ${fileApiViewModel.isScopeCompleted.value}")
             } else {
                 openDialog.value = true
             }
-
-
         }) {
-            Text("Procesar Completo")
+            Column(modifier = Modifier.fillMaxWidth(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+                fileApiViewModel.isScopeCompleted.value?.let {
+                    if (!it){
+                        CircularProgressIndicator()
+                    }else{
+                        println("---Termine ${fileApiViewModel.responseUploadAudio.value}")
+                    }
+                } ?: Text("Procesar Audio Completo")
+            }
+
         }
         Divider()
         DropdownMenuItem(onClick = {
-            var isAlreadyProcessed = false
+            isAlreadyProcessedInBD = false
 
             alreadyProcessedAudiosList.forEach {
                 if (it.title.lowercase(locale = Locale.getDefault())
                     == audio.title.lowercase(locale = Locale.getDefault())
                 ) {
-                    isAlreadyProcessed = true
+                    isAlreadyProcessedInBD = true
                 }
             }
 
-            if (!isAlreadyProcessed) {
+            if (!isAlreadyProcessedInBD) {
                 fileApiViewModel.uploadAudioAndCut(audio, "3", "25")
             } else {
                 openDialog.value = true
