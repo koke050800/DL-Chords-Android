@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessedActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
@@ -118,16 +119,20 @@ fun StoredCard(
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generatedFilesViewModel: GeneratedFilesViewModel) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val sendAudio = Intent(context, PlayerMusicProcessedActivity::class.java)
+    sendAudio.putExtra("AudioId", index)
+    sendAudio.putExtra("isAscending", isAscending)
     val toScreenPDF = Intent(context, FilesBDActivity::class.java)
     toScreenPDF.putExtra("AudioName", audio)
 
     Card(
         modifier = Modifier
             .height(64.dp)
-            .fillMaxWidth(1f),
+            .fillMaxWidth(1f)
+            .clickable{startActivity(context, sendAudio, null)},
         shape = RoundedCornerShape(4.dp),
         backgroundColor = DLChordsTheme.colors.cardColor,
         border = BorderStroke(1.dp, DLChordsTheme.colors.divider),

@@ -40,12 +40,12 @@ class AudioListActivity : ComponentActivity() {
         setContent {
             DLChordsTheme {
                 val context = LocalContext.current
-                if (Environment.isExternalStorageManager()) {
+                //if (Environment.isExternalStorageManager()) {
                     val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
                     MainScreen(generatedFilesViewModel)
-                } else {
-                    PermissionScreen(context)
-                }
+                //} else {
+                    //PermissionScreen(context)
+                //}
             }
 
         }

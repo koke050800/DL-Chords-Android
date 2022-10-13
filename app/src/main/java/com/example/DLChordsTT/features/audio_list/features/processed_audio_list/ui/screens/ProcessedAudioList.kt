@@ -22,6 +22,7 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -35,7 +36,8 @@ fun ProcessedAudiosScreen(
     isRefreshing: Boolean,
     refreshData: () -> Unit,
     generatedFilesViewModel: GeneratedFilesViewModel,
-    audioProcessedViewModel: AudioProcViewModel
+    audioProcessedViewModel: AudioProcViewModel,
+    audioViewModel: AudioViewModel
 ) {
     // var processedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
@@ -86,7 +88,12 @@ fun ProcessedAudiosScreen(
 
 
                     items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
-                        ProcessedCard(audio = audioElementList, generatedFilesViewModel)
+                        ProcessedCard(
+                            audio = audioElementList,
+                            index = audioElementList.id,
+                            isAscending = audioViewModel.isAscending.value,
+                            generatedFilesViewModel = generatedFilesViewModel
+                        )
                     }
                 } else {
                     item {
