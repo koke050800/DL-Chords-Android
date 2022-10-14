@@ -87,7 +87,7 @@ fun PlayerMusicStored(
                 }
             }
 
-            AlertDialogProcessedAudio(openDialog = openDialog)
+            AlertDialogProcessedAudio(openDialogProcessedAudio = openDialog)
 
             Text(
                 modifier = Modifier.padding(start = 45.dp),

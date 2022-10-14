@@ -35,10 +35,17 @@ class FileApiViewModel(
         }
     }
 
-    fun uploadAudioAndCut(audio: Audio, time_initial: String, time_final: String){
+    fun uploadAudioAndCut(audio: Audio, time_initial: String, time_final: String)= vmScope.launch {
+        isScopeCompleted.value = false
         val file = File(audio.data)
-        viewModelScope.launch {
+        kotlin.runCatching {
             repository.uploadAndCutAudioAndObtainLyricChords(file = file.absoluteFile, time_initial = time_initial, time_final= time_final)
+        }.onSuccess {
+            responseUploadAudio.value = it
+            isScopeCompleted.value = true
+            println("***---->> $it")
+        }.onFailure {
+            println("Hubo un error al subir el audio $it")
         }
     }
 }

@@ -36,9 +36,8 @@ interface FileApi {
         @Header("time_final") time_final: String,
         @Part audioToConvert: MultipartBody.Part
 
-    ):Response<ResponseBody>
+    ):Deferred<Response<ResponseBody>>
 
-    // @Header("Authorization") MultipartBody.Part token
 
     companion object {
         val instance by lazy {

@@ -2,7 +2,6 @@ package com.example.DLChordsTT.features.audio_list.features.processed_audio_list
 
 import DLChordsTT.R
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -12,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
@@ -86,7 +84,7 @@ fun PlayerMusicProcessed(
                 }
             }
 
-            AlertDialogProcessedAudio(openDialog = openDialog)
+            AlertDialogProcessedAudio(openDialogProcessedAudio = openDialog)
 
             Button(
                 onClick = {
