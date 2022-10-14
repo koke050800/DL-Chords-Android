@@ -33,7 +33,8 @@ class FileRepository {
                     )
                 )
 
-                return prettyJson
+                return prettyJson.replace(Regex("""[\\]"""), "").replace("\"[", "[")
+                    .replace("]\"", "]")
 
             } else {
                 return response.code().toString()
