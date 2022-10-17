@@ -120,7 +120,13 @@ fun StoredCard(
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(
+    audio: AudioProc,
+    index: Long,
+    isAscending: Boolean,
+    generatedFilesViewModel: GeneratedFilesViewModel,
+    onClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicProcessedActivity::class.java)
@@ -185,10 +191,7 @@ fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generated
                     }
                     Divider()
                     DropdownMenuItem(onClick = {
-                        generatedFilesViewModel.deletePDF(audio)
                         onClick()
-audioProcessedViewModel.deletedElement.value = true
-
                     }) {
                         Text("Eliminar")
                     }
@@ -197,7 +200,6 @@ audioProcessedViewModel.deletedElement.value = true
         }
     }
 }
-
 
 
 fun timeStampToDuration(position: Long): String {
