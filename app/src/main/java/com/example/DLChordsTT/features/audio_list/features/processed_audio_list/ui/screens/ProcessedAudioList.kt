@@ -59,21 +59,38 @@ fun ProcessedAudiosScreen(
                     !audioProcessedViewModel.isDescending.value
             }
         )
-        SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-            onRefresh = refreshData,
-        ) {
-            LazyColumn() {
-                item { LabelAndDividerOfLists(label = "Audios Procesados") }
 
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                onRefresh = refreshData,
+            ) {
+                LazyColumn() {
+                    item { LabelAndDividerOfLists(label = "Audios Procesados") }
+                    if (state.audioProcessedList.isNotEmpty()) {
+                        val searchedText = textState.value.text
+                        var processedAudioListFiltered = if (searchedText.isEmpty()) {
+                            if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
+                        } else {
+                            val resultList = mutableListOf<AudioProc>()
+                            for (audioProcessed in if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted) {
+                                if (audioProcessed.title.lowercase(Locale.getDefault())
+                                        .contains(searchedText.lowercase(Locale.getDefault()))
+                                ) {
+                                    resultList.add(audioProcessed)
+                                }
+                            }
+                            resultList
+                        }
 
-
-
-                if (state.audioProcessedList.isNotEmpty()) {
-
-                    val searchedText = textState.value.text
-                    var processedAudioListFiltered = if (searchedText.isEmpty()) {
-                        if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
+                        items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
+                            ProcessedCard(
+                                audio = audioElementList,
+                                generatedFilesViewModel = generatedFilesViewModel,
+                               audioProcessedViewModel =  audioProcessedViewModel, onClick = {
+                                                                    audioProcessedViewModel.getAudiosProcessedBD()
+                                }
+                            )
+                        }
                     } else {
                         val resultList = mutableListOf<AudioProc>()
                         for (audioProcessed in if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted) {
@@ -111,12 +128,14 @@ fun ProcessedAudiosScreen(
                                     modifier = Modifier.padding(vertical = 16.dp)
                                 )
 
+                                }
                             }
                         }
                     }
+
                 }
             }
-        }
+
 
         if (state.error.isNotBlank()) {
             Text(

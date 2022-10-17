@@ -20,14 +20,21 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.da
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Chord
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.json.JSONObject
+import java.io.IOException
+import kotlin.math.absoluteValue
 
 
 
 @Composable
 fun PlayerMusicStored(
+    context: Context,
     progress: Float,
     onProgressChange: (Float) -> Unit,
     audio: Audio,
@@ -115,6 +122,7 @@ fun PlayerMusicStored(
                         )
                         audioProcViewModel.addNewAudioProc(audioP)
 
+                    generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP,"Aqui van los request","Aqui van los request")
 
                         generatedFilesViewModel.createPDF(
                             audioProc = audioP,

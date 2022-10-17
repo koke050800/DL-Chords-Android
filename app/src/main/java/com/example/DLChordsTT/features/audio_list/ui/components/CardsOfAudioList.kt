@@ -184,7 +184,12 @@ fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generated
                         Text("Mostrar PDF")
                     }
                     Divider()
-                    DropdownMenuItem(onClick = { generatedFilesViewModel.deletePDF(audio) }) {
+                    DropdownMenuItem(onClick = {
+                        generatedFilesViewModel.deletePDF(audio)
+                        onClick()
+audioProcessedViewModel.deletedElement.value = true
+
+                    }) {
                         Text("Eliminar")
                     }
                 }
