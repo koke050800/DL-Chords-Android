@@ -194,6 +194,7 @@ fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generated
 }
 
 
+
 fun timeStampToDuration(position: Long): String {
     val totalSeconds = floor(position / 1E3).toInt()
     val minutes = totalSeconds / 60
