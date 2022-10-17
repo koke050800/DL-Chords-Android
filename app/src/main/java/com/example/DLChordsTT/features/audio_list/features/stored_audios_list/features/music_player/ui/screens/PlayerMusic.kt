@@ -25,6 +25,7 @@ import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlaye
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 
+
 @Composable
 fun PlayerMusicStored(
     progress: Float,
