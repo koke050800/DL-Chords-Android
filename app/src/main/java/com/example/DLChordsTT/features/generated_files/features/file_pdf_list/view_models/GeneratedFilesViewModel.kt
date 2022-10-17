@@ -16,7 +16,9 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.Result
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.repositories.AudioProcRepository
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Chord
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Files
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Word
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.repositories.GeneratedFilesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,8 +42,8 @@ class GeneratedFilesViewModel @Inject constructor(
     val isDescending = mutableStateOf(true)
     val deletedElement = mutableStateOf(false)
 
-    fun createPDF(context: Context,audioProc: AudioProc, text: String, pre: String) {
-        generatedFilesRepository.createPDF(context,audioProc = audioProc, text, pre)
+    fun generatePDFs(context: Context, audioProc: AudioProc,chordsJson:String , wordsJson:String) {
+        generatedFilesRepository.generatePDFs(context = context, audioProc = audioProc, chordsJson = chordsJson, wordsJson = wordsJson)
     }
     fun deletePDF(audioProc: AudioProc) {
         generatedFilesRepository.deleteData(audioProc = audioProc)

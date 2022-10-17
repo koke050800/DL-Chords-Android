@@ -20,9 +20,13 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Chord
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
+import org.json.JSONObject
 import java.io.IOException
 import kotlin.math.absoluteValue
 
@@ -98,8 +102,6 @@ fun PlayerMusicStored(
 
             Button(
                 onClick = {
-
-
                     /////////Esto se hará cuando se termine de procesar el audio
                     val audioP = AudioProc(
                         id = audio.id,
@@ -111,43 +113,7 @@ fun PlayerMusicStored(
                     )
                     audioProcViewModel.addNewAudioProc(audioP)
 
-
-
-
-                    generatedFilesViewModel.createPDF(
-                        context = context,
-                        audioProc = audioP,
-                        "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                        "L"
-                    )
-
-                    generatedFilesViewModel.createPDF(
-                        context,
-                        audioProc = audioP,
-                        "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                        "LAI"
-                    )
-
-                    generatedFilesViewModel.createPDF(
-                        context,
-                        audioProc = audioP,
-                        "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                        "LAL"
-                    )
-
-                    generatedFilesViewModel.createPDF(
-                        context,
-                        audioProc = audioP,
-                        "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                        "AI"
-                    )
-
-                    generatedFilesViewModel.createPDF(
-                        context,
-                        audioProc = audioP,
-                        "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                        "AL"
-                    )
+                    generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP,"Aqui van los request","Aqui van los request")
 
                     // mProgressDialog.setCancelable(true)
                     // mProgressDialog.cancel()
