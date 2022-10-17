@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.audio_list.ui.screens
 
 import DLChordsTT.BuildConfig
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -27,31 +28,46 @@ import com.example.DLChordsTT.features.audio_list.navigation.NavigationHostScree
 import com.example.DLChordsTT.features.audio_list.ui.components.BottomNavigationBar
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
 class AudioListActivity : ComponentActivity() {
-
+    @OptIn(ExperimentalPermissionsApi::class)
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             DLChordsTheme {
                 val context = LocalContext.current
-                if (Environment.isExternalStorageManager()) {
-                    val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
-                    MainScreen(generatedFilesViewModel)
+                val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
+                if (Build.VERSION.SDK_INT >= 30) {
+                    if (Environment.isExternalStorageManager()) {
+                        MainScreen(generatedFilesViewModel)
+                    } else {
+                        PermissionScreen(context)
+                    }
                 } else {
-                    PermissionScreen(context)
+                    val permissionState = rememberMultiplePermissionsState(
+                        permissions =
+                        listOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        )
+                    )
+                    if (permissionState.allPermissionsGranted) {
+                        MainScreen(generatedFilesViewModel)
+                    } else {
+                        PermissionScreen(context, false, permissionState)
+                    }
                 }
             }
-
         }
     }
 }
-
 
 @Composable
 fun MainScreen(generatedFilesViewModel: GeneratedFilesViewModel) {
@@ -71,9 +87,14 @@ fun MainScreen(generatedFilesViewModel: GeneratedFilesViewModel) {
 }
 
 
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
-fun PermissionScreen(context: Context) {
+fun PermissionScreen(
+    context: Context,
+    isAndroidVersionElevenORPlus: Boolean = true,
+    permissionState: MultiplePermissionsState? = null
+) {
     Scaffold(
         isFloatingActionButtonDocked = false,
         backgroundColor = MaterialTheme.colors.background
@@ -92,9 +113,14 @@ fun PermissionScreen(context: Context) {
             )
             Button(
                 onClick = {
-                    val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
-                    val intent = Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
-                    startActivity(context, intent, null)
+                    if (isAndroidVersionElevenORPlus) {
+                        val uri = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+                        val intent = Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri)
+                        startActivity(context, intent, null)
+                    } else {
+                        permissionState?.launchMultiplePermissionRequest()
+                            ?: println("*********** Hubo un error con el launcher de permisos ***********")
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
@@ -111,10 +137,12 @@ fun PermissionScreen(context: Context) {
                     color = DLChordsTheme.colors.surface
                 )
             }
-            Text(
-                text = "Despues de otorgar los permisos reinicie la aplicación.",
-                modifier = Modifier.padding(vertical = 0.dp)
-            )
+            if (isAndroidVersionElevenORPlus) {
+                Text(
+                    text = "Despues de otorgar los permisos reinicie la aplicación.",
+                    modifier = Modifier.padding(vertical = 0.dp)
+                )
+            }
         }
     }
 }

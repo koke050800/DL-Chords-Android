@@ -22,6 +22,7 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -35,7 +36,8 @@ fun ProcessedAudiosScreen(
     isRefreshing: Boolean,
     refreshData: () -> Unit,
     generatedFilesViewModel: GeneratedFilesViewModel,
-    audioProcessedViewModel: AudioProcViewModel
+    audioProcessedViewModel: AudioProcViewModel,
+    audioViewModel: AudioViewModel
 ) {
     // var processedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
@@ -56,62 +58,69 @@ fun ProcessedAudiosScreen(
                     !audioProcessedViewModel.isDescending.value
             }
         )
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            onRefresh = refreshData,
+        ) {
+            LazyColumn() {
+                item { LabelAndDividerOfLists(label = "Audios Procesados") }
 
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-                onRefresh = refreshData,
-            ) {
-                LazyColumn() {
-                    item { LabelAndDividerOfLists(label = "Audios Procesados") }
-                    if (state.audioProcessedList.isNotEmpty()) {
-                        val searchedText = textState.value.text
 
-                        var processedAudioListFiltered = if (searchedText.isEmpty()) {
-                            if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
-                        } else {
-                            val resultList = mutableListOf<AudioProc>()
-                            for (audioProcessed in if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted) {
-                                if (audioProcessed.title.lowercase(Locale.getDefault())
-                                        .contains(searchedText.lowercase(Locale.getDefault()))
-                                ) {
-                                    resultList.add(audioProcessed)
-                                }
-                            }
-                            resultList
-                        }
 
-                        items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
-                            ProcessedCard(
-                                audio = audioElementList,
-                                generatedFilesViewModel = generatedFilesViewModel,
-                               audioProcessedViewModel =  audioProcessedViewModel, onClick = {
-                                                                    audioProcessedViewModel.getAudiosProcessedBD()
-                                }
-                            )
-                        }
+
+                if (state.audioProcessedList.isNotEmpty()) {
+
+                    val searchedText = textState.value.text
+                    var processedAudioListFiltered = if (searchedText.isEmpty()) {
+                        if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
                     } else {
-                        item {
-                            Box(modifier = Modifier.fillMaxSize()) {
-                                Column(
-                                    modifier = Modifier
-                                        .fillMaxSize()
-                                        .align(Alignment.Center)
-                                ) {
-                                    Text(
-                                        text = "No se ha procesado ningún audio",
-                                        style = DLChordsTheme.typography.h5,
-                                        color = DLChordsTheme.colors.primaryText,
-                                        modifier = Modifier.padding(vertical = 16.dp)
-                                    )
+                        val resultList = mutableListOf<AudioProc>()
+                        for (audioProcessed in if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted) {
+                            if (audioProcessed.title.lowercase(Locale.getDefault())
+                                    .contains(searchedText.lowercase(Locale.getDefault()))
+                            ) {
+                                resultList.add(audioProcessed)
+                            }
+                        }
+                        resultList
+                    }
 
-                                }
+
+
+                    items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
+                        ProcessedCard(
+                            audio = audioElementList,
+                            index = audioElementList.id,
+                            isAscending = audioViewModel.isAscending.value,
+                            generatedFilesViewModel = generatedFilesViewModel,
+                            onClick = {
+                                generatedFilesViewModel.deletePDF(audioElementList)
+                                audioProcessedViewModel.getAudiosProcessedBD()
+                                audioProcessedViewModel.deletedElement.value = true
+                            }
+                        )
+                    }
+                } else {
+                    item {
+                        Box(modifier = Modifier.fillMaxSize()) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .align(Alignment.Center)
+                            ) {
+                                Text(
+                                    text = "No se ha procesado ningún audio",
+                                    style = DLChordsTheme.typography.h5,
+                                    color = DLChordsTheme.colors.primaryText,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+
                             }
                         }
                     }
-
                 }
             }
-
+        }
 
         if (state.error.isNotBlank()) {
             Text(

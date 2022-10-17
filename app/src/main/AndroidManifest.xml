@@ -15,6 +15,7 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.DLChordsTT1"
         android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
 >
 
         <activity
@@ -38,6 +39,12 @@
             android:name="com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity"
             android:exported="false"
             android:label="@string/title_activity_player_music"
+            android:theme="@style/Theme.DLChordsTT1" />
+
+        <activity
+            android:name="com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessedActivity"
+            android:exported="false"
+            android:label="@string/title_activity_player_music_processed"
             android:theme="@style/Theme.DLChordsTT1" />
 
     <service

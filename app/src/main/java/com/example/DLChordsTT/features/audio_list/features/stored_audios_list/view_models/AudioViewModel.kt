@@ -186,6 +186,13 @@ class AudioViewModel @Inject constructor(
         }
     }
 
+    fun seekTo(value: Float) {
+        println("HELLOUUUUUUU $value")
+        serviceConnection.transportControl.seekTo(
+            (currentDuration * value / 100f).toLong()
+        )
+    }
+
     override fun onCleared() {
         super.onCleared()
         serviceConnection.unSubscribe(
