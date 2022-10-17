@@ -65,6 +65,7 @@ fun ProcessedAudiosScreen(
                     item { LabelAndDividerOfLists(label = "Audios Procesados") }
                     if (state.audioProcessedList.isNotEmpty()) {
                         val searchedText = textState.value.text
+
                         var processedAudioListFiltered = if (searchedText.isEmpty()) {
                             if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
                         } else {

@@ -58,6 +58,7 @@ fun PlayerMusicStored(
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
 
+
                 ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),

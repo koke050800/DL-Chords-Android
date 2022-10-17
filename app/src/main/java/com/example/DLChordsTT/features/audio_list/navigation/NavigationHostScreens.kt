@@ -28,6 +28,7 @@ fun NavigationHostScreens(
         composable(ProcessedAudios.route) {
             val audioProcessedViewModel: AudioProcViewModel = hiltViewModel()
             val state = audioProcessedViewModel.state.value
+            
             val isRefreshing = audioProcessedViewModel.isRefreshing.collectAsState()
 
             ProcessedAudiosScreen(

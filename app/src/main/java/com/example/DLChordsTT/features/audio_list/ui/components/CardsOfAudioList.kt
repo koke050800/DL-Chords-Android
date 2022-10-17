@@ -96,6 +96,7 @@ fun StoredCard(audio: Audio, indexAudio: Int, isAscending: Boolean) {
 fun ProcessedCard(audio: AudioProc, generatedFilesViewModel: GeneratedFilesViewModel,audioProcessedViewModel:AudioProcViewModel, onClick:() -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     val toScreenPDF = Intent(context, FilesBDActivity::class.java)
     toScreenPDF.putExtra("AudioName", audio)
 
