@@ -1,14 +1,19 @@
 package com.example.DLChordsTT.features.audio_list.ui.components
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlinx.coroutines.launch
 import java.util.*
@@ -22,6 +27,9 @@ fun MenuStoredCards(
     openDialogProcessedAudio: MutableState<Boolean>,
     openDialogProcessing: MutableState<Boolean>,
 ) {
+    val context = LocalContext.current
+    val bdIntent = Intent(context, holiActivity::class.java)
+
     DropdownMenu(
         expanded = expandedMenu.value,
         onDismissRequest = { expandedMenu.value = false }
@@ -68,6 +76,9 @@ fun MenuStoredCards(
                         //aqui cerramos el progress
                         openDialogProcessing.value = false //cerrar el progressindicator
                         fileApiViewModel.isScopeCompleted.value = null //para que la vista regrese a la manera original
+
+                       context.startActivity(bdIntent)
+
                     }
                 } ?: Text("Procesar audio completo", style = DLChordsTheme.typography.caption)
             }
