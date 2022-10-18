@@ -196,6 +196,12 @@ fun PlayerMusicStored(
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
                         openDialogProcessing.value = false //cerrar el progressIndicator
                         pdfScreenIntent.putExtra("response", response)
+                        pdfScreenIntent.putExtra("AudioProc_id", audio.id)
+                        pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
+                        pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
+                        pdfScreenIntent.putExtra("AudioProc_data", audio.data)
+                        pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
+                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)
                         ContextCompat.startActivity(context, pdfScreenIntent, null)
                     }
                 } ?: Text(

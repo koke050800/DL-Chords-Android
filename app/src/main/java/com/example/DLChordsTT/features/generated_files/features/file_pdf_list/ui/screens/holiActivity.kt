@@ -15,6 +15,7 @@ import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -28,6 +29,23 @@ class holiActivity : ComponentActivity() {
 
         val receivePredictionResponse = intent.extras
         var responseWhitLyricChords = receivePredictionResponse?.getString("response")
+
+        /*val id = receivePredictionResponse?.getLong("AudioProc_id") ?: 1.000
+        var displayName = receivePredictionResponse?.getString("AudioProc_displayName")
+        var artist = receivePredictionResponse?.getString("AudioProc_artist")
+        var data = receivePredictionResponse?.getString("AudioProc_data")
+        var duration = receivePredictionResponse?.getInt("AudioProc_duration")
+        var title = receivePredictionResponse?.getString("AudioProc_title")
+
+        val audioP = AudioProc(
+            id = id,
+            displayName = displayName,
+            artist = artist,
+            data = receivePredictionResponse?.getString("AudioProc_data")
+            duration = receivePredictionResponse?.getInt("AudioProc_duration"),
+            title = receivePredictionResponse?.getString("AudioProc_title")
+        )*/
+
 
         super.onCreate(savedInstanceState)
 
