@@ -104,7 +104,6 @@ fun PlayerMusicStored(
 
             Button(
                 onClick = {
-
                     if (!isAlreadyProcessed) {
                         /////////Esto se hará cuando se termine de procesar el audio
                         val audioP = AudioProc(
@@ -116,12 +115,15 @@ fun PlayerMusicStored(
                             title = audio.title,
                         )
                         audioProcViewModel.addNewAudioProc(audioP)
-                        generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP, chordsJson = "", wordsJson = " ")
+                        generatedFilesViewModel.generatePDFs(context = context, audioP.id,
+                                audioP.displayName,audioP.artist,
+                            audioP.data,audioP.duration,
+                            audioP.title, "","","",
+                            "","", ChordsWordsJson = " ")
 
                     } else {
                         openDialog.value = true
                     }
-
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)

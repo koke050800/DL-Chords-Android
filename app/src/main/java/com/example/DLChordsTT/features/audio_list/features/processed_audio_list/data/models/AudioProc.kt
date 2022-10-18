@@ -4,7 +4,6 @@ import android.net.Uri
 import java.io.Serializable
 
 data class AudioProc (
-
     val id: Long = 0,
     val displayName:String = "",
     val artist:String = "",

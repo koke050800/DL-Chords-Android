@@ -32,18 +32,17 @@ import javax.inject.Inject
 class GeneratedFilesViewModel @Inject constructor(
     private val generatedFilesRepository: GeneratedFilesRepository,
 ) : ViewModel() {
-    private val _state: MutableState<AudioProcessedListState> = mutableStateOf(
-        AudioProcessedListState()
-    )
-        val state: State<AudioProcessedListState> = _state
-
+    private val _state: MutableState<AudioProcessedListState> = mutableStateOf(AudioProcessedListState())
+    val state: State<AudioProcessedListState> = _state
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
     val isDescending = mutableStateOf(true)
     val deletedElement = mutableStateOf(false)
 
-    fun generatePDFs(context: Context, audioProc: AudioProc,chordsJson:String , wordsJson:String) {
-        generatedFilesRepository.generatePDFs(context = context, audioProc = audioProc, chordsJson = chordsJson, wordsJson = wordsJson)
+    fun generatePDFs(context: Context, id:Long,displayName:String,artist:String,data:String, duration:Int, title:String,english_nomenclature:String,latin_nomenclature:String,chords_lyrics_e:String, chords_lyrics_l:String,lyrics:String, ChordsWordsJson : String) {
+        generatedFilesRepository.generatePDFs(context = context, id=id,displayName=displayName,artist=artist,data=data,
+               duration=duration, title=title,english_nomenclature=english_nomenclature,latin_nomenclature=latin_nomenclature,
+            chords_lyrics_e=chords_lyrics_e, chords_lyrics_l=chords_lyrics_l,lyrics=lyrics, ChordsWordsJson = ChordsWordsJson)
     }
     fun deletePDF(audioProc: AudioProc) {
         generatedFilesRepository.deleteData(audioProc = audioProc)
@@ -51,7 +50,6 @@ class GeneratedFilesViewModel @Inject constructor(
     fun showPDF(url:String, context: Context) {
         generatedFilesRepository.showData(url= url, context = context )
     }
-
     fun toCardScreen(context: Context, toScreenPDF : Intent){
         generatedFilesRepository.startCardScreen(context,toScreenPDF)
     }

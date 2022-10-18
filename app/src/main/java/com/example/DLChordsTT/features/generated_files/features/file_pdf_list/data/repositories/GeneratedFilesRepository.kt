@@ -30,10 +30,9 @@ class GeneratedFilesRepository
 @Inject
 constructor(
     private val processedAudioList: CollectionReference
-
 ) {
 
-    fun addNewGeneratedFiles(audio: AudioProc,mUri: Uri,pre: String,file: File) {
+    fun addNewGeneratedFiles(audio:AudioProc, mUri: Uri,pre: String,file: File){
         val folder: StorageReference = FirebaseStorage.getInstance().reference.child(audio.title)
         val path = mUri.lastPathSegment.toString()
         val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/') + 1))
@@ -193,7 +192,7 @@ constructor(
         return listWords
     }
 
-    fun createLyricsPDF(context: Context,audioProc: AudioProc,modelWordsList: MutableList<Word>) {
+    fun createLyricsPDF(context: Context,audio: AudioProc,modelWordsList: MutableList<Word>) {
         var pdfDocument = PdfDocument()
         var titulo = TextPaint()
         var text = TextPaint()
@@ -205,7 +204,7 @@ constructor(
 
         titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
         titulo.textSize = 20f
-        canvas.drawText("${audioProc.title}", 30f, 80f, titulo)
+        canvas.drawText("${audio.title}", 30f, 80f, titulo)
 
         text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
 
@@ -254,10 +253,10 @@ constructor(
             }
         }
         pdfDocument.finishPage(pagina)
-        val file = File(Environment.getExternalStorageDirectory(), "L_${audioProc.title}.pdf")
+        val file = File(Environment.getExternalStorageDirectory(), "L_${audio.title}.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audioProc, file.toUri(), "L", file)
+            addNewGeneratedFiles(audio = audio, file.toUri(), "L", file)
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -265,17 +264,18 @@ constructor(
 
     }
 
-    fun createChordsPDF(context: Context,audioProc: AudioProc,modelChordsList: MutableList<Chord>, nom:Boolean = true ) :List<String> {
+    fun createChordsPDF(context: Context,audio: AudioProc ,modelChordsList: MutableList<Chord>, nom:Boolean = true ) :List<String> {
         var pdfDocument = PdfDocument()
         var titulo = TextPaint()
         var text = TextPaint()
-        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, 1).create()
+        var npage = 0
+        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
         var pagina = pdfDocument.startPage(pageInfo)
         var canvas = pagina.canvas
 
         titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
         titulo.textSize = 20f
-        canvas.drawText("${audioProc.title}", 30f, 60f, titulo)
+        canvas.drawText("${audio.title}", 30f, 60f, titulo)
 
         text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
         text.textSize = 10f
@@ -373,59 +373,63 @@ constructor(
                 }
         }
 
+
+
         var arrayChord = stringChords.split("\n")
+        var arraytimeline = stringtimeline.split("\n")
+        var array = arraytimeline
+        if(arrayChord.size>=arraytimeline.size){
+            array = arrayChord
+        }
+
         var contC = 0
         var x = 80f
         y= 130f
-        for (item in arrayChord) {
+
+        for (i in 0 until array.size-1) {
             if(contC<3){
                 contC++
-                canvas.drawText(item, x, y, text)
-                y += 30
+                x = 30f
+                canvas.drawText(arraytimeline.get(i), x, y, text)
+                y += 10
+                x = 80f
+                canvas.drawText(arrayChord.get(i), x, y, text)
+                y+=30
             }else{
-                canvas.drawText(item, x, y, text)
+                x = 30f
+                canvas.drawText(arraytimeline.get(i), x, y, text)
+                y += 10
+                x = 80f
+                canvas.drawText(arrayChord.get(i), x, y, text)
                 y +=40
                 if(y>=900f){
+                    npage++
+                    pdfDocument.finishPage(pagina)
+                    pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
+                    pagina = pdfDocument.startPage(pageInfo)
+                    canvas = pagina.canvas
                   y=130f
+
                 }
                 contC=0
             }
 
         }
-
-        var arraytimeline = stringtimeline.split("\n")
-        var contT = 0
-        x = 30f
-        y = 120f
-
-        for (item in arraytimeline) {
-            if(contT<3){
-                contT++
-                canvas.drawText(item, x, y, text)
-                y += 30
-            }else{
-                canvas.drawText(item, x, y, text)
-                y +=40
-                if(y>=900f){
-                 y=120f
-                }
-                contT=0
-            }
-        }
         pdfDocument.finishPage(pagina)
+
 
         var pre = when(nom) {
             true -> "AI"
             false -> "AL"
         }
         var file = when(nom) {
-            true -> {File(Environment.getExternalStorageDirectory(), "AI_${audioProc.title}.pdf")}
-            false -> {File(Environment.getExternalStorageDirectory(), "AL_${audioProc.title}.pdf")}
+            true -> {File(Environment.getExternalStorageDirectory(), "AI_${audio.title}.pdf")}
+            false -> {File(Environment.getExternalStorageDirectory(), "AL_${audio.title}.pdf")}
         }
 
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audioProc, file.toUri(), pre, file)
+            addNewGeneratedFiles(audio = audio, file.toUri(), pre, file)
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -433,17 +437,18 @@ constructor(
         return arrayChord
     }
 
-    fun createLyricsChordsPDF(context: Context, audioProc: AudioProc, modelChordsList: List<String>, modelWordsList: MutableList<Word>, nom:Boolean = true){
+    fun createLyricsChordsPDF(context: Context,audio: AudioProc, modelChordsList: List<String>, modelWordsList: MutableList<Word>, nom:Boolean = true){
         var pdfDocument = PdfDocument()
         var titulo = TextPaint()
         var text = TextPaint()
-        var pageInfo = PdfDocument.PageInfo.Builder(1060, 2060, 1).create()
+        var npage =0
+        var pageInfo = PdfDocument.PageInfo.Builder(1060, 2060, npage).create()
         var pagina = pdfDocument.startPage(pageInfo)
         var canvas = pagina.canvas
 
         titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
         titulo.textSize = 20f
-        canvas.drawText("${audioProc.title}", 30f, 80f, titulo)
+        canvas.drawText("${audio.title}", 30f, 80f, titulo)
 
         text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
 
@@ -493,83 +498,56 @@ constructor(
         println("String words ${wordsJsontoString}")
 
 
+        var arraytimeline = stringtimeline.split("\n")
+        var arrayText = wordsJsontoString.split("\n")
+        var array = arraytimeline
 
+        if(modelChordsList.size>=arrayText.size){
+            array = modelChordsList
+        }  else  if(arrayText.size>=arrayText.size){
+            array = modelChordsList
+        }
 
         var contC = 0
         var x = 80f
         y= 130f
-        for (item in modelChordsList) {
+
+        for (i in 0 until array.size-1) {
             if(contC<3){
                 contC++
-                canvas.drawText(item, x, y, text)
-                y += 30
+                x = 30f
+                canvas.drawText(arraytimeline.get(i), x, y, text)
+                y += 10
+                x = 80f
+                canvas.drawText(modelChordsList.get(i), x, y, text)
+                y += 12
+                x = 80f
+                canvas.drawText(arrayText.get(i), x, y, text)
+                y+=30
             }else{
-                canvas.drawText(item, x, y, text)
+                x = 30f
+                canvas.drawText(arraytimeline.get(i), x, y, text)
+                y += 10
+                x = 80f
+                canvas.drawText(modelChordsList.get(i), x, y, text)
+                y += 12
+                x = 80f
+                canvas.drawText(arrayText.get(i), x, y, text)
                 y +=40
-                if(y>=900f){
+                if(y>=1500f){
+                    npage++
+                    pdfDocument.finishPage(pagina)
+                    pageInfo = PdfDocument.PageInfo.Builder(1060, 2060, npage).create()
+                    pagina = pdfDocument.startPage(pageInfo)
+                    canvas = pagina.canvas
                     y=130f
+
                 }
                 contC=0
             }
 
         }
 
-
-
-
-
-        var arrayText = wordsJsontoString.split("\n")
-         contC  = 0
-         x = 80f
-        y= 140f
-        var maxlength = 0
-
-        for (item in arrayText) {
-            println("largo de la desta : ${item.length}")
-               maxlength = item.length
-
-
-            if(contC<3){
-                contC++
-                canvas.drawText(item, x, y, text)
-                y += 30
-            }else{
-                canvas.drawText(item, x, y, text)
-                y +=40
-                  if(y>=900f){
-                      y=140f
-                  }
-                contC=0
-            }
-        }
-
-          var arraytimeline = stringtimeline.split("\n")
-          var contT = 0
-          var plus = 0
-          x = 30f
-          y = 120f
-
-
-          for (item in arraytimeline) {
-              println("${item.length} ---- ${maxlength}")
-              if(item.length < maxlength && item.length > 5 ){
-                  for(i in 0 until maxlength-item.length){
-                            item
-                  }
-              }
-              if(contT<3){
-                  contT++
-                  canvas.drawText(item, x, y, text)
-                  y += 30
-              }else{
-                  canvas.drawText(item, x, y, text)
-                  y +=40
-                  if(y>=900f){
-                      y=120f
-                  }
-                  contT=0
-              }
-          }
 
 
         pdfDocument.finishPage(pagina)
@@ -580,69 +558,48 @@ constructor(
             false -> "LAL"
         }
         var file = when(nom) {
-            true -> {File(Environment.getExternalStorageDirectory(), "LAI_${audioProc.title}.pdf")
+            true -> {File(Environment.getExternalStorageDirectory(), "LAI_${audio.title}.pdf")
             }
-            false -> {File(Environment.getExternalStorageDirectory(), "LAL_${audioProc.title}.pdf")}
+            false -> {File(Environment.getExternalStorageDirectory(), "LAL_${audio.title}.pdf")}
             //  else -> File(Environment.getExternalStorageDirectory(), "AI_${audioProc.title}.pdf")
         }
 
 
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audioProc, file.toUri(), pre, file)
+            addNewGeneratedFiles(audio = audio, file.toUri(), pre, file)
         }catch (e:Exception){
             e.printStackTrace()
         }
 
+  }
 
+    fun generatePDFs(context: Context, id:Long,displayName:String,artist:String,data:String, duration:Int, title:String,english_nomenclature:String,latin_nomenclature:String,chords_lyrics_e:String, chords_lyrics_l:String,lyrics:String, ChordsWordsJson : String ){
 
+        val modelChordsEList: MutableList<Chord> = getListModelChordEn(context, ChordsWordsJson)
+        val modelWordsList: MutableList<Word> = getListModelWord(context, ChordsWordsJson)
+        val modelChordsLList: MutableList<Chord> = getListModelChordLat(context, ChordsWordsJson)
 
+        val audio = AudioProc(
+            id  = id,
+            displayName = displayName,
+            artist = artist,
+            data = data,
+            duration =duration,
+            title = title,
+            english_nomenclature = english_nomenclature,
+            latin_nomenclature = latin_nomenclature,
+            chords_lyrics_e = chords_lyrics_e,
+            chords_lyrics_l = chords_lyrics_l,
+            lyrics  = lyrics
 
+        )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-    fun generatePDFs(context: Context, audioProc: AudioProc, chordsJson : String , wordsJson: String  ){
-        val modelChordsEList: MutableList<Chord> = getListModelChordEn(context, chordsJson)
-        val modelWordsList: MutableList<Word> = getListModelWord(context, wordsJson)
-        val modelChordsLList: MutableList<Chord> = getListModelChordLat(context, chordsJson)
-
-
-        createLyricsPDF(context,audioProc,modelWordsList)
-        var chordEList =  createChordsPDF(context,audioProc, modelChordsEList)
-        var chordLList = createChordsPDF(context,audioProc, modelChordsLList, false)
-        createLyricsChordsPDF(context,audioProc,chordEList,modelWordsList)
-        createLyricsChordsPDF(context,audioProc,chordLList,modelWordsList,false)
+        createLyricsPDF(context,audio,modelWordsList)
+        var chordEList =  createChordsPDF(context,audio, modelChordsEList)
+        var chordLList = createChordsPDF(context,audio, modelChordsLList, false)
+        createLyricsChordsPDF(context,audio,chordEList,modelWordsList)
+        createLyricsChordsPDF(context,audio,chordLList,modelWordsList,false)
 
         /*     Thread.sleep(2000)
              file = createChordsPDF(audioProc, modelChordsEList, modelWordsList,)
@@ -659,58 +616,6 @@ constructor(
 
     }
 
-
-
-/*
-    fun createPDF(context: Context, audioProc: AudioProc,typePDF: String) {
-
-
-
-
-        //-----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------------------------
-
-        var tiempo = 0.0
-        for(i in 0 until modelChords.size){
-             tiempo += modelChords.get(i).time_final - modelChords.get(i).time_init
-            if(modelChords.get(i).time_init>=modelWords.get(0).time_init && tiempo<=5.0) {
-                stringChords += modelChords.get(i).chord_result+" "
-            }else{
-                stringChords += "\n"
-                tiempo = 0.0
-            }
-            }
-        println("String chords ${stringChords}")
-
-        var arrayChord = stringChords.split("\n")
-        var contC : Int = 0
-        y=-253f
-        for (item in arrayChord) {
-            if(contC<4){
-                contC++
-                canvas.drawText(item, 30f, y, text)
-                y += 25
-            }else{
-                y +=20
-                println("Brincoooo")
-                contC=0
-            }
-        }
-//--------------------------------------------------------------------------------------------------
-        pdfDocument.finishPage(pagina1)
-
-
-        val file = File(Environment.getExternalStorageDirectory(), "${pre}_${audioProc.title}.pdf")
-        try {
-            pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audioProc, file.toUri(), "L", file)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-
-    }
-*/
     fun deleteData(audioProc: AudioProc) {
         try {
             processedAudioList.document("${audioProc.id}").delete()
@@ -767,8 +672,7 @@ constructor(
     }
 
     fun startCardScreen(context: Context, toScreenPDF: Intent) {
-
         startActivity(context, toScreenPDF, null)
-
     }
+
 }
