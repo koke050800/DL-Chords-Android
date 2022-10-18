@@ -2,6 +2,7 @@ package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
@@ -103,24 +106,11 @@ fun PlayerMusicStored(
 
             Button(
                 onClick = {
-
-                    if (!isAlreadyProcessed) {
-                        /////////Esto se hará cuando se termine de procesar el audio
-                        val audioP = AudioProc(
-                            id = audio.id,
-                            displayName = audio.displayName,
-                            artist = audio.artist,
-                            data = audio.data,
-                            duration = audio.duration,
-                            title = audio.title,
-                        )
-                        audioProcViewModel.addNewAudioProc(audioP)
-                        generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP, chordsJson = "", wordsJson = " ")
-
-                    } else {
-                        openDialog.value = true
-                    }
-
+                    audioViewModel.playAudio(audio,false)
+                    val cutAudio = Intent(context, CutAnAudioActivity::class.java)
+                    cutAudio.putExtra("AudioId", audio.id)
+                    cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
+                    context.startActivity(cutAudio)
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)

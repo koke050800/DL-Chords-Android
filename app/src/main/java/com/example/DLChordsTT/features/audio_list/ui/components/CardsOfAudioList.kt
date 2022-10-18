@@ -110,6 +110,7 @@ fun StoredCard(
                     expandedMenu = expandedMenu,
                     openDialogProcessedAudio = openDialogProcessedAudio,
                     openDialogProcessing = openDialogProcessing,
+                    isAscending = isAscending
                 )
 
             }
