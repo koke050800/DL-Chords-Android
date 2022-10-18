@@ -26,6 +26,7 @@ class FileRepository {
 
                 // Convert raw JSON to pretty JSON using GSON library
                 val gson = GsonBuilder().setPrettyPrinting().create()
+                println("RESPONSEEEEEEEE ${response.body()}")
                 val prettyJson = gson.toJson(
                     JsonParser.parseString(
                         response.body()
@@ -59,6 +60,7 @@ class FileRepository {
 
                 // Convert raw JSON to pretty JSON using GSON library
                 val gson = GsonBuilder().setPrettyPrinting().create()
+                println("reponseeeeeee${response.body()?.string()}")
                 val prettyJson = gson.toJson(
                     JsonParser.parseString(
                         response.body()
