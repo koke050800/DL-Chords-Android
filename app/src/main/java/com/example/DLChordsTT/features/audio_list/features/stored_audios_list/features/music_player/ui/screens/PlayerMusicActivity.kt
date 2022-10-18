@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.screens.PlayerMusicStored
@@ -44,6 +45,7 @@ class PlayerMusicActivity : ComponentActivity() {
         }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
+        val pythonFlaskApiViewModel: PythonFlaskApiViewModel by viewModels()
 
         setContent {
             DLChordsTheme {
@@ -65,7 +67,8 @@ class PlayerMusicActivity : ComponentActivity() {
                                 audioProcViewModel = audioProcViewModel,
                                 generatedFilesViewModel = generatedFilesViewModel,
                                 isAlreadyProcessed = isAlreadyProcessed,
-                                context = LocalContext.current
+                                context = LocalContext.current,
+                                pythonFlaskApiViewModel =  pythonFlaskApiViewModel,
                             )
                         }
                     } else {

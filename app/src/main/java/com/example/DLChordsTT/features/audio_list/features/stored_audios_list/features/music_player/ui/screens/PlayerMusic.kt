@@ -2,6 +2,7 @@ package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -10,20 +11,26 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -35,19 +42,25 @@ fun PlayerMusicStored(
     audioProcViewModel: AudioProcViewModel,
     generatedFilesViewModel: GeneratedFilesViewModel,
     isAlreadyProcessed: Boolean,
-    context: Context
+    context: Context,
+    pythonFlaskApiViewModel: PythonFlaskApiViewModel,
 ) {
     val openDialog = remember { mutableStateOf(false) }
+    var scope = rememberCoroutineScope()
+    val openDialogProcessing = remember { mutableStateOf(false) }
+    val pdfScreenIntent =
+        Intent(context, holiActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+    //val cutScreenIntent = Intent(context, /*TODO: PONER ACTIVIDAD DE RECORTE*/)
 
     DLChordsTheme {
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
-
+                .padding(20.dp)
             ) {
             TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel)
+
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
@@ -115,7 +128,12 @@ fun PlayerMusicStored(
                             title = audio.title,
                         )
                         audioProcViewModel.addNewAudioProc(audioP)
-                        generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP, chordsJson = "", wordsJson = " ")
+                        generatedFilesViewModel.generatePDFs(
+                            context = context,
+                            audioProc = audioP,
+                            chordsJson = "",
+                            wordsJson = " "
+                        )
 
                     } else {
                         openDialog.value = true
@@ -141,21 +159,15 @@ fun PlayerMusicStored(
                     color = DLChordsTheme.colors.primary
                 )
             }
+
+
             Button(
                 onClick = {
 
                     if (!isAlreadyProcessed) {
-                        audioProcViewModel.addNewAudioProc(
-                            AudioProc(
-                                id = audio.id,
-                                displayName = audio.displayName,
-                                artist = audio.artist,
-                                data = audio.data,
-                                duration = 344324,
-                                title = audio.title,
-
-                                )
-                        )
+                        scope.launch {
+                            pythonFlaskApiViewModel.uploadAudio(audio)
+                        }
                     } else {
                         openDialog.value = true
                     }
@@ -170,13 +182,30 @@ fun PlayerMusicStored(
                 contentPadding = PaddingValues(20.dp, 12.dp),
 
                 ) {
-                Text(
+                pythonFlaskApiViewModel.isScopeCompleted.value?.let { isScopeCompleted ->
+                    if (!isScopeCompleted) {
+                        openDialogProcessing.value = true
+                        Text(
+                            "Procesando...",
+                            maxLines = 2,
+                            style = DLChordsTheme.typography.button,
+                            color = DLChordsTheme.colors.surface
+                        )
+                    } else {
+                        var response = pythonFlaskApiViewModel.responseUploadAudio?.value
+                            ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
+                        openDialogProcessing.value = false //cerrar el progressIndicator
+                        pdfScreenIntent.putExtra("response", response)
+                        ContextCompat.startActivity(context, pdfScreenIntent, null)
+                    }
+                } ?: Text(
                     text = "AUDIO COMPLETO",
                     style = DLChordsTheme.typography.button,
                     maxLines = 1,
                     color = DLChordsTheme.colors.surface
                 )
             }
+            AlertDialogProcessing(openDialogProcessing = openDialogProcessing)
         }
 
     }

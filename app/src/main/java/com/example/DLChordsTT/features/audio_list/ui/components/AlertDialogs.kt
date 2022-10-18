@@ -1,20 +1,19 @@
 package com.example.DLChordsTT.features.audio_list.ui.components
 
+import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun AlertDialogProcessedAudio(
@@ -78,13 +77,41 @@ fun AlertDialogProcessing(
             Dialog(onDismissRequest = {},
                 content = {
                     Column(
-                        modifier = Modifier.fillMaxWidth(1f),
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .fillMaxHeight(0.5f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircularProgressIndicator()
+                        //CircularProgressIndicator()
+                        Card(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                            Column(Modifier.padding(all = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                                CircularProgressIndicator(modifier = Modifier.padding(all = 8.dp))
+                                var ticks by remember { mutableStateOf(0) }
+                                LaunchedEffect(Unit) {
+                                    while(true) {
+                                        delay(1000)
+                                        ticks++
+                                    }
+                                }
+                                Text(
+                                    "${formatDuration(ticks.toLong())}",
+                                    style = DLChordsTheme.typography.caption,
+                                    color = DLChordsTheme.colors.onSurface,
+                                    maxLines = 1,
+                                    modifier = Modifier.padding(all = 8.dp)
+                                )
+                            }
+
+                        }
                     }
                 }
             )
         }
     }
+}
+
+fun formatDuration(seconds: Long): String = if (seconds < 60) {
+    if (seconds<10) "Tiempo 00:0$seconds" else "Tiempo 00:$seconds"
+} else {
+    "Tiempo ${DateUtils.formatElapsedTime(seconds)}"
 }
