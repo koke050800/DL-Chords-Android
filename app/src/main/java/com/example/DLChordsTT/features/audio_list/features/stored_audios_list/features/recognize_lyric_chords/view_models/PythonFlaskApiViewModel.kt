@@ -3,7 +3,7 @@ package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.f
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.repositories.PythonFlaskRepository
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.repositories.PythonFlaskApiRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PythonFlaskApiViewModel @Inject constructor(
-    private val repository: PythonFlaskRepository
+    private val repository: PythonFlaskApiRepository
 ) : ViewModel() {
 
     private val viewModelJob = SupervisorJob()

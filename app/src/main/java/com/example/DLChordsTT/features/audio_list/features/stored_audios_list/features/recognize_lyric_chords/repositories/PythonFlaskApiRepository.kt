@@ -10,7 +10,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 
-class PythonFlaskRepository @Inject constructor() {
+class PythonFlaskApiRepository @Inject constructor() {
 
     suspend fun uploadAudioAndObtainLyricChords(file: File): String? {
 
