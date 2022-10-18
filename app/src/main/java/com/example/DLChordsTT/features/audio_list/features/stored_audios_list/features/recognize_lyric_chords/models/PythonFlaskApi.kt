@@ -1,4 +1,4 @@
-package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.models
 
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -8,7 +8,6 @@ import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.create
 import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -21,7 +20,7 @@ var client = OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
     .readTimeout(420, TimeUnit.SECONDS).build();
 
 
-interface FileApi {
+interface PythonFlaskApi {
 
     @Multipart
     @POST("predict")
@@ -35,7 +34,6 @@ interface FileApi {
         @Header("time_initial") time_initial: String,
         @Header("time_final") time_final: String,
         @Part audioToConvert: MultipartBody.Part
-
     ):Deferred<Response<ResponseBody>>
 
 
@@ -46,7 +44,7 @@ interface FileApi {
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .client(client)
                 .build()
-                .create(FileApi::class.java)
+                .create(PythonFlaskApi::class.java)
         }
     }
 

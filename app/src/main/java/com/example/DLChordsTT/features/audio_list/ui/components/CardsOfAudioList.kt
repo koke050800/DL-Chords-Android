@@ -18,7 +18,7 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessedActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -31,7 +31,7 @@ fun StoredCard(
     audio: Audio,
     indexAudio: Int,
     isAscending: Boolean,
-    fileApiViewModel: FileApiViewModel,
+    pythonFlaskApiViewModel: PythonFlaskApiViewModel,
     alreadyProcessedAudiosList: List<AudioProc>
 ) {
     val context = LocalContext.current
@@ -105,7 +105,7 @@ fun StoredCard(
                 }
                 MenuStoredCards(
                     audio = audio,
-                    fileApiViewModel = fileApiViewModel,
+                    pythonFlaskApiViewModel = pythonFlaskApiViewModel,
                     alreadyProcessedAudiosList = alreadyProcessedAudiosList,
                     expandedMenu = expandedMenu,
                     openDialogProcessedAudio = openDialogProcessedAudio,

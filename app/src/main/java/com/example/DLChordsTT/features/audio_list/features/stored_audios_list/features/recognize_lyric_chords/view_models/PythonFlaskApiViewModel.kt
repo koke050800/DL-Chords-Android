@@ -1,13 +1,17 @@
-package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.repositories.PythonFlaskRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.io.File
+import javax.inject.Inject
 
-class FileApiViewModel(
-    private val repository: FileRepository = FileRepository()
+@HiltViewModel
+class PythonFlaskApiViewModel @Inject constructor(
+    private val repository: PythonFlaskRepository = PythonFlaskRepository()
 ) : ViewModel() {
 
     private val viewModelJob = SupervisorJob()
