@@ -58,7 +58,7 @@ class CutAnAudioActivity : ComponentActivity() {
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
                             audioProcessed?.let { it1 ->
-                                PlayerMusicProcessed(
+                                CutAnAudioScreen(
                                     progress = audioViewModel.currentAudioProgress.value,
                                     onProgressChange = {},
                                     it1,

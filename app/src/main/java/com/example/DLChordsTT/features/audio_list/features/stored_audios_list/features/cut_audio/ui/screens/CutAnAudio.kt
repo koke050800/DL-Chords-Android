@@ -85,7 +85,7 @@ fun CutAnAudioScreen(
                 }
             }
 
-            AlertDialogProcessedAudio(openDialog = openDialog)
+            AlertDialogProcessedAudio(openDialogProcessedAudio = openDialog)
 
             Button(
                 onClick = {

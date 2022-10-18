@@ -50,6 +50,11 @@
             android:exported="false"
             android:label="@string/title_activity_player_music_processed"
             android:theme="@style/Theme.DLChordsTT1" />
+        <activity
+            android:name="com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity"
+            android:exported="false"
+            android:label="@string/title_activity_cut_audio"
+            android:theme="@style/Theme.DLChordsTT1" />
 
     <service
         android:name="com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.models.MusicPlayerService"
