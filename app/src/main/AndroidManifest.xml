@@ -40,6 +40,10 @@
             android:exported="false"
             android:label="@string/title_activity_player_music"
             android:theme="@style/Theme.DLChordsTT1" />
+        <activity android:name="com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity"
+            android:exported="false"
+            android:label="Holis"
+            android:theme="@style/Theme.DLChordsTT1"></activity>
 
         <activity
             android:name="com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessedActivity"

@@ -10,10 +10,11 @@ import com.example.DLChordsTT.features.audio_list.navigation.Destinations.*
 
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.ui.screens.ProcessedAudiosScreen
 import com.example.DLChordsTT.features.audio_list.ui.screens.StoredAudiosScreen
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
+
 
 
 @Composable
@@ -24,12 +25,12 @@ fun NavigationHostScreens(
     NavHost(navController = navController, startDestination = StoredAudios.route) {
         composable(StoredAudios.route) {
             val audioStoredViewModel: AudioViewModel = hiltViewModel()
-            val fileApiViewModel: FileApiViewModel = hiltViewModel()
+            val pythonFlaskApiViewModel: PythonFlaskApiViewModel = hiltViewModel()
             val alreadyProccessedAudios: AudioProcViewModel = hiltViewModel()
             val state = alreadyProccessedAudios.state.value
             StoredAudiosScreen(
                 audioStoredViewModel = audioStoredViewModel,
-                fileApiViewModel = fileApiViewModel,
+                pythonFlaskApiViewModel = pythonFlaskApiViewModel,
                 alreadyProccessedAudios = alreadyProccessedAudios,
                 stateAlreadyProccessedAudios = state
             )

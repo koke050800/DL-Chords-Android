@@ -28,29 +28,30 @@ class AudioProcViewModel @Inject constructor(
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing
-
     val isDescending = mutableStateOf(true)
+
+    val deletedElement = mutableStateOf(false)
 
     init {
         getAudiosProcessedBD()
     }
 
 
-    fun addNewAudioProc(audioP : AudioProc){
+    fun addNewAudioProc(audioP: AudioProc) {
 
         val audio = AudioProc(
-             id  = audioP.id,
-       //  id_file = audioP.id_file,
-         displayName = audioP.displayName,
-         artist = audioP.artist,
-         data = audioP.data,
-         duration = audioP.duration,
-         title = audioP.title,
+            id = audioP.id,
+            displayName = audioP.displayName,
+            artist = audioP.artist,
+            data = audioP.data,
+            duration = audioP.duration,
+            title = audioP.title,
         )
 
-            audioprocRepository.addNewProcessedAudio(audio)
+        audioprocRepository.addNewProcessedAudio(audio)
 
     }
+
     fun getAudiosProcessedBD() {
         audioprocRepository.getProcessedAudioList().onEach { result ->
             when (result) {
@@ -66,7 +67,8 @@ class AudioProcViewModel @Inject constructor(
                     var sortList = emptyList<AudioProc>()
 
                     if (result.data?.isNotEmpty() == true) {
-                        listProcessed =  result.data.sortedBy { it.title.lowercase(locale = Locale.getDefault()) }
+                        listProcessed =
+                            result.data.sortedBy { it.title.lowercase(locale = Locale.getDefault()) }
                         sortList = listProcessed.reversed()
                     }
 

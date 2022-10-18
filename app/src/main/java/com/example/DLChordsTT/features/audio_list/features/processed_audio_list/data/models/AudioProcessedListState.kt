@@ -5,5 +5,6 @@ data class AudioProcessedListState(
     val isLoading: Boolean = false,
     val audioProcessedList: List<AudioProc> = emptyList(),
     val audioProcessedListInverted: List<AudioProc> = emptyList(),
-    val error: String = ""
+    val error: String = "",
+    val deleted : Boolean = false
 )

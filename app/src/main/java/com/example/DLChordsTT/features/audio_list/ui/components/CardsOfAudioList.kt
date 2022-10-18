@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -19,11 +18,10 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessedActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
-import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.floor
 
@@ -33,7 +31,7 @@ fun StoredCard(
     audio: Audio,
     indexAudio: Int,
     isAscending: Boolean,
-    fileApiViewModel: FileApiViewModel,
+    pythonFlaskApiViewModel: PythonFlaskApiViewModel,
     alreadyProcessedAudiosList: List<AudioProc>
 ) {
     val context = LocalContext.current
@@ -41,7 +39,8 @@ fun StoredCard(
     sendAudio.putExtra("AudioId", indexAudio)
     sendAudio.putExtra("isAscending", isAscending)
     var expandedMenu = remember { mutableStateOf(false) }
-    val openDialog = remember { mutableStateOf(false) }
+    val openDialogProcessedAudio = remember { mutableStateOf(false) }
+    val openDialogProcessing = remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -106,20 +105,28 @@ fun StoredCard(
                 }
                 MenuStoredCards(
                     audio = audio,
-                    fileApiViewModel = fileApiViewModel,
+                    pythonFlaskApiViewModel = pythonFlaskApiViewModel,
                     alreadyProcessedAudiosList = alreadyProcessedAudiosList,
                     expandedMenu = expandedMenu,
-                    openDialog = openDialog
+                    openDialogProcessedAudio = openDialogProcessedAudio,
+                    openDialogProcessing = openDialogProcessing,
                 )
 
             }
-            AlertDialogProcessedAudio(openDialog, expandedMenu)
+            AlertDialogProcessedAudio(openDialogProcessedAudio, expandedMenu)
+            AlertDialogProcessing(openDialogProcessing = openDialogProcessing)
         }
     }
 }
 
 @Composable
-fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generatedFilesViewModel: GeneratedFilesViewModel) {
+fun ProcessedCard(
+    audio: AudioProc,
+    index: Long,
+    isAscending: Boolean,
+    generatedFilesViewModel: GeneratedFilesViewModel,
+    onClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val sendAudio = Intent(context, PlayerMusicProcessedActivity::class.java)
@@ -132,7 +139,7 @@ fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generated
         modifier = Modifier
             .height(64.dp)
             .fillMaxWidth(1f)
-            .clickable{startActivity(context, sendAudio, null)},
+            .clickable { startActivity(context, sendAudio, null) },
         shape = RoundedCornerShape(4.dp),
         backgroundColor = DLChordsTheme.colors.cardColor,
         border = BorderStroke(1.dp, DLChordsTheme.colors.divider),
@@ -183,7 +190,9 @@ fun ProcessedCard(audio: AudioProc, index: Long, isAscending: Boolean, generated
                         Text("Mostrar PDF")
                     }
                     Divider()
-                    DropdownMenuItem(onClick = { generatedFilesViewModel.deletePDF(audio) }) {
+                    DropdownMenuItem(onClick = {
+                        onClick()
+                    }) {
                         Text("Eliminar")
                     }
                 }
@@ -209,129 +218,8 @@ fun timeStampToDuration(position: Long): String {
 }
 
 
-@Composable
-fun AlertDialogProcessedAudio(
-    openDialog: MutableState<Boolean>,
-    expandedMenu: MutableState<Boolean>? = null
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        if (openDialog.value) {
 
-            AlertDialog(
-                onDismissRequest = {},
-                title = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .fillMaxWidth(1.2f)
-                            .padding(bottom = 8.dp)
-                    ) {
-                        Text(
-                            text = "Ya se procesó este audio, puede eliminar el resultado desde la lista de procesados.",
-                            style = DLChordsTheme.typography.subtitle1
-                        )
-                    }
-                },
-                confirmButton = {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxWidth(1f)
-                    ) {
-                        Button(
-                            modifier = Modifier
-                                .fillMaxWidth(.55f)
-                                .padding(bottom = 4.dp),
-                            shape = CircleShape,
-                            onClick = {
-                                openDialog.value = false
-                                expandedMenu?.value = false
-                            }) {
-                            Text(
-                                text = "Entendido",
-                                style = DLChordsTheme.typography.button,
-                                maxLines = 1,
-                                color = DLChordsTheme.colors.onPrimary
-                            )
 
-                        }
-                    }
 
-                },
-            )
-        }
-    }
-}
 
-@Composable
-fun MenuStoredCards(
-    audio: Audio,
-    fileApiViewModel: FileApiViewModel,
-    alreadyProcessedAudiosList: List<AudioProc>,
-    expandedMenu: MutableState<Boolean>,
-    openDialog: MutableState<Boolean>,
-) {
-    DropdownMenu(
-        expanded = expandedMenu.value,
-        onDismissRequest = { expandedMenu.value = false }
-    ) {
-        var isAlreadyProcessedInBD by remember {
-            mutableStateOf(false)
-        }
 
-        var scope = rememberCoroutineScope()
-
-        DropdownMenuItem(onClick = {
-
-            isAlreadyProcessedInBD = false
-
-            alreadyProcessedAudiosList.forEach {
-                if (it.title.lowercase(locale = Locale.getDefault())
-                    == audio.title.lowercase(locale = Locale.getDefault())
-                ) {
-                    isAlreadyProcessedInBD = true
-                }
-            }
-
-            if (!isAlreadyProcessedInBD) {
-
-                scope.launch {
-                    fileApiViewModel.uploadAudio(audio)
-                }
-
-            } else {
-                openDialog.value = true
-            }
-        }) {
-            Column(modifier = Modifier.fillMaxWidth(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-                fileApiViewModel.isScopeCompleted.value?.let {
-                    if (!it){
-                        CircularProgressIndicator()
-                    }else{
-                        println("---Termine ${fileApiViewModel.responseUploadAudio.value}")
-                    }
-                } ?: Text("Procesar Audio Completo")
-            }
-
-        }
-        Divider()
-        DropdownMenuItem(onClick = {
-            isAlreadyProcessedInBD = false
-
-            alreadyProcessedAudiosList.forEach {
-                if (it.title.lowercase(locale = Locale.getDefault())
-                    == audio.title.lowercase(locale = Locale.getDefault())
-                ) {
-                    isAlreadyProcessedInBD = true
-                }
-            }
-
-            if (!isAlreadyProcessedInBD) {
-                fileApiViewModel.uploadAudioAndCut(audio, "3", "25")
-            } else {
-                openDialog.value = true
-            }
-        }) {
-            Text("Procesar Fragmento")
-        }
-    }
-}

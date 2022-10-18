@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -34,6 +35,7 @@ fun PlayerMusicStored(
     audioProcViewModel: AudioProcViewModel,
     generatedFilesViewModel: GeneratedFilesViewModel,
     isAlreadyProcessed: Boolean,
+    context: Context
 ) {
     val openDialog = remember { mutableStateOf(false) }
 
@@ -87,7 +89,7 @@ fun PlayerMusicStored(
                 }
             }
 
-            AlertDialogProcessedAudio(openDialog = openDialog)
+            AlertDialogProcessedAudio(openDialogProcessedAudio = openDialog)
 
             Text(
                 modifier = Modifier.padding(start = 45.dp),
@@ -113,41 +115,7 @@ fun PlayerMusicStored(
                             title = audio.title,
                         )
                         audioProcViewModel.addNewAudioProc(audioP)
-
-
-                        generatedFilesViewModel.createPDF(
-                            audioProc = audioP,
-                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                            "L"
-                        )
-                        generatedFilesViewModel.createPDF(
-                            audioProc = audioP,
-                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                            "LAI"
-                        )
-                        generatedFilesViewModel.createPDF(
-                            audioProc = audioP,
-                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                            "LAL"
-                        )
-                        generatedFilesViewModel.createPDF(
-                            audioProc = audioP,
-                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                            "AI"
-                        )
-                        generatedFilesViewModel.createPDF(
-                            audioProc = audioP,
-                            "apoco si nena seguraaaa????? \n como has estado bebe \n hace cunato tiempo no nos vemos??",
-                            "AL"
-                        )
-                        /* if(audioProcViewModel.state.error.isNotBlank()){
-
-
-                         }
-                         if(audioProcViewModel.state.isLoading){
-
-
-                         }*/
+                        generatedFilesViewModel.generatePDFs(context = context, audioProc = audioP, chordsJson = "", wordsJson = " ")
 
                     } else {
                         openDialog.value = true

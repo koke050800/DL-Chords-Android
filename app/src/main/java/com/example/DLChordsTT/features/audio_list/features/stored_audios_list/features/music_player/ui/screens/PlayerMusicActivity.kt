@@ -60,11 +60,12 @@ class PlayerMusicActivity : ComponentActivity() {
                             PlayerMusicStored(
                                 progress = audioViewModel.currentAudioProgress.value,
                                 onProgressChange = {},
-                                storedAudiosList[musicData],
+                                audio = storedAudiosList[musicData],
                                 audioViewModel = audioViewModel,
                                 audioProcViewModel = audioProcViewModel,
                                 generatedFilesViewModel = generatedFilesViewModel,
                                 isAlreadyProcessed = isAlreadyProcessed,
+                                context = LocalContext.current
                             )
                         }
                     } else {

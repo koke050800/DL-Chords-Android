@@ -35,9 +35,8 @@ class FilesBDActivity : ComponentActivity() {
         val receiveName = intent.extras
         val audioName = receiveName?.getSerializable("AudioName") as AudioProc
         super.onCreate(savedInstanceState)
-
         val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
-
+      
         setContent {
             DLChordsTheme {
 
@@ -46,7 +45,7 @@ class FilesBDActivity : ComponentActivity() {
                     floatingActionButtonPosition = FabPosition.End,
                     backgroundColor = MaterialTheme.colors.background
                 ){
-                    FilesBDScreen(audioName,generatedFilesViewModel)}
+                    FilesBDScreen(audio = audioName,generatedFilesViewModel)}
             }    
         }
         

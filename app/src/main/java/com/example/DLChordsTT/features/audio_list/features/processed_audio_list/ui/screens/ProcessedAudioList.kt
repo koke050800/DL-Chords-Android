@@ -92,7 +92,12 @@ fun ProcessedAudiosScreen(
                             audio = audioElementList,
                             index = audioElementList.id,
                             isAscending = audioViewModel.isAscending.value,
-                            generatedFilesViewModel = generatedFilesViewModel
+                            generatedFilesViewModel = generatedFilesViewModel,
+                            onClick = {
+                                generatedFilesViewModel.deletePDF(audioElementList)
+                                audioProcessedViewModel.getAudiosProcessedBD()
+                                audioProcessedViewModel.deletedElement.value = true
+                            }
                         )
                     }
                 } else {

@@ -1,6 +1,9 @@
 package com.example.DLChordsTT.features.generated_files.ui.components
 
-
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -14,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -120,7 +124,9 @@ fun CardPDF(url: String, title: String, text: String, generatedFilesViewModel: G
                     }
                     IconButton(
                         onClick = {
+
                             generatedFilesViewModel.downloadPDF(url, context)
+
                         }
                     ) {
                         Icon(
@@ -129,7 +135,10 @@ fun CardPDF(url: String, title: String, text: String, generatedFilesViewModel: G
                         )
                     }
                 }
+
             }
+
+
         }
     }
 
