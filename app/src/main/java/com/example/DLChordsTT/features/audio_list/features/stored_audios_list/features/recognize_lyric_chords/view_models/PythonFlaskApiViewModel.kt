@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PythonFlaskApiViewModel @Inject constructor(
-    private val repository: PythonFlaskRepository = PythonFlaskRepository()
+    private val repository: PythonFlaskRepository
 ) : ViewModel() {
 
     private val viewModelJob = SupervisorJob()

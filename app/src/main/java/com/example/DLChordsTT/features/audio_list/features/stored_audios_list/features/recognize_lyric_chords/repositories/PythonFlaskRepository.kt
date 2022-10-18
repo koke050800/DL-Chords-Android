@@ -6,8 +6,11 @@ import com.google.gson.JsonParser
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PythonFlaskRepository {
+
+class PythonFlaskRepository @Inject constructor() {
 
     suspend fun uploadAudioAndObtainLyricChords(file: File): String? {
 
