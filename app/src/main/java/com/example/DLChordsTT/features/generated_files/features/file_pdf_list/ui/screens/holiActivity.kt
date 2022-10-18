@@ -30,24 +30,25 @@ class holiActivity : ComponentActivity() {
         val receivePredictionResponse = intent.extras
         var responseWhitLyricChords = receivePredictionResponse?.getString("response")
 
-        /*val id = receivePredictionResponse?.getLong("AudioProc_id") ?: 1.000
-        var displayName = receivePredictionResponse?.getString("AudioProc_displayName")
-        var artist = receivePredictionResponse?.getString("AudioProc_artist")
-        var data = receivePredictionResponse?.getString("AudioProc_data")
-        var duration = receivePredictionResponse?.getInt("AudioProc_duration")
-        var title = receivePredictionResponse?.getString("AudioProc_title")
+        //Datos del audio para subir a la base de datos
+        var id:Long = receivePredictionResponse?.getLong("AudioProc_id") ?: 0
+        var displayName = receivePredictionResponse?.getString("AudioProc_displayName") ?: "display name null"
+        var artist = receivePredictionResponse?.getString("AudioProc_artist")?: "artist null"
+        var data = receivePredictionResponse?.getString("AudioProc_data")?: "data null"
+        var duration = receivePredictionResponse?.getInt("AudioProc_duration") ?: 0
+        var title = receivePredictionResponse?.getString("AudioProc_title")?: "title null"
 
-        val audioP = AudioProc(
+        super.onCreate(savedInstanceState)
+
+
+        var audioP = AudioProc(
             id = id,
             displayName = displayName,
             artist = artist,
-            data = receivePredictionResponse?.getString("AudioProc_data")
-            duration = receivePredictionResponse?.getInt("AudioProc_duration"),
-            title = receivePredictionResponse?.getString("AudioProc_title")
-        )*/
-
-
-        super.onCreate(savedInstanceState)
+            data = data,
+            duration = duration,
+            title = title,
+        )
 
         setContent {
             DLChordsTheme {
@@ -64,6 +65,7 @@ class holiActivity : ComponentActivity() {
                             .padding(horizontal = 16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Text(text = "${audioP.toString()}")
                         Text(text = "$responseWhitLyricChords")
                     }
                 }

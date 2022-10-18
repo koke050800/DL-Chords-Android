@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
@@ -192,17 +192,22 @@ fun PlayerMusicStored(
                             color = DLChordsTheme.colors.surface
                         )
                     } else {
+
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
                         openDialogProcessing.value = false //cerrar el progressIndicator
                         pdfScreenIntent.putExtra("response", response)
+
+                        //datos del audio
                         pdfScreenIntent.putExtra("AudioProc_id", audio.id)
                         pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
                         pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
                         pdfScreenIntent.putExtra("AudioProc_data", audio.data)
                         pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
                         pdfScreenIntent.putExtra("AudioProc_title", audio.title)
-                        ContextCompat.startActivity(context, pdfScreenIntent, null)
+
+                        //lanzamos actividad
+                        startActivity(context, pdfScreenIntent, null)
                     }
                 } ?: Text(
                     text = "AUDIO COMPLETO",

@@ -73,10 +73,21 @@ fun MenuStoredCards(
                             maxLines = 2
                         )
                     } else {
+
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION"
                         openDialogProcessing.value = false //cerrar el progressIndicator
                         pdfScreenIntent.putExtra("response", response)
+
+                        //datos del audio
+                        pdfScreenIntent.putExtra("AudioProc_id", audio.id)
+                        pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
+                        pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
+                        pdfScreenIntent.putExtra("AudioProc_data", audio.data)
+                        pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
+                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)
+
+                        //lanzamos actividad
                         startActivity(context, pdfScreenIntent, null)
                     }
                 } ?: Text("Procesar audio completo", style = DLChordsTheme.typography.caption)
