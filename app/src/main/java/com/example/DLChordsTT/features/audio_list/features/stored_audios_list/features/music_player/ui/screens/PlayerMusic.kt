@@ -18,18 +18,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlinx.coroutines.launch
@@ -41,8 +37,6 @@ fun PlayerMusicStored(
     onProgressChange: (Float) -> Unit,
     audio: Audio,
     audioViewModel: AudioViewModel,
-    audioProcViewModel: AudioProcViewModel,
-    generatedFilesViewModel: GeneratedFilesViewModel,
     isAlreadyProcessed: Boolean,
     context: Context,
     pythonFlaskApiViewModel: PythonFlaskApiViewModel,
@@ -59,7 +53,7 @@ fun PlayerMusicStored(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
-            ) {
+        ) {
             TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel)
 
             Card(
@@ -117,7 +111,7 @@ fun PlayerMusicStored(
 
             Button(
                 onClick = {
-                    audioViewModel.playAudio(audio,false)
+                    audioViewModel.playAudio(audio, false)
                     val cutAudio = Intent(context, CutAnAudioActivity::class.java)
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
