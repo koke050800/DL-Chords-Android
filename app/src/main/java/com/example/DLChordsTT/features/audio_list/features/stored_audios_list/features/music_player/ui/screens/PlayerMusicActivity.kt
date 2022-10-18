@@ -64,8 +64,6 @@ class PlayerMusicActivity : ComponentActivity() {
                                 onProgressChange = {},
                                 audio = storedAudiosList[musicData],
                                 audioViewModel = audioViewModel,
-                                audioProcViewModel = audioProcViewModel,
-                                generatedFilesViewModel = generatedFilesViewModel,
                                 isAlreadyProcessed = isAlreadyProcessed,
                                 context = LocalContext.current,
                                 pythonFlaskApiViewModel =  pythonFlaskApiViewModel,
