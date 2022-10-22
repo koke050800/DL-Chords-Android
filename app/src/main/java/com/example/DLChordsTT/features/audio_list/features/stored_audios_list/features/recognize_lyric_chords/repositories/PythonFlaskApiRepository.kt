@@ -1,16 +1,20 @@
-package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.repositories
 
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.models.PythonFlaskApi
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonParser
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class FileRepository {
+
+class PythonFlaskApiRepository @Inject constructor() {
 
     suspend fun uploadAudioAndObtainLyricChords(file: File): String? {
 
-        val response = FileApi.instance.uploadAudio(
+        val response = PythonFlaskApi.instance.uploadAudio(
             audioToConvert = MultipartBody.Part.createFormData(
                 name = "file",
                 file.name,
@@ -47,7 +51,7 @@ class FileRepository {
     ): String? {
 
 
-        val response = FileApi.instance.uploadAudioAndCut(
+        val response = PythonFlaskApi.instance.uploadAudioAndCut(
             time_initial = time_initial,
             time_final = time_final,
             audioToConvert = MultipartBody.Part.createFormData(

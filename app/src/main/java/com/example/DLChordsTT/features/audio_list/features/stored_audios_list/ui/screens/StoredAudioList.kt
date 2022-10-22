@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.FileApiViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.StoredCard
 import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
@@ -28,7 +28,7 @@ import java.util.*
 @Composable
 fun StoredAudiosScreen(
     audioStoredViewModel: AudioViewModel,
-    fileApiViewModel: FileApiViewModel,
+    pythonFlaskApiViewModel: PythonFlaskApiViewModel,
     alreadyProccessedAudios: AudioProcViewModel,
     stateAlreadyProccessedAudios : AudioProcessedListState,
 ) {
@@ -83,7 +83,7 @@ fun StoredAudiosScreen(
                             audio = audioElementList,
                             indexAudio = storedAudioList.indexOf(audioElementList),
                             isAscending = audioStoredViewModel.isAscending.value,
-                            fileApiViewModel = fileApiViewModel,
+                            pythonFlaskApiViewModel = pythonFlaskApiViewModel,
                             alreadyProcessedAudiosList = alreadyProccessedAudiosList,
                         )
                     }

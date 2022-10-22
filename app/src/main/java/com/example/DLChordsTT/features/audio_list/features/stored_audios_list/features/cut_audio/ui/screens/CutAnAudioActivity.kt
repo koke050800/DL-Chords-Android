@@ -1,7 +1,6 @@
-package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens
+package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -9,34 +8,28 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessed
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
-import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
-import com.example.DLChordsTT.features.music_player.ui.screens.PlayerMusicStored
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PlayerMusicActivity : ComponentActivity() {
+class CutAnAudioActivity : ComponentActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
-        val musicData = receiveMusic?.getInt("AudioId")
+        val musicData = receiveMusic?.getLong("AudioId")
+        println(musicData)
         var cont = 0
         val isAscending = receiveMusic?.getBoolean("isAscending")
         val isAlreadyProcessed = receiveMusic?.getBoolean("isAlreadyProcessed") ?: false
-
+        var audioProcessed: Audio? = null
 
         super.onCreate(savedInstanceState)
         val audioViewModel: AudioViewModel by viewModels()
@@ -45,29 +38,36 @@ class PlayerMusicActivity : ComponentActivity() {
         }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
-        val pythonFlaskApiViewModel: PythonFlaskApiViewModel by viewModels()
 
         setContent {
             DLChordsTheme {
-                storedAudiosList.forEach { println(" ${it.displayName}") }
+
                 Crossfade(targetState = audioViewModel.isLoading.value) {
                     if (!it) {
                         if (musicData != null && storedAudiosList.size != 0) {
-                            cont+=1
-                            if (!audioViewModel.isAudioPlaying && cont==1) {
-                                audioViewModel.playAudio(storedAudiosList[musicData],false)
+
+                            storedAudiosList.forEach { audio: Audio ->
+                                if(audio.id == musicData){
+                                    audioProcessed = audio
+                                }
+                            }
+                            cont += 1
+                            if (!audioViewModel.isAudioPlaying && cont == 1) {
+                                audioProcessed?.let { it1 -> audioViewModel.playAudio(it1, false) }
                             }
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
-                            PlayerMusicStored(
-                                progress = audioViewModel.currentAudioProgress.value,
-                                onProgressChange = {},
-                                audio = storedAudiosList[musicData],
-                                audioViewModel = audioViewModel,
-                                isAlreadyProcessed = isAlreadyProcessed,
-                                context = LocalContext.current,
-                                pythonFlaskApiViewModel =  pythonFlaskApiViewModel,
-                            )
+                            audioProcessed?.let { it1 ->
+                                CutAnAudioScreen(
+                                    progress = audioViewModel.currentAudioProgress.value,
+                                    onProgressChange = {},
+                                    it1,
+                                    audioViewModel = audioViewModel,
+                                    audioProcViewModel = audioProcViewModel,
+                                    generatedFilesViewModel = generatedFilesViewModel,
+                                    isAlreadyProcessed = isAlreadyProcessed,
+                                )
+                            }
                         }
                     } else {
                         Box(
@@ -84,4 +84,3 @@ class PlayerMusicActivity : ComponentActivity() {
 
 
 }
-
