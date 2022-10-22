@@ -3,12 +3,15 @@ package com.example.DLChordsTT.features.generated_files.features.file_pdf_list.d
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.net.Uri
 import android.os.Environment
 import android.text.TextPaint
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.graphics.blue
+import androidx.core.graphics.green
 import androidx.core.net.toUri
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Chord
@@ -17,7 +20,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
-import com.google.gson.JsonParser
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -41,35 +43,35 @@ constructor(
             fileName.downloadUrl.addOnSuccessListener {
                 val audioP = audio
                 when (pre) {
-                    "L" -> {
+                    "Lyrics" -> {
                         audioP.lyrics = "${it}"
                         audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
                         audioP.english_nomenclature = "${audio.english_nomenclature}"
                         audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
                         audioP.latin_nomenclature = "${audio.latin_nomenclature}"
                     }
-                    "LAI" -> {
+                    "LyricChordE" -> {
                         audioP.chords_lyrics_e = "${it}"
                         audioP.lyrics = "${audio.lyrics}"
                         audioP.english_nomenclature = "${audio.english_nomenclature}"
                         audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
                         audioP.latin_nomenclature = "${audio.latin_nomenclature}"
                     }
-                    "AI" -> {
+                    "ChordsE" -> {
                         audioP.english_nomenclature = "${it}"
                         audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
                         audioP.lyrics = "${audio.lyrics}"
                         audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
                         audioP.latin_nomenclature = "${audio.latin_nomenclature}"
                     }
-                    "LAL" -> {
+                    "LyricChordL" -> {
                         audioP.chords_lyrics_l = "${it}"
                         audioP.english_nomenclature = "${audio.english_nomenclature}"
                         audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
                         audioP.lyrics = "${audio.lyrics}"
                         audioP.latin_nomenclature = "${audio.latin_nomenclature}"
                     }
-                    "AL" -> {
+                    "ChordsL" -> {
                         audioP.latin_nomenclature = "${it}"
                         audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
                         audioP.english_nomenclature = "${audio.english_nomenclature}"
@@ -109,7 +111,7 @@ constructor(
     }
 
     fun getListModelChordEn(context: Context, chordsJson: String):MutableList<Chord> {
-    val string = getJsonDataFramAsset(context, "Chords.json")
+    val string = getJsonDataFramAsset(context, "quien_de_los_dos_sera.json")
     val listChords = mutableListOf<Chord>()
     val obj = JSONObject(string)
     val jsonArray = obj.getJSONArray("chords")
@@ -141,7 +143,7 @@ constructor(
 }
 
     fun getListModelChordLat(context: Context,chordsJson: String):MutableList<Chord> {
-        val string = getJsonDataFramAsset(context, "Chords.json")
+        val string = getJsonDataFramAsset(context, "quien_de_los_dos_sera.json")
         val listChords = mutableListOf<Chord>()
         val obj = JSONObject(string)
 
@@ -175,10 +177,8 @@ constructor(
     }
 
     fun getListModelWord(context: Context, wordsJson: String):MutableList<Word> {
-        val string = getJsonDataFramAsset(context, "Chords.json")
+        val string = getJsonDataFramAsset(context, "quien_de_los_dos_sera.json")
         val listWords = mutableListOf<Word>()
-
-
         val obj = JSONObject( string)
 
         val jsonArray = obj.getJSONArray("words")
@@ -193,27 +193,8 @@ constructor(
     }
 
     fun createLyricsPDF(context: Context,audio: AudioProc,modelWordsList: MutableList<Word>) {
-        var pdfDocument = PdfDocument()
-        var titulo = TextPaint()
-        var text = TextPaint()
-        var npage = 1
-        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
-        var pagina = pdfDocument.startPage(pageInfo)
-        var canvas = pagina.canvas
-
-
-        titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
-        titulo.textSize = 20f
-        canvas.drawText("${audio.title}", 30f, 80f, titulo)
-
-        text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
-
-        text.textSize = 12f
-
-        var y = 120f
 
         var wordsJsontoString = ""
-
         var tiempow = 0.0
         var contW = 0
         for(i in 0 until modelWordsList.size){
@@ -227,13 +208,28 @@ constructor(
                 contW=0
             }
         }
-        println("String words ${wordsJsontoString}")
 
-        var arrayText = wordsJsontoString.split("\n")
+        var pdfDocument = PdfDocument()
+        var titulo = TextPaint()
+        var text = TextPaint()
+        var npage = 1
+        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
+        var pagina = pdfDocument.startPage(pageInfo)
+        var canvas = pagina.canvas
+
+        titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
+        titulo.textSize = 25f
+        canvas.drawText("${audio.title}", 35f, 80f, titulo)
+
+        text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
+        text.textSize = 12f
+
+          var arrayText = wordsJsontoString.split("\n")
         var contT = 0
-        var x = 30f
-        y = 120f
-        for (item in arrayText) {
+        var y = 120f
+        var x = 45f
+
+       for (item in arrayText) {
             if(contT<3){
                 contT++
                 canvas.drawText(item, x, y, text)
@@ -253,10 +249,10 @@ constructor(
             }
         }
         pdfDocument.finishPage(pagina)
-        val file = File(Environment.getExternalStorageDirectory(), "L_${audio.title}.pdf")
+        val file = File(Environment.getExternalStorageDirectory(), "Lyrics_${audio.title}.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-            addNewGeneratedFiles(audio = audio, file.toUri(), "L", file)
+            addNewGeneratedFiles(audio = audio, file.toUri(), "Lyrics", file)
         }catch (e:Exception){
             e.printStackTrace()
         }
@@ -264,102 +260,94 @@ constructor(
 
     }
 
-    fun createChordsPDF(context: Context,audio: AudioProc ,modelChordsList: MutableList<Chord>, nom:Boolean = true ) :List<String> {
-        var pdfDocument = PdfDocument()
-        var titulo = TextPaint()
-        var text = TextPaint()
-        var npage = 0
-        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
-        var pagina = pdfDocument.startPage(pageInfo)
-        var canvas = pagina.canvas
-
-        titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
-        titulo.textSize = 20f
-        canvas.drawText("${audio.title}", 30f, 60f, titulo)
-
-        text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
-        text.textSize = 10f
-        var y = 120f
+    fun createChordsPDF(context: Context,audio: AudioProc ,modelChordsList: MutableList<Chord>, nom:Boolean = true ) :MutableList<Chord> {
 
         var stringChords=""
-        var stringtimeline= " 0    < "
+        var timeLineList = mutableListOf<String>()
 
-        var timepin = mutableListOf<String>()
+        var act = modelChordsList.get(0).chord_result
+        for(i in 0 until modelChordsList.size) {
+            if(i >0 && modelChordsList.get(i).chord_result == act){
+                modelChordsList.set(i,Chord(" ",modelChordsList.get(i).time_init,modelChordsList.get(i).time_final))
+            }else{
+                act=modelChordsList.get(i).chord_result
+            }
+        }
+
+        for(item in modelChordsList){
+            println("Holaaaaa ${item.chord_result}")
+        }
+
 
         for(i in 0 until (modelChordsList.get(modelChordsList.size-1).time_final*10).roundToInt()){
-                timepin.add(i," ")
+                timeLineList.add(i," ")
         }
-
-        var size = timepin.size
 
         for(i in 0 until modelChordsList.size){
-           println("Asi esta redondeado ${modelChordsList.get(i).chord_result} --- ${(modelChordsList.get(i).time_init*10).roundToInt()}")
-
             if(modelChordsList.get(i).chord_result.length == 2 && i < modelChordsList.size && i!=0 ) {
-                timepin.add((modelChordsList.get(i).time_init * 10).roundToInt()-1,modelChordsList.get(i).chord_result[0].toString())
-                timepin.add(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[1].toString())
+                timeLineList.set((modelChordsList.get(i).time_init * 10).roundToInt()-1,modelChordsList.get(i).chord_result[0].toString())
+                timeLineList.set(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[1].toString())
             }
             else if(modelChordsList.get(i).chord_result.length == 3 && i < modelChordsList.size && i!=0 ){
-                timepin.add((modelChordsList.get(i).time_init * 10).roundToInt()-2,modelChordsList.get(i).chord_result[0].toString())
-                timepin.add(((modelChordsList.get(i).time_init * 10).roundToInt())-1,modelChordsList.get(i).chord_result[1].toString())
-                timepin.add(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[2].toString())
-
+                timeLineList.set((modelChordsList.get(i).time_init * 10).roundToInt()-2,modelChordsList.get(i).chord_result[0].toString())
+                timeLineList.set(((modelChordsList.get(i).time_init * 10).roundToInt())-1,modelChordsList.get(i).chord_result[1].toString())
+                timeLineList.set(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[2].toString())
             }
             else if(modelChordsList.get(i).chord_result.length == 4 && i < modelChordsList.size && i!=0 ){
-                timepin.add((modelChordsList.get(i).time_init * 10).roundToInt()-3,modelChordsList.get(i).chord_result[0].toString())
-                timepin.add(((modelChordsList.get(i).time_init * 10).roundToInt())-2,modelChordsList.get(i).chord_result[1].toString())
-                timepin.add((modelChordsList.get(i).time_init * 10).roundToInt()-1,modelChordsList.get(i).chord_result[2].toString())
-                timepin.add(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[3].toString())
+                timeLineList.set((modelChordsList.get(i).time_init * 10).roundToInt()-3,modelChordsList.get(i).chord_result[0].toString())
+                timeLineList.set(((modelChordsList.get(i).time_init * 10).roundToInt())-2,modelChordsList.get(i).chord_result[1].toString())
+                timeLineList.set((modelChordsList.get(i).time_init * 10).roundToInt()-1,modelChordsList.get(i).chord_result[2].toString())
+                timeLineList.set(((modelChordsList.get(i).time_init * 10).roundToInt()),modelChordsList.get(i).chord_result[3].toString())
             }
             else{
-                timepin.add(
-                    (modelChordsList.get(i).time_init * 10).roundToInt(),
-                    modelChordsList.get(i).chord_result
-                )
+                timeLineList.set((modelChordsList.get(i).time_init * 10).roundToInt(), modelChordsList.get(i).chord_result )
             }
         }
 
-        for(i in 0 until size){
+        var stringtimeline= " 0    < "
+        var size = timeLineList.size
+
+        for(i in 0 until size-1){
             stringtimeline+="-"
             if(i == size-1){
                 stringtimeline+=" > ${i/10} \n "
             }
             if(i%50==0 && i!=0 || i == size-1){
-                if( timepin.get(i) != " " && timepin.get(i+1) != " "&&timepin.get(i+2) != " "&& timepin.get(i+3) != " " && timepin.get(i+4) != " ") {
-                    stringChords += timepin.get(i)+timepin.get(i+1)+timepin.get(i+2)+timepin.get(i+3)+timepin.get(i+4)
-                    timepin.set ((i + 1)," ")
-                    timepin.set ((i + 2)," ")
-                    timepin.set ((i + 3)," ")
-                    timepin.set ((i + 4)," ")
+                if( timeLineList.get(i) != " " && timeLineList.get(i+1) != " "&&timeLineList.get(i+2) != " "&& timeLineList.get(i+3) != " " && timeLineList.get(i+4) != " ") {
+                    stringChords += timeLineList.get(i)+timeLineList.get(i+1)+timeLineList.get(i+2)+timeLineList.get(i+3)+timeLineList.get(i+4)
+                    timeLineList.set ((i + 1)," ")
+                    timeLineList.set ((i + 2)," ")
+                    timeLineList.set ((i + 3)," ")
+                    timeLineList.set ((i + 4)," ")
                     stringChords += "\n"
                 }
-                else if( timepin.get(i) != " " && timepin.get(i+1) != " "&&timepin.get(i+2) != " "&& timepin.get(i+3) != " ") {
-                    stringChords += timepin.get(i)+timepin.get(i+1)+timepin.get(i+2)+timepin.get(i+3)
-                    timepin.set ((i + 1)," ")
-                    timepin.set ((i + 2)," ")
-                    timepin.set ((i + 3)," ")
+                else if( timeLineList.get(i) != " " && timeLineList.get(i+1) != " "&&timeLineList.get(i+2) != " "&& timeLineList.get(i+3) != " ") {
+                    stringChords += timeLineList.get(i)+timeLineList.get(i+1)+timeLineList.get(i+2)+timeLineList.get(i+3)
+                    timeLineList.set ((i + 1)," ")
+                    timeLineList.set ((i + 2)," ")
+                    timeLineList.set ((i + 3)," ")
                     stringChords += "\n"
                 }
-                else if( timepin.get(i) != " " && timepin.get(i+1) != " " && timepin.get(i+2) != " ") {
-                    stringChords += timepin.get(i)+timepin.get(i+1)+timepin.get(i+2)
-                    timepin.set ((i + 1)," ")
-                    timepin.set ((i + 2)," ")
+                else if( timeLineList.get(i) != " " && timeLineList.get(i+1) != " " && timeLineList.get(i+2) != " ") {
+                    stringChords += timeLineList.get(i)+timeLineList.get(i+1)+timeLineList.get(i+2)
+                    timeLineList.set ((i + 1)," ")
+                    timeLineList.set ((i + 2)," ")
                     stringChords += "\n"
                 }
-                else if (timepin.get(i) != " " && timepin.get(i+1) != " ") {
-                    stringChords += timepin.get(i)+timepin.get(i+1)
-                    timepin.set ((i + 1)," ")
+                else if (timeLineList.get(i) != " " && timeLineList.get(i+1) != " ") {
+                    stringChords += timeLineList.get(i)+timeLineList.get(i+1)
+                    timeLineList.set ((i + 1)," ")
                     stringChords += "\n"
                 }
-                else if (timepin.get(i) != " " ) {
-                    stringChords += timepin.get(i)+timepin.get(i+1)
-                    timepin.set ((i + 1)," ")
+                else if (timeLineList.get(i) != " " ) {
+                    stringChords += timeLineList.get(i)+timeLineList.get(i+1)
+                    timeLineList.set ((i + 1)," ")
                     stringChords += "\n"
                 }
                 else{
-                stringChords += timepin.get(i)
-                if(!Character.isUpperCase(timepin.get(i+1)[0])){
-                    timepin.set ((i + 1)," ")
+                stringChords += timeLineList.get(i)
+                if(!Character.isUpperCase(timeLineList.get(i+1)[0])){
+                    timeLineList.set ((i + 1)," ")
                  }
                 stringChords += "\n"
                 }
@@ -369,38 +357,61 @@ constructor(
                      3 -> stringtimeline += " > ${i / 10} \n ${(i + 1) / 10} < "
                      }
               }else{
-                 stringChords+=timepin.get(i)
+                 stringChords+=timeLineList.get(i)
                 }
         }
-
-
 
         var arrayChord = stringChords.split("\n")
         var arraytimeline = stringtimeline.split("\n")
         var array = arraytimeline
+
         if(arrayChord.size>=arraytimeline.size){
             array = arrayChord
         }
 
-        var contC = 0
-        var x = 80f
-        y= 130f
+        var pdfDocument = PdfDocument()
+        var titulo = TextPaint()
+        var chords =TextPaint()
+        var timeline =TextPaint()
+        var npage = 1
+        var pageInfo = PdfDocument.PageInfo.Builder(816, 1054, npage).create()
+        var pagina = pdfDocument.startPage(pageInfo)
+        var canvas = pagina.canvas
 
-        for (i in 0 until array.size-1) {
+        titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
+        titulo.textSize = 25f
+
+        canvas.drawText("${audio.title}", 35f, 80f, titulo)
+
+        chords.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
+        chords.textSize = 10f
+       // chords.setColor(Color.BLUE)
+        timeline.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
+        timeline.textSize = 10f
+       // timeline.setColor(Color.RED)
+
+
+        var contC = 0
+        var x : Float
+        var y = 130f
+
+        for (i in 0 until array.size) {
             if(contC<3){
                 contC++
                 x = 30f
-                canvas.drawText(arraytimeline.get(i), x, y, text)
+                if(i < arraytimeline.size-1){
+                canvas.drawText(arraytimeline.get(i), x, y, timeline)}
                 y += 10
                 x = 80f
-                canvas.drawText(arrayChord.get(i), x, y, text)
+                canvas.drawText(arrayChord.get(i), x, y,chords)
                 y+=30
             }else{
                 x = 30f
-                canvas.drawText(arraytimeline.get(i), x, y, text)
+                if(i < arraytimeline.size-1){
+                canvas.drawText(arraytimeline.get(i), x, y, timeline)}
                 y += 10
                 x = 80f
-                canvas.drawText(arrayChord.get(i), x, y, text)
+                canvas.drawText(arrayChord.get(i), x, y, chords)
                 y +=40
                 if(y>=900f){
                     npage++
@@ -409,7 +420,6 @@ constructor(
                     pagina = pdfDocument.startPage(pageInfo)
                     canvas = pagina.canvas
                   y=130f
-
                 }
                 contC=0
             }
@@ -417,14 +427,13 @@ constructor(
         }
         pdfDocument.finishPage(pagina)
 
-
         var pre = when(nom) {
-            true -> "AI"
-            false -> "AL"
+            true -> "ChordsE"
+            false -> "ChordsL"
         }
         var file = when(nom) {
-            true -> {File(Environment.getExternalStorageDirectory(), "AI_${audio.title}.pdf")}
-            false -> {File(Environment.getExternalStorageDirectory(), "AL_${audio.title}.pdf")}
+            true -> {File(Environment.getExternalStorageDirectory(), "ChordsE_${audio.title}.pdf")}
+            false -> {File(Environment.getExternalStorageDirectory(), "ChordsL_${audio.title}.pdf")}
         }
 
         try {
@@ -434,136 +443,200 @@ constructor(
             e.printStackTrace()
         }
 
-        return arrayChord
+        return modelChordsList
     }
 
-    fun createLyricsChordsPDF(context: Context,audio: AudioProc, modelChordsList: List<String>, modelWordsList: MutableList<Word>, nom:Boolean = true){
+    fun createLyricsChordsPDF(context: Context,audio: AudioProc, modelChordsList: MutableList<Chord>, modelWordsList: MutableList<Word>, nom:Boolean = true) {
+        var wordsJsontoString = ""
+        var stringtimeline = " "
+        var wordsList = mutableListOf<String>()
+
+        for (i in 0 until (modelWordsList.get(modelWordsList.size - 1).time_final * 10).roundToInt()) {
+            wordsList.add(i, " ")
+        }
+
+        var size = wordsList.size
+
+        for (i in 0 until modelWordsList.size) {
+            wordsList.set((modelWordsList.get(i).time_init * 10).roundToInt(),modelWordsList.get(i).word_result)
+
+        }
+
+        var tamMax = 0
+        var comp = ""
+        for (i in 0 until wordsList.size) {
+           if (i % 50 == 0 && i != 0 || i ==  size - 1) {
+                comp += wordsList.get(i) + "\n"
+                if(comp.length > tamMax){
+                    tamMax= comp.length
+                }
+                wordsJsontoString += wordsList.get(i) + "\n"
+                comp = ""
+
+            } else {
+                wordsJsontoString += wordsList.get(i)
+                comp += wordsList.get(i)}
+
+        }
+
+        var arrayText = wordsJsontoString.split("\n")
+
+        for (r in 0 until arrayText.size) {
+            when ((r*5).toString().length) {
+                1 -> {
+                    stringtimeline += " ${r*5}   < "
+                    for (i in 0 until tamMax) {
+                        stringtimeline += "-"
+                    }
+                    stringtimeline += " > ${(r+1)*5} \n "
+                }
+                2 -> {
+                    stringtimeline += " ${r*5}  < "
+                    for (i in 0 until tamMax) {
+                        stringtimeline += "-"
+                    }
+                    stringtimeline += " > ${(r+1)*5} \n "
+                }
+                3 -> {
+                    stringtimeline += " ${r*5} < "
+                    for (i in 0 until tamMax) {
+                        stringtimeline += "-"
+                    }
+                    stringtimeline += " > ${(r+1)*5} \n "
+                }
+            }
+
+        }
+// chords.size == item.length
+//              == i
+        var chordsList = mutableListOf<String>()
+        var chordsList2 = mutableListOf<String>()
+
+        for (i in 0 until tamMax*arrayText.size) {
+            chordsList.add(i, " ")
+        }
+
+        for(i in 0 until (modelChordsList.get(modelChordsList.size-1).time_final*10).roundToInt()){
+            chordsList2.add(i," ")
+        }
+
+        for(i in 0 until modelChordsList.size){
+            chordsList2.set((modelChordsList.get(i).time_init * 10).roundToInt(), modelChordsList.get(i).chord_result )
+        }
+
+        for (item in chordsList2){
+            println("C2  $item")
+        }
+        println("Largo de C2: ${chordsList2.size}")
+        println("TamMax : $tamMax y ${Math.max(modelChordsList.size,arrayText.size)} -- ${modelChordsList.size} , ${arrayText.size}")
+println("Largo de C1: ${chordsList.size}")
+
+        for (i in 0 until chordsList2.size) {
+            chordsList.set(i*chordsList.size/chordsList2.size, chordsList2.get(i))
+        }
+
+        for (item in chordsList){
+            println("C1  $item")
+        }
+        var stringtemp =""
+        var stringChords=""
+        for (i in 0 until chordsList.size){
+            if( i%tamMax==0 && i!=0) {
+                stringtemp +="\n"
+                println("valor : $stringtemp")
+                stringChords+=stringtemp
+                stringtemp=""
+            }else{
+                stringtemp += chordsList.get(i)
+
+            }
+        }
+        var arrayChords = stringChords.split("\n")
+        for (item in arrayChords){
+            println("JAJAJAJ $item")
+        }
+
+        var h=(tamMax*7)
         var pdfDocument = PdfDocument()
         var titulo = TextPaint()
         var text = TextPaint()
-        var npage =0
-        var pageInfo = PdfDocument.PageInfo.Builder(1060, 2060, npage).create()
+        var chords = TextPaint()
+        var timeline = TextPaint()
+        var npage = 0
+        var pageInfo = PdfDocument.PageInfo.Builder(h+80, 1700, npage).create()
         var pagina = pdfDocument.startPage(pageInfo)
         var canvas = pagina.canvas
 
         titulo.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.BOLD)))
-        titulo.textSize = 20f
-        canvas.drawText("${audio.title}", 30f, 80f, titulo)
+        titulo.textSize = 25f
+        canvas.drawText("${audio.title}", 35f, 80f, titulo)
 
-        text.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
-
+        chords.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
+        chords.textSize = 10f
+        chords.setColor(Color.BLUE)
+        timeline.typeface = Typeface.createFromAsset(context.assets,"fonts/SpaceMono-Regular.ttf")
+        timeline.textSize = 10f
+        //
+        // timeline.setColor(Color.RED)
+        text.typeface = Typeface.createFromAsset(context.assets, "fonts/SpaceMono-Regular.ttf")
         text.textSize = 12f
 
-        var y = 120f
-
-        var wordsJsontoString = ""
-        var stringtimeline= " 0    < "
-
-        var wordsList = mutableListOf<String>()
-
-
-        for(i in 0 until (modelWordsList.get(modelWordsList.size-1).time_final*10).roundToInt()){
-            wordsList.add(i,"")
-        }
-
-        var size = wordsList.size
-        for(i in 0 until modelWordsList.size){
-            println("Asi esta redondeado ${modelWordsList.get(i).word_result} --- ${(modelWordsList.get(i).time_init*10).roundToInt()}")
-            wordsList.set((modelWordsList.get(i).time_init*10).roundToInt(),modelWordsList.get(i).word_result)
-       }
-        for(i in 0 until wordsList.size){
-            println("aqui esta timepin: ${wordsList.get(i)} en $i")
-        }
-        println("Tamañote2 ${wordsList.size}")
-
-        var cont=0
-        var contW = 0
-        for(i in 0 until wordsList.size){
-            stringtimeline+="-"
-            if(i%50==0 && i!=0 || i == size-1) {
-                wordsJsontoString += wordsList.get(i)+"\n"
-                when ((i / 10).toString().length) {
-                    1 -> stringtimeline += " > ${i / 10} \n ${(i + 1) / 10}    < "
-                    2 -> stringtimeline += " > ${i / 10} \n ${(i + 1) / 10}   < "
-                    3 -> stringtimeline += " > ${i / 10} \n ${(i + 1) / 10} < "
-                }
-                cont=0
-                contW=0
-            }else{
-                cont++
-                contW++
-                wordsJsontoString += wordsList.get(i)+" "
-            }
-        }
-        println("String words ${wordsJsontoString}")
-
-
         var arraytimeline = stringtimeline.split("\n")
-        var arrayText = wordsJsontoString.split("\n")
-        var array = arraytimeline
-
-        if(modelChordsList.size>=arrayText.size){
-            array = modelChordsList
-        }  else  if(arrayText.size>=arrayText.size){
-            array = modelChordsList
-        }
-
+      //  var arrayChords = stringChords.split("\n")
+        var tam = Math.max(Math.max(arrayChords.size,arrayText.size),arraytimeline.size)
         var contC = 0
-        var x = 80f
-        y= 130f
+        var x : Float
+        var y = 130f
 
-        for (i in 0 until array.size-1) {
+        for (i in 0 until tam) {
             if(contC<3){
                 contC++
                 x = 30f
-                canvas.drawText(arraytimeline.get(i), x, y, text)
+                if(i<arraytimeline.size){
+                canvas.drawText(arraytimeline.get(i), x, y, timeline)}
                 y += 10
-                x = 80f
-                canvas.drawText(modelChordsList.get(i), x, y, text)
+                x = 85f
+                if(i<arrayChords.size){
+                canvas.drawText(arrayChords.get(i), x, y, chords)}
                 y += 12
-                x = 80f
-                canvas.drawText(arrayText.get(i), x, y, text)
+                    if(i<arrayText.size){
+                canvas.drawText(arrayText.get(i), x, y, text)}
                 y+=30
             }else{
                 x = 30f
-                canvas.drawText(arraytimeline.get(i), x, y, text)
+                if(i<arraytimeline.size){
+                    canvas.drawText(arraytimeline.get(i), x, y, timeline)}
                 y += 10
-                x = 80f
-                canvas.drawText(modelChordsList.get(i), x, y, text)
+                x = 85f
+                if(i<arrayChords.size){
+                    canvas.drawText(arrayChords.get(i), x, y, chords)}
                 y += 12
-                x = 80f
-                canvas.drawText(arrayText.get(i), x, y, text)
+                if(i<arrayText.size){
+                    canvas.drawText(arrayText.get(i), x, y, text)}
                 y +=40
                 if(y>=1500f){
                     npage++
                     pdfDocument.finishPage(pagina)
-                    pageInfo = PdfDocument.PageInfo.Builder(1060, 2060, npage).create()
+                    pageInfo = PdfDocument.PageInfo.Builder(h+80, 1700, npage).create()
                     pagina = pdfDocument.startPage(pageInfo)
                     canvas = pagina.canvas
                     y=130f
-
                 }
                 contC=0
             }
 
         }
-
-
-
         pdfDocument.finishPage(pagina)
 
         var pre = when(nom) {
-            true -> "LAI"
-
-            false -> "LAL"
+            true -> "LyricChordE"
+            false -> "LyricChordL"
         }
         var file = when(nom) {
-            true -> {File(Environment.getExternalStorageDirectory(), "LAI_${audio.title}.pdf")
+            true -> {File(Environment.getExternalStorageDirectory(), "LyricChordE_${audio.title}.pdf")
             }
-            false -> {File(Environment.getExternalStorageDirectory(), "LAL_${audio.title}.pdf")}
-            //  else -> File(Environment.getExternalStorageDirectory(), "AI_${audioProc.title}.pdf")
+            false -> {File(Environment.getExternalStorageDirectory(), "LyricChordL_${audio.title}.pdf")}
         }
-
 
         try {
             pdfDocument.writeTo(FileOutputStream(file))
@@ -575,7 +648,6 @@ constructor(
   }
 
     fun generatePDFs(context: Context, id:Long,displayName:String,artist:String,data:String, duration:Int, title:String,english_nomenclature:String,latin_nomenclature:String,chords_lyrics_e:String, chords_lyrics_l:String,lyrics:String, ChordsWordsJson : String ){
-
         val modelChordsEList: MutableList<Chord> = getListModelChordEn(context, ChordsWordsJson)
         val modelWordsList: MutableList<Word> = getListModelWord(context, ChordsWordsJson)
         val modelChordsLList: MutableList<Chord> = getListModelChordLat(context, ChordsWordsJson)
@@ -592,7 +664,6 @@ constructor(
             chords_lyrics_e = chords_lyrics_e,
             chords_lyrics_l = chords_lyrics_l,
             lyrics  = lyrics
-
         )
 
         createLyricsPDF(context,audio,modelWordsList)
@@ -601,18 +672,7 @@ constructor(
         createLyricsChordsPDF(context,audio,chordEList,modelWordsList)
         createLyricsChordsPDF(context,audio,chordLList,modelWordsList,false)
 
-        /*     Thread.sleep(2000)
-             file = createChordsPDF(audioProc, modelChordsEList, modelWordsList,)
-             addNewGeneratedFiles(audio = audioProc, file.toUri(), "AI", file)
-             Thread.sleep(2000)
-             file = createChordsPDF(audioProc, modelChordsLList, modelWordsList,false)
-              addNewGeneratedFiles(audio = audioProc, file.toUri(), "AL", file)
-             Thread.sleep(2000)*/
 
-            // file = createChordsPDF(audioProc, modelChordsEList, modelWordsList,)
-           // addNewGeneratedFiles(audio = audioProc, file.toUri(), "LAI", file)
-           // file = createChordsPDF(audioProc, modelChordsLList, modelWordsList,)
-           // addNewGeneratedFiles(audio = audioProc, file.toUri(), "LAL", file)
 
     }
 
@@ -625,19 +685,20 @@ constructor(
         if (audioProc.lyrics.isNotEmpty()) {
             val folderL: StorageReference =
                 FirebaseStorage.getInstance().reference.child(audioProc.title)
-                    .child("L_${audioProc.title}.pdf")
+                    .child("Lyrics_${audioProc.title}.pdf")
             val folderLAI: StorageReference =
                 FirebaseStorage.getInstance().reference.child(audioProc.title)
-                    .child("LAI_${audioProc.title}.pdf")
+                    .child("LyricChordE_${audioProc.title}.pdf")
             val folderAI: StorageReference =
                 FirebaseStorage.getInstance().reference.child(audioProc.title)
-                    .child("AI_${audioProc.title}.pdf")
+                    .child("ChordsE_${audioProc.title}.pdf")
             val folderLAL: StorageReference =
                 FirebaseStorage.getInstance().reference.child(audioProc.title)
-                    .child("LAL_${audioProc.title}.pdf")
+                    .child("LyricChordL_${audioProc.title}.pdf")
             val folderAL: StorageReference =
                 FirebaseStorage.getInstance().reference.child(audioProc.title)
-                    .child("AL_${audioProc.title}.pdf")
+                    .child("ChordsL_${audioProc.title}.pdf")
+
             folderL.delete()
             folderLAI.delete()
             folderAI.delete()
@@ -647,15 +708,11 @@ constructor(
     }
 
     fun showData(url: String, context: Context) {
-
         val intent = Intent(Intent.ACTION_VIEW)
-        println("Este es el url${url}")
         intent.setDataAndType(Uri.parse(url), "application/pdf")
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        //val newIntent = Intent.createChooser(intent)
         try {
             startActivity(context, intent, null)
-
         } catch (e: ActivityNotFoundException) {
             println("Algo salió mal en show")
         }

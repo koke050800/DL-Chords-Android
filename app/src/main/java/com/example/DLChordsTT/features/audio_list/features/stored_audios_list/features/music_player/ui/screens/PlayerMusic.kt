@@ -148,7 +148,7 @@ fun PlayerMusicStored(
                 onClick = {
 
                     if (!isAlreadyProcessed) {
-                        audioProcViewModel.addNewAudioProc(
+                    /*    audioProcViewModel.addNewAudioProc(
                             AudioProc(
                                 id = audio.id,
                                 displayName = audio.displayName,
@@ -158,7 +158,7 @@ fun PlayerMusicStored(
                                 title = audio.title,
 
                                 )
-                        )
+                        )*/
                     } else {
                         openDialog.value = true
                     }
