@@ -48,7 +48,7 @@ fun CutAnAudioScreen(
                 textOnTop = "Pantalla de Recorte",
                 audio = audio,
                 audioViewModel = audioViewModel,
-                false
+                true
             )
             Card(
                 shape = DLChordsTheme.shapes.medium,
