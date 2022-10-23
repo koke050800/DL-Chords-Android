@@ -38,7 +38,7 @@ class CutAnAudioActivity : ComponentActivity() {
         }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
-
+        audioViewModel.isPlayingAgain.value = true
         setContent {
             DLChordsTheme {
 
@@ -47,13 +47,16 @@ class CutAnAudioActivity : ComponentActivity() {
                         if (musicData != null && storedAudiosList.size != 0) {
 
                             storedAudiosList.forEach { audio: Audio ->
-                                if(audio.id == musicData){
+                                if (audio.id == musicData) {
                                     audioProcessed = audio
                                 }
                             }
                             cont += 1
                             if (!audioViewModel.isAudioPlaying && cont == 1) {
-                                audioProcessed?.let { it1 -> audioViewModel.playAudio(it1, false) }
+                                println("ANDO PLAYEANDO DESDE LA ACTIVITY")
+                                audioProcessed?.let { it1 ->
+                                    audioViewModel.playAudio(it1, false)
+                                }
                             }
                             val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
