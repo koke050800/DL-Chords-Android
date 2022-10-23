@@ -173,7 +173,7 @@ class AudioViewModel @Inject constructor(
             if (currentPlayBackPosition != position) {
                 currentPlayBackPosition = position
             }
-            /*if ((lastPosition > position) && !isPlayingAgain.value) {
+            if ((lastPosition > position) && !isPlayingAgain.value) {
                 println("Last Position ${lastPosition} y la Position ${position} y quiero playear ${isPlayingAgain.value}")
                 currentPlayingAudio.value?.let {
                     playAudio(
@@ -181,7 +181,7 @@ class AudioViewModel @Inject constructor(
                         true
                     )
                 }
-            }*/
+            }
             if (currentDuration > 0) {
                 try {
                     currentAudioProgress.value = (
