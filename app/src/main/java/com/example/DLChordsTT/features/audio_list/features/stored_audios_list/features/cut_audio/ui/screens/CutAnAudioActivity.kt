@@ -38,7 +38,7 @@ class CutAnAudioActivity : ComponentActivity() {
         }
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
-        audioViewModel.isPlayingAgain.value = true
+        //audioViewModel.isPlayingAgain.value = true
         setContent {
             DLChordsTheme {
 
