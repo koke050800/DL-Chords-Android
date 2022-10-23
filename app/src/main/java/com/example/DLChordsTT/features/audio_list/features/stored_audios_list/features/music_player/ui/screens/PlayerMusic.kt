@@ -115,10 +115,12 @@ fun PlayerMusicStored(
                 onClick = {
                     println("Hellou man voy a pausar")
                     audioViewModel.playAudio(audio, true)
+                    audioViewModel.isPlayingAgain.value = true
                     val cutAudio = Intent(context, CutAnAudioActivity::class.java)
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
                     context.startActivity(cutAudio)
+
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
