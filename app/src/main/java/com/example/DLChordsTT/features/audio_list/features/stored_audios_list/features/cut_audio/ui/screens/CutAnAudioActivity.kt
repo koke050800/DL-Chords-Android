@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens.PlayerMusicProcessed
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -37,6 +38,8 @@ class CutAnAudioActivity : ComponentActivity() {
             audioViewModel.isAscending.value = isAscending
         }
         val storedAudiosList = audioViewModel.storedAudioList
+
+        val pythonFlaskApiViewModel : PythonFlaskApiViewModel by viewModels()
         val audioProcViewModel: AudioProcViewModel by viewModels()
         //audioViewModel.isPlayingAgain.value = true
         setContent {
@@ -66,9 +69,7 @@ class CutAnAudioActivity : ComponentActivity() {
                                     onProgressChange = {},
                                     it1,
                                     audioViewModel = audioViewModel,
-                                    audioProcViewModel = audioProcViewModel,
-                                    generatedFilesViewModel = generatedFilesViewModel,
-                                    isAlreadyProcessed = isAlreadyProcessed,
+                                    pythonFlaskApiViewModel = pythonFlaskApiViewModel
                                 )
                             }
                         }
