@@ -120,7 +120,7 @@ fun PlayerMusicStored(
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
                     context.startActivity(cutAudio)
-
+                    activity?.finish()
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
