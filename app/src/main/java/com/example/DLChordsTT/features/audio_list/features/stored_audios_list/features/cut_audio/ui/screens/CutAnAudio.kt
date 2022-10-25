@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -69,6 +70,8 @@ fun CutAnAudioScreen(
             }
             val range = 0f..100f
             var select by remember { mutableStateOf(range) }
+            var changedSlider by remember { mutableStateOf(false) }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth(.7f)
@@ -88,19 +91,69 @@ fun CutAnAudioScreen(
                     RangeSlider(
                         values = select,
                         valueRange = range,
-                        onValueChange = { select = it }
+                        onValueChange = {
+                            select = it
+                            changedSlider = true
+                        }
                     )
                 }
 
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "0:00", style = DLChordsTheme.typography.caption)
+
+                    if (changedSlider) {
+
+                        Card(
+                            backgroundColor = DLChordsTheme.colors.primary, modifier = Modifier
+                                .fillMaxHeight(0.1f)
+                                .fillMaxWidth(0.2f)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
+                                    style = DLChordsTheme.typography.caption,
+                                    color = DLChordsTheme.colors.onPrimary
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
+                            style = DLChordsTheme.typography.caption
+                        )
+                    }
+
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(
-                        text = timeStampToDuration(audio.duration.toLong()),
-                        style = DLChordsTheme.typography.caption
-                    )
+
+                    if (changedSlider) {
+                        Card(
+                            backgroundColor = DLChordsTheme.colors.primary, modifier = Modifier
+                                .fillMaxHeight(0.1f)
+                                .fillMaxWidth(0.2f)
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
+                                    style = DLChordsTheme.typography.caption,
+                                    color = DLChordsTheme.colors.onPrimary
+                                )
+                            }
+                        }
+                    } else {
+                        Text(
+                            text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
+                            style = DLChordsTheme.typography.caption
+                        )
+                    }
                 }
             }
 

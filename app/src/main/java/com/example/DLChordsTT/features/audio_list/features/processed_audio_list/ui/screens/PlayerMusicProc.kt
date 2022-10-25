@@ -75,7 +75,7 @@ fun PlayerMusicProcessed(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "0:00", style = DLChordsTheme.typography.caption)
+                    Text(text = timeStampToDuration((progress.toLong() * audio.duration) / 100), style = DLChordsTheme.typography.caption)
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = timeStampToDuration(audio.duration.toLong()),

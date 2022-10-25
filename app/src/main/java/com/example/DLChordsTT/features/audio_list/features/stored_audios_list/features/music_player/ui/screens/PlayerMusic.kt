@@ -9,10 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -51,6 +48,8 @@ fun PlayerMusicStored(
     val activity = (LocalContext.current as? Activity)
     DLChordsTheme {
 
+        var cursorProgress by remember { mutableStateOf(0f) }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +80,9 @@ fun PlayerMusicStored(
                 Slider(
                     value = progress,
                     valueRange = range,
-                    onValueChange = { onProgressChange.invoke(it) },
+                    onValueChange = {
+                        onProgressChange.invoke(it)
+                    },
                     colors = SliderDefaults.colors(
                         thumbColor = DLChordsTheme.colors.secondaryText,
                         activeTrackColor = DLChordsTheme.colors.secondaryText
@@ -90,7 +91,7 @@ fun PlayerMusicStored(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "0:00", style = DLChordsTheme.typography.caption)
+                    Text(text = timeStampToDuration((progress.toLong() * audio.duration) / 100), style = DLChordsTheme.typography.caption)
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = timeStampToDuration(audio.duration.toLong()),
