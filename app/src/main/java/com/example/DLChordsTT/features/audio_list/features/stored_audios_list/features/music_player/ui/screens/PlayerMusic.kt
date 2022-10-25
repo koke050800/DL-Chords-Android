@@ -3,6 +3,7 @@ package com.example.DLChordsTT.features.music_player.ui.screens
 import DLChordsTT.R
 import android.content.Context
 import android.content.Intent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
@@ -28,6 +30,7 @@ import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProce
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlinx.coroutines.launch
@@ -39,6 +42,8 @@ fun PlayerMusicStored(
     onProgressChange: (Float) -> Unit,
     audio: Audio,
     audioViewModel: AudioViewModel,
+    generatedFilesViewModel: GeneratedFilesViewModel,
+    audioProcViewModel: AudioProcViewModel,
     isAlreadyProcessed: Boolean,
     context: Context,
     pythonFlaskApiViewModel: PythonFlaskApiViewModel,
@@ -198,6 +203,14 @@ fun PlayerMusicStored(
                             lyrics ="",
 
                             )
+audioProcViewModel.addNewAudioProc(audioP)
+                      audioP=  generatedFilesViewModel.generatePDFs(
+                            context, audioP.id,
+                            audioP.displayName, audioP.artist,
+                            audioP.data, audioP.duration,
+                            audioP.title, "", "", "", "", "", response
+                        )
+                        println("AudiioP en player $audioP")
                         pdfScreenIntent.putExtra("Audio", audioP)
 
                         //datos del audio

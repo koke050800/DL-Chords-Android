@@ -48,70 +48,123 @@ class GeneratedFilesViewModel @Inject constructor(
 
     var isLoading = mutableStateOf(false)
     var isCompleted = mutableStateOf(false)
+    val isCreatingPDFs = mutableStateOf<Boolean?>(value = null)
+
+    var listPDF = emptyList<File>()
 
 
+    fun generatePDFs(
+        context: Context,
+        id: Long,
+        displayName: String,
+        artist: String,
+        data: String,
+        duration: Int,
+        title: String,
+        english_nomenclature: String,
+        latin_nomenclature: String,
+        chords_lyrics_e: String,
+        chords_lyrics_l: String,
+        lyrics: String,
+        ChordsWordsJson: String
+    ) {
 
-    fun getAudiosProcessedBD() {
+        println("Valor de estado creating: ${isCreatingPDFs.value}")
+        isCreatingPDFs.value = true
 
-        generatedFilesRepository.getProcessedAudioList().onEach { result ->
-            when (result) {
-                is Result.Error -> {
-                    _state.value =
-                        AudioProcessedListState(error = result.message ?: "Error inesperado")
-                }
-                is Result.Loading -> {
-                    _state.value = AudioProcessedListState(isLoading = true)
-                }
-                is Result.Success -> {
-                    var listProcessed = emptyList<AudioProc>()
-                    var sortList = emptyList<AudioProc>()
+        // isCreatingPDFs.value = false
 
-                    if (result.data?.isNotEmpty() == true) {
-                        println("Si entre aqui")
-                        listProcessed =
-                            result.data.sortedBy { it.title.lowercase(locale = Locale.getDefault()) }
-                        println("Si entre aqui ${listProcessed.size}")
+                listPDF = generatedFilesRepository.generatePDFs(
+                    context = context,
+                    id = id,
+                    displayName = displayName,
+                    artist = artist,
+                    data = data,
+                    duration = duration,
+                    title = title,
+                    english_nomenclature = english_nomenclature,
+                    latin_nomenclature = latin_nomenclature,
+                    chords_lyrics_e = chords_lyrics_e,
+                    chords_lyrics_l = chords_lyrics_l,
+                    lyrics = lyrics,
+                    ChordsWordsJson = ChordsWordsJson
+                )
+                var audio = AudioProc(
+                    id = id,
+                    displayName = displayName,
+                    artist = artist,
+                    data = data,
+                    duration = duration,
+                    title = title,
+                    english_nomenclature = english_nomenclature,
+                    latin_nomenclature = latin_nomenclature,
+                    chords_lyrics_e = chords_lyrics_e,
+                    chords_lyrics_l = chords_lyrics_l,
+                    lyrics = lyrics,
+                )
 
-                        sortList = listProcessed.reversed()
-                    }
-
-                    _state.value = AudioProcessedListState(
-                        audioProcessedList = listProcessed,
-                        audioProcessedListInverted = sortList
-                    )
-                }
-            }
-        }.launchIn(viewModelScope)
 
     }
 
-    fun generatePDFs(context: Context, id:Long,displayName:String,artist:String,data:String, duration:Int, title:String,english_nomenclature:String,latin_nomenclature:String,chords_lyrics_e:String, chords_lyrics_l:String,lyrics:String, ChordsWordsJson : String) {
-          if(!isCompleted.value){
-           generatedFilesRepository.generatePDFs(context = context, id=id,displayName=displayName,artist=artist,data=data,
-           duration=duration, title=title,english_nomenclature=english_nomenclature,latin_nomenclature=latin_nomenclature,
-           chords_lyrics_e=chords_lyrics_e, chords_lyrics_l=chords_lyrics_l,lyrics=lyrics, ChordsWordsJson = ChordsWordsJson)
-              isCompleted.value=true
-          }
-        println("Terminé")
+ fun update(  id: Long,
+              displayName: String,
+              artist: String,
+              data: String,
+              duration: Int,
+              title: String,
+              english_nomenclature: String,
+              latin_nomenclature: String,
+              chords_lyrics_e: String,
+              chords_lyrics_l: String,
+              lyrics: String,):AudioProc{
 
-        
+     var audioT = AudioProc(
+         id = id,
+         displayName = displayName,
+         artist = artist,
+         data = data,
+         duration = duration,
+         title = title,
+         english_nomenclature = english_nomenclature,
+         latin_nomenclature = latin_nomenclature,
+         chords_lyrics_e = chords_lyrics_e,
+         chords_lyrics_l = chords_lyrics_l,
+         lyrics = lyrics,
+     )
+     var listPre =
+         mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
+     var cont = 0
 
-    }
+     for (item in listPDF) {
+         println("Archivos: ${item.toPath()}")
+         audioT =  generatedFilesRepository.addNewGeneratedFiles(
+             audio = audioT,
+             item.toUri(),
+             listPre[cont],
+             item
+         )
+         cont++
+     }
+     println("Terminé ${isCreatingPDFs.value}")
 
-    fun obtenerdoc(title:String){
-        generatedFilesRepository.obteenrdoc(title)
-    }
-     fun deletePDF(audioProc: AudioProc) {
+     return audioT
+
+
+ }
+    fun deletePDF(audioProc: AudioProc) {
         generatedFilesRepository.deleteData(audioProc = audioProc)
     }
-    fun showPDF(url:String, context: Context) {
-        generatedFilesRepository.showData(url= url, context = context )
+
+    fun showPDF(url: String, context: Context) {
+        generatedFilesRepository.showData(url = url, context = context)
     }
-    fun toCardScreen(context: Context, toScreenPDF : Intent){
-        generatedFilesRepository.startCardScreen(context,toScreenPDF)
+
+    fun toCardScreen(context: Context, toScreenPDF: Intent) {
+        generatedFilesRepository.startCardScreen(context, toScreenPDF)
     }
-    fun downloadPDF(url:String, context: Context) {
-        generatedFilesRepository.downloadData(url= url, context = context )
+
+    fun downloadPDF(url: String, context: Context) {
+        generatedFilesRepository.downloadData(url = url, context = context)
 
     }
 }

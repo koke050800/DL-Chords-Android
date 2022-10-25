@@ -83,13 +83,13 @@ class FilesBDActivity : ComponentActivity() {
                     floatingActionButtonPosition = FabPosition.End,
                     backgroundColor = MaterialTheme.colors.background
                 ){
-                    val context = LocalContext.current
-
+                 /*
                    LaunchedEffect(Unit) {
                        delay(10000)
                        if (responseWhitLyricChords != null) {
                            audioViewModel.addNewAudioProc(audioP)
-
+                           println("Ya subi el Audio sin archivos ")
+                           println("Estoy generando PDF's desde ActivityFilesBD")
                            generatedFilesViewModel.generatePDFs(
                                context, audioP.id,
                                audioP.displayName, audioP.artist,
@@ -97,9 +97,7 @@ class FilesBDActivity : ComponentActivity() {
                                audioP.title, "", "", "", "", "", responseWhitLyricChords
                            )
                        }
-                       delay(10000)
-                       generatedFilesViewModel.obtenerdoc(audioP.title)
-                       delay(10000)
+
 
 
                        var state = generatedFilesViewModel.state.value
@@ -117,7 +115,7 @@ class FilesBDActivity : ComponentActivity() {
                                }
                            }
                        }
-                   }
+                   }*/
 
 
                  /*  Crossfade(targetState = generatedFilesViewModel.isLoading.value) {
@@ -145,7 +143,7 @@ class FilesBDActivity : ComponentActivity() {
 
 
 
-                  // FilesBDScreen(audio = audioP , generatedFilesViewModel)
+                   FilesBDScreen(audio = audioP , generatedFilesViewModel)
 
 
                    /*  Crossfade(targetState = generatedFilesViewModel.isCompleted.value) {

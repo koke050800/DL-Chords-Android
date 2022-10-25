@@ -46,6 +46,7 @@ class PlayerMusicActivity : ComponentActivity() {
         val storedAudiosList = audioViewModel.storedAudioList
         val audioProcViewModel: AudioProcViewModel by viewModels()
         val pythonFlaskApiViewModel: PythonFlaskApiViewModel by viewModels()
+        val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
         setContent {
             DLChordsTheme {
@@ -57,13 +58,14 @@ class PlayerMusicActivity : ComponentActivity() {
                             if (!audioViewModel.isAudioPlaying && cont==1) {
                                 audioViewModel.playAudio(storedAudiosList[musicData],false)
                             }
-                            val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
                             PlayerMusicStored(
                                 progress = audioViewModel.currentAudioProgress.value,
                                 onProgressChange = {},
                                 audio = storedAudiosList[musicData],
                                 audioViewModel = audioViewModel,
+                                generatedFilesViewModel,
+                                audioProcViewModel,
                                 isAlreadyProcessed = isAlreadyProcessed,
                                 context = LocalContext.current,
                                 pythonFlaskApiViewModel =  pythonFlaskApiViewModel,
