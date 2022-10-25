@@ -105,7 +105,7 @@ fun CutAnAudioScreen(
                     Box(
                         contentAlignment = Alignment.CenterStart,
                         modifier = Modifier
-                            .fillMaxHeight(0.1f)
+                            .fillMaxHeight(0.08f)
                             .fillMaxWidth(0.2f)
                     ) {
                         if (changedSlider) {
@@ -137,7 +137,7 @@ fun CutAnAudioScreen(
                     Box(
                         contentAlignment = Alignment.CenterEnd,
                         modifier = Modifier
-                            .fillMaxHeight(0.1f)
+                            .fillMaxHeight(0.08f)
                             .fillMaxWidth(0.25f)
                     ) {
                         if (changedSlider) {
