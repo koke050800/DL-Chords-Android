@@ -101,58 +101,66 @@ fun CutAnAudioScreen(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
+                    Box(
+                        contentAlignment = Alignment.CenterStart,
+                        modifier = Modifier
+                            .fillMaxHeight(0.1f)
+                            .fillMaxWidth(0.2f)
+                    ) {
+                        if (changedSlider) {
 
-                    if (changedSlider) {
-
-                        Card(
-                            backgroundColor = DLChordsTheme.colors.primary, modifier = Modifier
-                                .fillMaxHeight(0.1f)
-                                .fillMaxWidth(0.2f)
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(1f),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
+                            Card(
+                                backgroundColor = DLChordsTheme.colors.primary,
+                                modifier = Modifier.fillMaxSize(1f)
                             ) {
-                                Text(
-                                    text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
-                                    style = DLChordsTheme.typography.caption,
-                                    color = DLChordsTheme.colors.onPrimary
-                                )
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
+                                        style = DLChordsTheme.typography.caption,
+                                        color = DLChordsTheme.colors.onPrimary
+                                    )
+                                }
                             }
+                        } else {
+                            Text(
+                                text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
+                                style = DLChordsTheme.typography.caption
+                            )
                         }
-                    } else {
-                        Text(
-                            text = timeStampToDuration((select.start.toLong() * audio.duration) / 100),
-                            style = DLChordsTheme.typography.caption
-                        )
                     }
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    if (changedSlider) {
-                        Card(
-                            backgroundColor = DLChordsTheme.colors.primary, modifier = Modifier
-                                .fillMaxHeight(0.1f)
-                                .fillMaxWidth(0.2f)
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(1f),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
+                    Spacer(modifier = Modifier.weight(0.1f))
+                    Box(
+                        contentAlignment = Alignment.CenterEnd,
+                        modifier = Modifier
+                            .fillMaxHeight(0.1f)
+                            .fillMaxWidth(0.25f)
+                    ) {
+                        if (changedSlider) {
+                            Card(
+                                backgroundColor = DLChordsTheme.colors.primary, modifier = Modifier.fillMaxSize(1f)
                             ) {
-                                Text(
-                                    text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
-                                    style = DLChordsTheme.typography.caption,
-                                    color = DLChordsTheme.colors.onPrimary
-                                )
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
+                                        style = DLChordsTheme.typography.caption,
+                                        color = DLChordsTheme.colors.onPrimary
+                                    )
+                                }
                             }
+                        } else {
+                            Text(
+                                text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
+                                style = DLChordsTheme.typography.caption
+                            )
                         }
-                    } else {
-                        Text(
-                            text = timeStampToDuration((select.endInclusive.toLong() * audio.duration) / 100),
-                            style = DLChordsTheme.typography.caption
-                        )
                     }
                 }
             }
