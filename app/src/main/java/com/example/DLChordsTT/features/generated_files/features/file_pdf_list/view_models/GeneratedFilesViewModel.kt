@@ -102,7 +102,21 @@ class GeneratedFilesViewModel @Inject constructor(
                     chords_lyrics_l = chords_lyrics_l,
                     lyrics = lyrics,
                 )
+        var listPre =
+            mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
+        var cont = 0
 
+        for (item in listPDF) {
+            println("Archivos: ${item.toPath()}")
+            audio =  generatedFilesRepository.addNewGeneratedFiles(
+                audio = audio,
+                item.toUri(),
+                listPre[cont],
+                item
+            )
+            cont++
+        }
+        println("Terminé ${isCreatingPDFs.value}")
 
     }
 
@@ -131,21 +145,7 @@ class GeneratedFilesViewModel @Inject constructor(
          chords_lyrics_l = chords_lyrics_l,
          lyrics = lyrics,
      )
-     var listPre =
-         mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
-     var cont = 0
 
-     for (item in listPDF) {
-         println("Archivos: ${item.toPath()}")
-         audioT =  generatedFilesRepository.addNewGeneratedFiles(
-             audio = audioT,
-             item.toUri(),
-             listPre[cont],
-             item
-         )
-         cont++
-     }
-     println("Terminé ${isCreatingPDFs.value}")
 
      return audioT
 

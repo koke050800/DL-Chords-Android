@@ -204,12 +204,13 @@ fun PlayerMusicStored(
 
                             )
 audioProcViewModel.addNewAudioProc(audioP)
-                      audioP=  generatedFilesViewModel.generatePDFs(
+                       generatedFilesViewModel.generatePDFs(
                             context, audioP.id,
                             audioP.displayName, audioP.artist,
                             audioP.data, audioP.duration,
                             audioP.title, "", "", "", "", "", response
                         )
+
                         println("AudiioP en player $audioP")
                         pdfScreenIntent.putExtra("Audio", audioP)
 

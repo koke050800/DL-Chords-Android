@@ -37,28 +37,14 @@ constructor(
 
 ) {
 
-    var audioFinal = AudioProc(
-        id = 0,
-        displayName = "",
-        artist = "artist",
-        data = "data",
-        duration = 0,
-        title = "title",
-        english_nomenclature = "english_nomenclature",
-        latin_nomenclature = "latin_nomenclature",
-        chords_lyrics_e = "chords_lyrics_e",
-        chords_lyrics_l = "chords_lyrics_l",
-        lyrics = "lyrics"
-    )
-
        fun addNewGeneratedFiles(audio: AudioProc, mUri: Uri, pre: String, file: File):AudioProc {
         val folder: StorageReference = FirebaseStorage.getInstance().reference.child(audio.title)
         val path = mUri.lastPathSegment.toString()
         val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/') + 1))
-
-           fileName.putFile(mUri).addOnSuccessListener { f ->
+           var audioP = audio
+           fileName.putFile(mUri).addOnSuccessListener {
             fileName.downloadUrl.addOnSuccessListener {
-                val audioP = audio
+                 audioP = audio
                 when (pre) {
                     "Lyrics" -> {
                         audioP.lyrics = "${it}"
@@ -103,27 +89,16 @@ constructor(
                         audioP.lyrics = "${audio.lyrics}"
                     }
                 }
-               // file.delete()
+               file.delete()
                 try {
                     processedAudioList.document("${audioP.id}").set(audioP)
-                        .addOnSuccessListener {
-
-                        }.addOnCompleteListener {
-                            println("AudioP dentro del complete: ${audioP}")
-                            println("AudioF dentro del complete: ${audioFinal}")
-                            audioFinal = audioP
-                        }
-
-                    audioFinal = audioP
-                    println("AudioP fuera del complete: ${audioP}")
-                    println("AudioF fuera del complete: ${audioFinal}")
-                } catch (e: Exception) {
+                }catch (e: Exception) {
                     e.printStackTrace()
                 }
             }
 
         }
-           return audioFinal
+           return audioP
 
        }
 
@@ -857,7 +832,7 @@ constructor(
         pdfList.add(createLyricsChordsPDF(context, audio, modelChordsEList, modelWordsList))
         pdfList.add(createLyricsChordsPDF(context, audio, modelChordsLList, modelWordsList, false))
 
-        println("getfinalaudio  en el generate${audioFinal}")
+        println("getfinalaudio  en el generate${audio}")
 
         return pdfList
 
