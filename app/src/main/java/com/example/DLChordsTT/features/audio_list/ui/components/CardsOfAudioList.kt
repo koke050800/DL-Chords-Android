@@ -134,7 +134,8 @@ fun ProcessedCard(
     sendAudio.putExtra("AudioId", index)
     sendAudio.putExtra("isAscending", isAscending)
     val toScreenPDF = Intent(context, FilesBDActivity::class.java)
-    toScreenPDF.putExtra("AudioName", audio)
+    toScreenPDF.putExtra("Audio", audio)
+
 
     Card(
         modifier = Modifier

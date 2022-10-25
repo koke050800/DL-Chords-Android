@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
@@ -25,6 +26,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.vi
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -45,7 +47,8 @@ fun PlayerMusicStored(
     var scope = rememberCoroutineScope()
     val openDialogProcessing = remember { mutableStateOf(false) }
     val pdfScreenIntent =
-        Intent(context, holiActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+        Intent(context, FilesBDActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+
 
     DLChordsTheme {
 
@@ -181,14 +184,29 @@ fun PlayerMusicStored(
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
                         openDialogProcessing.value = false //cerrar el progressIndicator
                         pdfScreenIntent.putExtra("response", response)
+                        var audioP = AudioProc(
+                            id = audio.id,
+                            displayName = audio.displayName,
+                            artist = audio.artist,
+                            data = audio.data,
+                            duration = audio.duration,
+                            title = audio.title,
+                            english_nomenclature = "",
+                            latin_nomenclature = "" ,
+                            chords_lyrics_e = "",
+                            chords_lyrics_l = "",
+                            lyrics ="",
+
+                            )
+                        pdfScreenIntent.putExtra("Audio", audioP)
 
                         //datos del audio
-                        pdfScreenIntent.putExtra("AudioProc_id", audio.id)
+                        /*pdfScreenIntent.putExtra("AudioProc_id", audio.id)
                         pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
                         pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
                         pdfScreenIntent.putExtra("AudioProc_data", audio.data)
                         pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
-                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)
+                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)*/
 
                         //lanzamos actividad
                         startActivity(context, pdfScreenIntent, null)

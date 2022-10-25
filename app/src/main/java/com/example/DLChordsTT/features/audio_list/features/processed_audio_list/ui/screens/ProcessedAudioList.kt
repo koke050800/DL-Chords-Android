@@ -65,9 +65,6 @@ fun ProcessedAudiosScreen(
             LazyColumn() {
                 item { LabelAndDividerOfLists(label = "Audios Procesados") }
 
-
-
-
                 if (state.audioProcessedList.isNotEmpty()) {
 
                     val searchedText = textState.value.text

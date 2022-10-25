@@ -52,7 +52,7 @@ class AudioProcViewModel @Inject constructor(
 
     }
 
-    fun getAudiosProcessedBD() {
+    fun getAudiosProcessedBD()  {
         audioprocRepository.getProcessedAudioList().onEach { result ->
             when (result) {
                 is Result.Error -> {

@@ -14,9 +14,12 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
+import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +27,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class holiActivity : ComponentActivity() {
 
+    val audioViewModel: AudioProcViewModel by viewModels()
+    val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -51,6 +56,12 @@ class holiActivity : ComponentActivity() {
         )
 
         setContent {
+            if (responseWhitLyricChords != null) {
+                audioViewModel.addNewAudioProc(audioP)
+                generatedFilesViewModel.generatePDFs(LocalContext.current,audioP.id,audioP.displayName,audioP.artist,audioP.data,audioP.duration,
+                    audioP.title,"","","","","",responseWhitLyricChords)
+            }
+
             DLChordsTheme {
 
                 Scaffold(

@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models
 
 import android.net.Uri
+import java.io.Serializable
 
 data class Audio(
     val uri: Uri ,

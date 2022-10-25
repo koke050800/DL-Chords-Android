@@ -13,8 +13,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.LabelAndDividerOfLists
 import com.example.DLChordsTT.features.audio_list.ui.components.ProcessedCard
 import com.example.DLChordsTT.features.audio_list.ui.components.SearchAndSortBar
@@ -29,7 +31,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 
 @Composable
-fun FilesBDScreen(audio:AudioProc,   generatedFilesViewModel: GeneratedFilesViewModel) {
+fun FilesBDScreen(audio:AudioProc,  generatedFilesViewModel: GeneratedFilesViewModel) {
+
+
     Column(
         modifier = Modifier
             .fillMaxWidth()

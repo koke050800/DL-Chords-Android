@@ -17,6 +17,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.da
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity_GeneratedInjector
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlinx.coroutines.launch
@@ -34,7 +35,7 @@ fun MenuStoredCards(
 ) {
     val context = LocalContext.current
     val pdfScreenIntent =
-        Intent(context, holiActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+        Intent(context, FilesBDActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
     val cutScreenIntent = Intent(context, CutAnAudioActivity::class.java)
 
     DropdownMenu(
@@ -83,14 +84,30 @@ fun MenuStoredCards(
                         openDialogProcessing.value = false //cerrar el progressIndicator
                         pdfScreenIntent.putExtra("response", response)
 
+                        var audioP = AudioProc(
+                            id = audio.id,
+                            displayName = audio.displayName,
+                            artist = audio.artist,
+                            data = audio.data,
+                            duration = audio.duration,
+                            title = audio.title,
+                            english_nomenclature = "",
+                            latin_nomenclature = "" ,
+                            chords_lyrics_e = "",
+                            chords_lyrics_l = "",
+                            lyrics ="",
+
+                            )
+                        pdfScreenIntent.putExtra("Audio", audioP)
+
                         //datos del audio
-                        pdfScreenIntent.putExtra("AudioProc_id", audio.id)
+                      /*  pdfScreenIntent.putExtra("AudioProc_id", audio.id)
                         pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
                         pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
                         pdfScreenIntent.putExtra("AudioProc_data", audio.data)
                         pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
                         pdfScreenIntent.putExtra("AudioProc_title", audio.title)
-
+*/
                         //lanzamos actividad
                         startActivity(context, pdfScreenIntent, null)
                     }
