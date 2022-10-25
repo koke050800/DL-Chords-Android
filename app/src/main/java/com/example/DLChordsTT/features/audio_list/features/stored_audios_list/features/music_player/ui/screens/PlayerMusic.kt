@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -14,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,7 +48,7 @@ fun PlayerMusicStored(
     val openDialogProcessing = remember { mutableStateOf(false) }
     val pdfScreenIntent =
         Intent(context, holiActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
-
+    val activity = (LocalContext.current as? Activity)
     DLChordsTheme {
 
         Column(
@@ -54,7 +56,7 @@ fun PlayerMusicStored(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel)
+            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel, isBack = true)
 
             Card(
                 shape = DLChordsTheme.shapes.medium,
@@ -111,11 +113,14 @@ fun PlayerMusicStored(
 
             Button(
                 onClick = {
-                    audioViewModel.playAudio(audio, false)
+                    println("Hellou man voy a pausar")
+                    audioViewModel.playAudio(audio, true)
+                    audioViewModel.isPlayingAgain.value = true
                     val cutAudio = Intent(context, CutAnAudioActivity::class.java)
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
                     context.startActivity(cutAudio)
+                    activity?.finish()
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)

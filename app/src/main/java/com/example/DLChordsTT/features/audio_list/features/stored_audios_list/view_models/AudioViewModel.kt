@@ -35,6 +35,7 @@ class AudioViewModel @Inject constructor(
     val isRefreshing = SwipeRefreshState(false)
     val isLoading = mutableStateOf(false)
     val isLoadingStoredList = mutableStateOf(false)
+
     val isPlaying = mutableStateOf(false)
     val currentPlayingAudio = serviceConnection.currentPlayingAudio
     private val isConnected = serviceConnection.isConnected
@@ -46,7 +47,7 @@ class AudioViewModel @Inject constructor(
         get() = playbackState.value?.isPlaying == true
 
     var isAscending = mutableStateOf(true)
-
+    var isPlayingAgain = mutableStateOf(false)
     private val subscriptionCallback = object
         : MediaBrowserCompat.SubscriptionCallback() {
         override fun onChildrenLoaded(
@@ -136,11 +137,24 @@ class AudioViewModel @Inject constructor(
 
     fun playAudio(currentAudio: Audio, isBack: Boolean) {
         serviceConnection.playAudio(storedAudioList)
+        println("currentAudioId ${currentAudio.id} and ${isPlayingAgain.value}")
         if (currentAudio.id == currentPlayingAudio.value?.id) {
+            println("entro aquí")
             if (isAudioPlaying) {
+                println("Hola pause")
                 serviceConnection.transportControl.stop()
+            } else {
+                if (!isBack) {
+                    serviceConnection.transportControl.play()
+                    println("si playé qlo")
+                } else {
+                    println("ANDO QUERIENDO PLAYEAR DE NUEVO ${isBack}")
+                }
+
             }
         } else {
+            println("Ando acá")
+            println("currentPlayingAudioId ${currentPlayingAudio.value?.id}")
             if (!isBack) {
                 serviceConnection.transportControl
                     .playFromMediaId(
@@ -159,7 +173,8 @@ class AudioViewModel @Inject constructor(
             if (currentPlayBackPosition != position) {
                 currentPlayBackPosition = position
             }
-            if (lastPosition > position) {
+            if ((lastPosition > position) && !isPlayingAgain.value) {
+                println("Last Position ${lastPosition} y la Position ${position} y quiero playear ${isPlayingAgain.value}")
                 currentPlayingAudio.value?.let {
                     playAudio(
                         it,

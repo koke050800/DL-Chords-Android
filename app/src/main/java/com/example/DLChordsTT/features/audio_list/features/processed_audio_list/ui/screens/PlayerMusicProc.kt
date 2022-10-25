@@ -42,7 +42,7 @@ fun PlayerMusicProcessed(
                 .padding(20.dp),
 
             ) {
-            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel)
+            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel, isBack = true)
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier

@@ -218,6 +218,15 @@ fun timeStampToDuration(position: Long): String {
     }
 }
 
+fun timeStampToSeconds(position: Long): String {
+    val totalSeconds = floor(position / 1E3).toInt()
+
+    return if (position < 0) {
+        "--:--"
+    } else {
+        totalSeconds.toString()
+    }
+}
 
 
 
