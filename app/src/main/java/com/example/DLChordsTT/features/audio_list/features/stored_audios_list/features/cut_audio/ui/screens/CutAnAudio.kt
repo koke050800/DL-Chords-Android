@@ -58,10 +58,11 @@ fun CutAnAudioScreen(
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
-                    .width(254.dp)
+                    .width(270.dp)
+                    .height(300.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
-
+                backgroundColor = Color(0xFFD9D9D9)
                 ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),

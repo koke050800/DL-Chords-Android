@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
@@ -46,10 +47,11 @@ fun PlayerMusicProcessed(
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
-                    .width(254.dp)
+                    .width(270.dp)
+                    .height(300.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
-
+                backgroundColor = Color(0xFFD9D9D9)
                 ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),
