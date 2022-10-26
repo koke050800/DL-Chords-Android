@@ -51,7 +51,7 @@ fun PlayerMusicStored(
     val openDialogProcessing = remember { mutableStateOf(false) }
     val pdfScreenIntent =
         Intent(context, FilesBDUploadActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
-
+    val activity = (LocalContext.current as? Activity)
 
     DLChordsTheme {
 
@@ -131,12 +131,12 @@ fun PlayerMusicStored(
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
                     context.startActivity(cutAudio)
+                        activity?.finish()
 
                     } else {
                         openDialog.value = true
                     }
-                   
-                    activity?.finish()
+
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)
