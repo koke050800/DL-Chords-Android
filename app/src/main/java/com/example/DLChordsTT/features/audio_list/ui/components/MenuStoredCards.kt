@@ -47,7 +47,6 @@ fun MenuStoredCards(
         }
 
         DropdownMenuItem(onClick = {
-
             isAlreadyProcessedInBD = false
             alreadyProcessedAudiosList.forEach {
                 if (it.title.lowercase(locale = Locale.getDefault())
@@ -76,37 +75,24 @@ fun MenuStoredCards(
                             maxLines = 2
                         )
                     } else {
-
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION"
                         openDialogProcessing.value = false //cerrar el progressIndicator
-                        pdfScreenIntent.putExtra("response", response)
-
-                        var audioP = AudioProc(
-                            id = audio.id,
-                            displayName = audio.displayName,
-                            artist = audio.artist,
-                            data = audio.data,
-                            duration = audio.duration,
-                            title = audio.title,
-                            english_nomenclature = "",
-                            latin_nomenclature = "" ,
-                            chords_lyrics_e = "",
-                            chords_lyrics_l = "",
-                            lyrics ="",
-
-                            )
-                        pdfScreenIntent.putExtra("Audio", audioP)
-
-                        //datos del audio
-                      /*  pdfScreenIntent.putExtra("AudioProc_id", audio.id)
-                        pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
-                        pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
-                        pdfScreenIntent.putExtra("AudioProc_data", audio.data)
-                        pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
-                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)
-*/
-                        //lanzamos actividad
+                            pdfScreenIntent.putExtra("response", response)
+                            var audioP = AudioProc(
+                                id = audio.id,
+                                displayName = audio.displayName,
+                                artist = audio.artist,
+                                data = audio.data,
+                                duration = audio.duration,
+                                title = audio.title,
+                                english_nomenclature = "",
+                                latin_nomenclature = "" ,
+                                chords_lyrics_e = "",
+                                chords_lyrics_l = "",
+                                lyrics ="",
+                                )
+                            pdfScreenIntent.putExtra("Audio", audioP)
                         startActivity(context, pdfScreenIntent, null)
                     }
                 } ?: Text("Procesar audio completo", style = DLChordsTheme.typography.caption)
