@@ -19,7 +19,8 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.music_player.ui.screens.PlayerMusicActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDShowActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDUploadActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import java.util.*
@@ -133,7 +134,9 @@ fun ProcessedCard(
     val sendAudio = Intent(context, PlayerMusicProcessedActivity::class.java)
     sendAudio.putExtra("AudioId", index)
     sendAudio.putExtra("isAscending", isAscending)
-    val toScreenPDF = Intent(context, FilesBDActivity::class.java)
+    sendAudio.putExtra("audioProc", audio)
+
+    val toScreenPDF = Intent(context, FilesBDShowActivity::class.java)
     toScreenPDF.putExtra("Audio", audio)
 
 

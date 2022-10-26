@@ -3,7 +3,6 @@ package com.example.DLChordsTT.features.music_player.ui.screens
 import DLChordsTT.R
 import android.content.Context
 import android.content.Intent
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -28,8 +27,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.vi
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDActivity
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDUploadActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -52,7 +50,7 @@ fun PlayerMusicStored(
     var scope = rememberCoroutineScope()
     val openDialogProcessing = remember { mutableStateOf(false) }
     val pdfScreenIntent =
-        Intent(context, FilesBDActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+        Intent(context, FilesBDUploadActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
 
 
     DLChordsTheme {

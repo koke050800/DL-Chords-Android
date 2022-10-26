@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.audio_list.features.processed_audio_list.ui.screens
 
 import DLChordsTT.R
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -10,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
@@ -18,6 +20,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.da
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
+import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDShowActivity
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -27,12 +30,17 @@ fun PlayerMusicProcessed(
     progress: Float,
     onProgressChange: (Float) -> Unit,
     audio: Audio,
+    audioP: AudioProc,
     audioViewModel: AudioViewModel,
     audioProcViewModel: AudioProcViewModel,
     generatedFilesViewModel: GeneratedFilesViewModel,
     isAlreadyProcessed: Boolean,
 ) {
     val openDialog = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val toScreenPDF = Intent(context, FilesBDShowActivity::class.java)
+    toScreenPDF.putExtra("Audio", audioP)
+
 
     DLChordsTheme {
 
@@ -88,23 +96,10 @@ fun PlayerMusicProcessed(
 
             Button(
                 onClick = {
-
-                    if (!isAlreadyProcessed) {
-                        audioProcViewModel.addNewAudioProc(
-                            AudioProc(
-                                id = audio.id,
-                                displayName = audio.displayName,
-                                artist = audio.artist,
-                                data = audio.data,
-                                duration = audio.duration,
-                                title = audio.title,
-
-                                )
-                        )
-                    } else {
-                        openDialog.value = true
-                    }
-
+                    generatedFilesViewModel.toCardScreen(
+                        context,
+                        toScreenPDF
+                    )
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)

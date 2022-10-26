@@ -21,7 +21,7 @@ import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FilesBDActivity : ComponentActivity() {
+class FilesBDUploadActivity : ComponentActivity() {
     val audioViewModel: AudioProcViewModel by viewModels()
     val generatedFilesViewModel: GeneratedFilesViewModel by viewModels()
     val audioProcViewModel: AudioProcViewModel by viewModels()

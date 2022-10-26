@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
@@ -29,6 +30,7 @@ class PlayerMusicProcessedActivity : ComponentActivity() {
         var cont = 0
         val isAscending = receiveMusic?.getBoolean("isAscending")
         val isAlreadyProcessed = receiveMusic?.getBoolean("isAlreadyProcessed") ?: false
+        val audioProc = receiveMusic?.getSerializable("audioProc") as AudioProc
         var audioProcessed: Audio? = null
 
         super.onCreate(savedInstanceState)
@@ -61,7 +63,8 @@ class PlayerMusicProcessedActivity : ComponentActivity() {
                                 PlayerMusicProcessed(
                                     progress = audioViewModel.currentAudioProgress.value,
                                     onProgressChange = {},
-                                    it1,
+                                    audio =  it1,
+                                    audioP = audioProc ,
                                     audioViewModel = audioViewModel,
                                     audioProcViewModel = audioProcViewModel,
                                     generatedFilesViewModel = generatedFilesViewModel,

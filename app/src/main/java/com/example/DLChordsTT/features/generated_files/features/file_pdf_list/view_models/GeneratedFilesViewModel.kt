@@ -88,7 +88,7 @@ class GeneratedFilesViewModel @Inject constructor(
             lyrics = lyrics,
         )
         var listPre =
-            mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
+            mutableListOf<String>("Lyrics", "ChordsE", "ChordsL", "LyricChordE", "LyricChordL")
         var cont = 0
 
         println("isUploadingPDFsOnDB.value >>>>>> ${isUploadingPDFsOnDB.value} ")
