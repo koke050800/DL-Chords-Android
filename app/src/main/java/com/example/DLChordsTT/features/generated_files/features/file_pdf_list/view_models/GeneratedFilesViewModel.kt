@@ -2,32 +2,15 @@ package com.example.DLChordsTT.features.generated_files.features.file_pdf_list.v
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Environment
-import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProcessedListState
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.Result
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.repositories.AudioProcRepository
-import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Chord
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Files
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.models.Word
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.data.repositories.GeneratedFilesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,9 +18,9 @@ class GeneratedFilesViewModel @Inject constructor(
     private val generatedFilesRepository: GeneratedFilesRepository,
 ) : ViewModel() {
 
-    val isCreationCompletedOfPDFs = mutableStateOf<Boolean>(value = false)
+    //val isCreationCompletedOfPDFs = mutableStateOf<Boolean>(value = false)
     var audiosProc = mutableStateListOf<AudioProc>()
-    val isUploadingCompletedOnDB = mutableStateOf<Boolean>(value = true)
+    val isUploadingPDFsOnDB = mutableStateOf<Boolean>(value = true)
     var listPDF = emptyList<File>()
 
 
@@ -56,7 +39,7 @@ class GeneratedFilesViewModel @Inject constructor(
         lyrics: String,
         ChordsWordsJson: String
     ) {
-        isCreationCompletedOfPDFs.value = false
+       // isCreationCompletedOfPDFs.value = false
 
         listPDF = generatedFilesRepository.generatePDFs(
             context = context,
@@ -73,7 +56,7 @@ class GeneratedFilesViewModel @Inject constructor(
             lyrics = lyrics,
             ChordsWordsJson = ChordsWordsJson
         )
-        isCreationCompletedOfPDFs.value = true
+        //isCreationCompletedOfPDFs.value = true
     }
 
     fun UploadPDFsInBD(
@@ -108,9 +91,8 @@ class GeneratedFilesViewModel @Inject constructor(
             mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
         var cont = 0
 
-        println("isUploadingCompletedOnDB.value >>>>>> ${isUploadingCompletedOnDB.value} ")
+        println("isUploadingPDFsOnDB.value >>>>>> ${isUploadingPDFsOnDB.value} ")
         for (item in listPDF) {
-            println("Archivos: ${item.toPath()}")
             kotlin.runCatching {
                 generatedFilesRepository.addNewGeneratedFiles(
                     audio = audio,
@@ -118,21 +100,17 @@ class GeneratedFilesViewModel @Inject constructor(
                     listPre[cont],
                     item
                 )
-
             }.onSuccess {
                 audiosProc.add(it)
             }.onFailure {
                 println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
             }
-
-
-            println("AUDIO CHORDS E $cont >>>>>>>>>>> ${audio.chords_lyrics_e}")
-            println("AUDIO >>>>>>>>>>> ${audio}")
+            println("<<<<<< CICLO kotlin.runCatching $cont")
             cont++
         }
 
-        isUploadingCompletedOnDB.value = false
-        println("isUploadingCompletedOnDB.value ACABE >>>>>> ${isUploadingCompletedOnDB.value} ")
+        isUploadingPDFsOnDB.value = false
+        println("isUploadingPDFsOnDB.value ACABE >>>>>> ${isUploadingPDFsOnDB.value} ")
 
     }
 

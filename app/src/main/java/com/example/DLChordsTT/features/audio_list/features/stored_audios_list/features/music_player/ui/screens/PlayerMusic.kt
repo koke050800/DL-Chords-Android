@@ -187,13 +187,31 @@ fun PlayerMusicStored(
 
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
-                        //openDialogProcessing.value = false //cerrar el progressIndicator
+                        openDialogProcessing.value = false //cerrar el progressIndicator
 
 
                         pdfScreenIntent.putExtra("response", response)
 
-
                         var audioP = AudioProc(
+                            id = audio.id,
+                            displayName = audio.displayName,
+                            artist = audio.artist,
+                            data = audio.data,
+                            duration = audio.duration,
+                            title = audio.title,
+                            english_nomenclature = "",
+                            latin_nomenclature = "",
+                            chords_lyrics_e = "",
+                            chords_lyrics_l = "",
+                            lyrics = "",
+                        )
+
+                        pdfScreenIntent.putExtra("Audio", audioP)
+
+                        startActivity(context, pdfScreenIntent, null)
+
+
+                        /*var audioP = AudioProc(
                             id = audio.id,
                             displayName = audio.displayName,
                             artist = audio.artist,
@@ -240,7 +258,7 @@ fun PlayerMusicStored(
                                 generatedFilesViewModel.listPDF
                             )
 
-                            if (!generatedFilesViewModel.isUploadingCompletedOnDB.value){
+                            if (!generatedFilesViewModel.isUploadingPDFsOnDB.value){
                                 println("ENTRE A LANZAR")
                                 pdfScreenIntent.putExtra("Audio",
                                     generatedFilesViewModel.audiosProc[generatedFilesViewModel.audiosProc.lastIndex]
@@ -249,14 +267,7 @@ fun PlayerMusicStored(
                             }
 
 
-                        }
-
-
-
-
-
-
-
+                        }*/
 
                     }
                 } ?: Text(

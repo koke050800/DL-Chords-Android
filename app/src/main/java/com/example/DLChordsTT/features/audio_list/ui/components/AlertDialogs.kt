@@ -109,6 +109,47 @@ fun AlertDialogProcessing(
         }
     }
 }
+@Composable
+fun AlertDialogProcessing2(
+    openDialogProcessing: MutableState<Boolean>,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        if (openDialogProcessing.value) {
+            Dialog(onDismissRequest = {},
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .fillMaxHeight(0.5f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        //CircularProgressIndicator()
+                        Card(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                            Column(Modifier.padding(all = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                                CircularProgressIndicator(modifier = Modifier.padding(all = 8.dp))
+                                var ticks by remember { mutableStateOf(0) }
+                                LaunchedEffect(Unit) {
+                                    while(true) {
+                                        delay(1000)
+                                        ticks++
+                                    }
+                                }
+                                Text(
+                                    "Generando pdf's",
+                                    style = DLChordsTheme.typography.caption,
+                                    color = DLChordsTheme.colors.onSurface,
+                                    maxLines = 1,
+                                    modifier = Modifier.padding(all = 8.dp)
+                                )
+                            }
+
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
 
 fun formatDuration(seconds: Long): String = if (seconds < 60) {
     if (seconds<10) "Tiempo 00:0$seconds" else "Tiempo 00:$seconds"
