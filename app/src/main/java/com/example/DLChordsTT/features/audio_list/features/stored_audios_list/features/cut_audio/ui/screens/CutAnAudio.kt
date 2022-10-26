@@ -174,7 +174,6 @@ fun CutAnAudioScreen(
                 onClick = {
                     var timeInitial = (select.start.toLong() * audio.duration) / 100
                     var timeEnd = (select.endInclusive.toLong() * audio.duration) / 100
-                    println("De ${timeStampToSeconds(timeInitial)} a ${timeStampToSeconds(timeEnd)}")
 
                     scope.launch {
                         pythonFlaskApiViewModel.uploadAudioAndCut(

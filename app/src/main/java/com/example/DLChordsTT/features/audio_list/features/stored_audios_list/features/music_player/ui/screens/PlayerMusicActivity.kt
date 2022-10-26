@@ -50,7 +50,6 @@ class PlayerMusicActivity : ComponentActivity() {
 
         setContent {
             DLChordsTheme {
-                storedAudiosList.forEach { println(" ${it.displayName}") }
                 Crossfade(targetState = audioViewModel.isLoading.value) {
                     if (!it) {
                         if (musicData != null && storedAudiosList.size != 0) {

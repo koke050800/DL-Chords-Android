@@ -80,7 +80,6 @@ class FilesBDUploadActivity : ComponentActivity() {
                             "",
                             responseWhitLyricChords
                         )
-                        println("listita con pdf creada ${generatedFilesViewModel.listPDF.size}")
                         if (contador == 0) {
                             generatedFilesViewModel.UploadPDFsInBD(
                                 audioP.id,

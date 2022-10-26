@@ -22,8 +22,6 @@ class PythonFlaskApiRepository @Inject constructor() {
             )
         ).await()
 
-        println("RESPONSE REPO uploadAudioAndObtainLyricChords:::: ${response.raw()}")
-
         if (response.isSuccessful) {
 
             // Convert raw JSON to pretty JSON using GSON library
@@ -50,7 +48,6 @@ class PythonFlaskApiRepository @Inject constructor() {
         time_final: String
     ): String? {
 
-        println("ANTES DE RESPONSE AQUI ESTOY" )
         val response = PythonFlaskApi.instance.uploadAudioAndCut(
             time_initial = time_initial,
             time_final = time_final,
@@ -60,8 +57,8 @@ class PythonFlaskApiRepository @Inject constructor() {
                 file.asRequestBody()
             )
         ).await()
-        println("DESPUES DE RESPONSE AQUI ESTOY")
-        println("RESPONSE REPO uploadAndCutAudioAndObtainLyricChords:::: ${response.raw()}")
+
+        //println("RESPONSE REPO uploadAndCutAudioAndObtainLyricChords:::: ${response.raw()}")
 
         if (response.isSuccessful) {
 

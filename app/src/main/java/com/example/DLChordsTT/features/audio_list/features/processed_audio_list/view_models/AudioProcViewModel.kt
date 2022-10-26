@@ -42,10 +42,9 @@ class AudioProcViewModel @Inject constructor(
     fun addNewAudioProc(audioP: AudioProc)  = viewModelScope.launch  {
 
         kotlin.runCatching {
-            println("addNewProc: $audioP")
             audioprocRepository.addNewProcessedAudio(audioP)
         }.onSuccess {
-            println("Ya agregué el rimer audio")
+            println("Ya agregué el primer audio")
         }.onFailure {
             println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
         }

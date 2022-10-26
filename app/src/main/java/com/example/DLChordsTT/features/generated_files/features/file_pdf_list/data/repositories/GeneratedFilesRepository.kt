@@ -66,7 +66,7 @@ constructor(
 
 
         audioP = audio
-        println("AUDIO REPO:::: $audioP")
+
         when (pre) {
             "Lyrics" -> {
                 audioP.lyrics = "${downloadURl}"
@@ -112,7 +112,7 @@ constructor(
             }
         }
         audioFinal = audioP
-        println("Entre aqui 7 : $audioFinal")
+
         return audioFinal
     }
 
@@ -120,7 +120,6 @@ constructor(
         try {
             if(audioP.lyrics.isNotEmpty()){
             processedAudioList.document("${audioP.id}").set(audioP).await()
-                println("Subí el archivo")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -141,7 +140,7 @@ constructor(
     fun getListModelChordEn(context: Context, chordsJson: String): MutableList<Chord> {
         val string = getJsonDataFramAsset(context, "quien_de_los_dos_sera.json")
         val listChords = mutableListOf<Chord>()
-        println(chordsJson)
+
         val obj = JSONObject(chordsJson)
         val jsonArray = obj.getJSONArray("chords")
         for (i in 0 until jsonArray.length()) {
@@ -634,7 +633,7 @@ constructor(
             (modelChordsList.get(modelChordsList.lastIndex).time_final).roundToInt() / 5
         )
 
-        // println("Hlaaaa: $hola")
+
 
         for (r in 0 until hola) {
             when ((r * 5).toString().length) {
@@ -683,13 +682,6 @@ constructor(
             )
         }
 
-
-        /*     for (item in chordsList2){
-                 println("C2  $item")
-             }
-             println("Largo de C2: ${chordsList2.size}")
-             println("TamMax : $tamMax y ${Math.max(modelChordsList.size,arrayText.size)} -- ${modelChordsList.size} , ${arrayText.size}")
-             println("Largo de C1: ${chordsList.size}")*/
 
         for (i in 0 until chordsList2.size) {
             chordsList.set(i * chordsList.size / chordsList2.size, chordsList2.get(i))

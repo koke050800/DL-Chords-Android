@@ -91,7 +91,7 @@ class GeneratedFilesViewModel @Inject constructor(
             mutableListOf<String>("Lyrics", "ChordsE", "ChordsL", "LyricChordE", "LyricChordL")
         var cont = 0
 
-        println("isUploadingPDFsOnDB.value >>>>>> ${isUploadingPDFsOnDB.value} ")
+
         for (item in listPDF) {
             kotlin.runCatching {
               generatedFilesRepository.addNewGeneratedFiles(
@@ -102,12 +102,10 @@ class GeneratedFilesViewModel @Inject constructor(
                 )
             }.onSuccess {
                 audiosProc.add(it)
-                println("ya asigne archivo")
                 generatedFilesRepository.uploadtoFirebase(it)
             }.onFailure {
                 println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
             }
-            println("<<<<<< CICLO kotlin.runCatching $cont")
             cont++
         }
 
