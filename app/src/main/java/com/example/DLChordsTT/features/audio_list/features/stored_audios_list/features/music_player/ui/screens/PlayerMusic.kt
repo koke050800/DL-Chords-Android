@@ -1,6 +1,7 @@
 package com.example.DLChordsTT.features.music_player.ui.screens
 
 import DLChordsTT.R
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.Image
@@ -8,12 +9,11 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,21 +55,23 @@ fun PlayerMusicStored(
 
     DLChordsTheme {
 
+        var cursorProgress by remember { mutableStateOf(0f) }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel)
+            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel, isBack = true)
 
             Card(
                 shape = DLChordsTheme.shapes.medium,
                 modifier = Modifier
-                    .width(254.dp)
+                    .width(270.dp)
+                    .height(300.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
-
-
+                backgroundColor = Color(0xFFD9D9D9)
                 ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),
@@ -86,7 +88,9 @@ fun PlayerMusicStored(
                 Slider(
                     value = progress,
                     valueRange = range,
-                    onValueChange = { onProgressChange.invoke(it) },
+                    onValueChange = {
+                        onProgressChange.invoke(it)
+                    },
                     colors = SliderDefaults.colors(
                         thumbColor = DLChordsTheme.colors.secondaryText,
                         activeTrackColor = DLChordsTheme.colors.secondaryText
@@ -95,7 +99,7 @@ fun PlayerMusicStored(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "0:00", style = DLChordsTheme.typography.caption)
+                    Text(text = timeStampToDuration((progress.toLong() * audio.duration) / 100), style = DLChordsTheme.typography.caption)
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = timeStampToDuration(audio.duration.toLong()),
@@ -120,6 +124,9 @@ fun PlayerMusicStored(
                 onClick = {
                     if (!isAlreadyProcessed) {
                      audioViewModel.playAudio(audio, false)
+                    println("Hellou man voy a pausar")
+                    audioViewModel.playAudio(audio, true)
+                    audioViewModel.isPlayingAgain.value = true
                     val cutAudio = Intent(context, CutAnAudioActivity::class.java)
                     cutAudio.putExtra("AudioId", audio.id)
                     cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
@@ -129,6 +136,7 @@ fun PlayerMusicStored(
                         openDialog.value = true
                     }
                    
+                    activity?.finish()
                 },
                 modifier = Modifier
                     .fillMaxWidth(.8f)

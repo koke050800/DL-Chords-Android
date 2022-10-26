@@ -18,7 +18,12 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.vi
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 
 @Composable
-fun TopAppBarPlayer(textOnTop: String, audio: Audio, audioViewModel: AudioViewModel?) {
+fun TopAppBarPlayer(
+    textOnTop: String,
+    audio: Audio,
+    audioViewModel: AudioViewModel?,
+    isBack: Boolean
+) {
     val activity = (LocalContext.current as? Activity)
 
     Row(modifier = Modifier.fillMaxWidth()) {
@@ -28,7 +33,7 @@ fun TopAppBarPlayer(textOnTop: String, audio: Audio, audioViewModel: AudioViewMo
                 .align(Alignment.CenterVertically)
         ) {
             IconButton(onClick = {
-                audioViewModel?.playAudio(audio, true)
+                audioViewModel?.playAudio(audio, isBack)
                 activity?.finish()
                 audioViewModel?.isPlaying?.value = false
             }) {
