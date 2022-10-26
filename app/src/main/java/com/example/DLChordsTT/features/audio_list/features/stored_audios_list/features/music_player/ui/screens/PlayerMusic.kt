@@ -187,8 +187,12 @@ fun PlayerMusicStored(
 
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
-                        openDialogProcessing.value = false //cerrar el progressIndicator
+                        //openDialogProcessing.value = false //cerrar el progressIndicator
+
+
                         pdfScreenIntent.putExtra("response", response)
+
+
                         var audioP = AudioProc(
                             id = audio.id,
                             displayName = audio.displayName,
@@ -197,33 +201,63 @@ fun PlayerMusicStored(
                             duration = audio.duration,
                             title = audio.title,
                             english_nomenclature = "",
-                            latin_nomenclature = "" ,
+                            latin_nomenclature = "",
                             chords_lyrics_e = "",
                             chords_lyrics_l = "",
-                            lyrics ="",
+                            lyrics = "",
 
                             )
-audioProcViewModel.addNewAudioProc(audioP)
-                       generatedFilesViewModel.generatePDFs(
-                            context, audioP.id,
-                            audioP.displayName, audioP.artist,
-                            audioP.data, audioP.duration,
-                            audioP.title, "", "", "", "", "", response
+                        audioProcViewModel.addNewAudioProc(audioP)
+                        generatedFilesViewModel.generatePDFs(
+                            context,
+                            audioP.id,
+                            audioP.displayName,
+                            audioP.artist,
+                            audioP.data,
+                            audioP.duration,
+                            audioP.title,
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            response
                         )
 
-                        println("AudiioP en player $audioP")
-                        pdfScreenIntent.putExtra("Audio", audioP)
+                        if (generatedFilesViewModel.isCreationCompletedOfPDFs.value) {
+                            generatedFilesViewModel.UploadPDFsInBD(
+                                audioP.id,
+                                audioP.displayName,
+                                audioP.artist,
+                                audioP.data,
+                                audioP.duration,
+                                audioP.title,
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                generatedFilesViewModel.listPDF
+                            )
 
-                        //datos del audio
-                        /*pdfScreenIntent.putExtra("AudioProc_id", audio.id)
-                        pdfScreenIntent.putExtra("AudioProc_displayName", audio.displayName)
-                        pdfScreenIntent.putExtra("AudioProc_artist", audio.artist)
-                        pdfScreenIntent.putExtra("AudioProc_data", audio.data)
-                        pdfScreenIntent.putExtra("AudioProc_duration", audio.duration)
-                        pdfScreenIntent.putExtra("AudioProc_title", audio.title)*/
+                            if (!generatedFilesViewModel.isUploadingCompletedOnDB.value){
+                                println("ENTRE A LANZAR")
+                                pdfScreenIntent.putExtra("Audio",
+                                    generatedFilesViewModel.audiosProc[generatedFilesViewModel.audiosProc.lastIndex]
+                                )
+                                startActivity(context, pdfScreenIntent, null)
+                            }
 
-                        //lanzamos actividad
-                        startActivity(context, pdfScreenIntent, null)
+
+                        }
+
+
+
+
+
+
+
+
                     }
                 } ?: Text(
                     text = "AUDIO COMPLETO",

@@ -34,73 +34,78 @@ class GeneratedFilesRepository
 @Inject
 constructor(
     private val processedAudioList: CollectionReference
-
 ) {
 
-       fun addNewGeneratedFiles(audio: AudioProc, mUri: Uri, pre: String, file: File):AudioProc {
+
+    suspend fun addNewGeneratedFiles(
+        audio: AudioProc,
+        mUri: Uri,
+        pre: String,
+        file: File
+    ): AudioProc {
         val folder: StorageReference = FirebaseStorage.getInstance().reference.child(audio.title)
         val path = mUri.lastPathSegment.toString()
         val fileName: StorageReference = folder.child(path.substring(path.lastIndexOf('/') + 1))
-           var audioP = audio
-           fileName.putFile(mUri).addOnSuccessListener {
-            fileName.downloadUrl.addOnSuccessListener {
-                 audioP = audio
-                when (pre) {
-                    "Lyrics" -> {
-                        audioP.lyrics = "${it}"
-                        audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
-                        audioP.english_nomenclature = "${audio.english_nomenclature}"
-                        audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
-                        audioP.latin_nomenclature = "${audio.latin_nomenclature}"
-                    }
-                    "LyricChordE" -> {
-                        audioP.chords_lyrics_e = "${it}"
-                        audioP.lyrics = "${audio.lyrics}"
-                        audioP.english_nomenclature = "${audio.english_nomenclature}"
-                        audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
-                        audioP.latin_nomenclature = "${audio.latin_nomenclature}"
-                    }
-                    "ChordsE" -> {
-                        audioP.english_nomenclature = "${it}"
-                        audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
-                        audioP.lyrics = "${audio.lyrics}"
-                        audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
-                        audioP.latin_nomenclature = "${audio.latin_nomenclature}"
-                    }
-                    "LyricChordL" -> {
-                        audioP.chords_lyrics_l = "${it}"
-                        audioP.english_nomenclature = "${audio.english_nomenclature}"
-                        audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
-                        audioP.lyrics = "${audio.lyrics}"
-                        audioP.latin_nomenclature = "${audio.latin_nomenclature}"
-                    }
-                    "ChordsL" -> {
-                        audioP.latin_nomenclature = "${it}"
-                        audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
-                        audioP.english_nomenclature = "${audio.english_nomenclature}"
-                        audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
-                        audioP.lyrics = "${audio.lyrics}"
-                    }
-                    else -> {
-                        audioP.latin_nomenclature = "${audio.latin_nomenclature}"
-                        audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
-                        audioP.english_nomenclature = "${audio.english_nomenclature}"
-                        audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
-                        audioP.lyrics = "${audio.lyrics}"
-                    }
-                }
-               file.delete()
-                try {
-                    processedAudioList.document("${audioP.id}").set(audioP)
-                }catch (e: Exception) {
-                    e.printStackTrace()
-                }
+        var audioP = audio
+
+
+        fileName.putFile(mUri).await()
+        val downloadURl = fileName.downloadUrl.await()
+
+
+        audioP = audio
+        println("AUDIO REPO:::: $audioP")
+        when (pre) {
+            "Lyrics" -> {
+                audioP.lyrics = "${downloadURl}"
+                audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
+                audioP.english_nomenclature = "${audio.english_nomenclature}"
+                audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
+                audioP.latin_nomenclature = "${audio.latin_nomenclature}"
             }
-
+            "LyricChordE" -> {
+                audioP.chords_lyrics_e = "${downloadURl}"
+                audioP.lyrics = "${audio.lyrics}"
+                audioP.english_nomenclature = "${audio.english_nomenclature}"
+                audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
+                audioP.latin_nomenclature = "${audio.latin_nomenclature}"
+            }
+            "ChordsE" -> {
+                audioP.english_nomenclature = "${downloadURl}"
+                audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
+                audioP.lyrics = "${audio.lyrics}"
+                audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
+                audioP.latin_nomenclature = "${audio.latin_nomenclature}"
+            }
+            "LyricChordL" -> {
+                audioP.chords_lyrics_l = "${downloadURl}"
+                audioP.english_nomenclature = "${audio.english_nomenclature}"
+                audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
+                audioP.lyrics = "${audio.lyrics}"
+                audioP.latin_nomenclature = "${audio.latin_nomenclature}"
+            }
+            "ChordsL" -> {
+                audioP.latin_nomenclature = "${downloadURl}"
+                audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
+                audioP.english_nomenclature = "${audio.english_nomenclature}"
+                audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
+                audioP.lyrics = "${audio.lyrics}"
+            }
+            else -> {
+                audioP.latin_nomenclature = "${audio.latin_nomenclature}"
+                audioP.chords_lyrics_l = "${audio.chords_lyrics_l}"
+                audioP.english_nomenclature = "${audio.english_nomenclature}"
+                audioP.chords_lyrics_e = "${audio.chords_lyrics_e}"
+                audioP.lyrics = "${audio.lyrics}"
+            }
         }
-           return audioP
-
-       }
+        try {
+            processedAudioList.document("${audioP.id}").set(audioP).await()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return audioP
+    }
 
     fun getJsonDataFramAsset(context: Context, fileName: String): String? {
         val jsonString: String

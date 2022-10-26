@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -34,22 +35,9 @@ class GeneratedFilesViewModel @Inject constructor(
     private val generatedFilesRepository: GeneratedFilesRepository,
 ) : ViewModel() {
 
-    private val _state: MutableState<AudioProcessedListState> = mutableStateOf(
-        AudioProcessedListState()
-    )
-    val state: State<AudioProcessedListState> = _state
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing
-    val isDescending = mutableStateOf(true)
-
-    val deletedElement = mutableStateOf(false)
-
-
-    var isLoading = mutableStateOf(false)
-    var isCompleted = mutableStateOf(false)
-    val isCreatingPDFs = mutableStateOf<Boolean?>(value = null)
-
+    val isCreationCompletedOfPDFs = mutableStateOf<Boolean>(value = false)
+    var audiosProc = mutableStateListOf<AudioProc>()
+    val isUploadingCompletedOnDB = mutableStateOf<Boolean>(value = true)
     var listPDF = emptyList<File>()
 
 
@@ -68,89 +56,91 @@ class GeneratedFilesViewModel @Inject constructor(
         lyrics: String,
         ChordsWordsJson: String
     ) {
+        isCreationCompletedOfPDFs.value = false
 
-        println("Valor de estado creating: ${isCreatingPDFs.value}")
-        isCreatingPDFs.value = true
+        listPDF = generatedFilesRepository.generatePDFs(
+            context = context,
+            id = id,
+            displayName = displayName,
+            artist = artist,
+            data = data,
+            duration = duration,
+            title = title,
+            english_nomenclature = english_nomenclature,
+            latin_nomenclature = latin_nomenclature,
+            chords_lyrics_e = chords_lyrics_e,
+            chords_lyrics_l = chords_lyrics_l,
+            lyrics = lyrics,
+            ChordsWordsJson = ChordsWordsJson
+        )
+        isCreationCompletedOfPDFs.value = true
+    }
 
-        // isCreatingPDFs.value = false
+    fun UploadPDFsInBD(
+        id: Long,
+        displayName: String,
+        artist: String,
+        data: String,
+        duration: Int,
+        title: String,
+        english_nomenclature: String,
+        latin_nomenclature: String,
+        chords_lyrics_e: String,
+        chords_lyrics_l: String,
+        lyrics: String,
+        listPDF: List<File>
+    ) = viewModelScope.launch {
 
-                listPDF = generatedFilesRepository.generatePDFs(
-                    context = context,
-                    id = id,
-                    displayName = displayName,
-                    artist = artist,
-                    data = data,
-                    duration = duration,
-                    title = title,
-                    english_nomenclature = english_nomenclature,
-                    latin_nomenclature = latin_nomenclature,
-                    chords_lyrics_e = chords_lyrics_e,
-                    chords_lyrics_l = chords_lyrics_l,
-                    lyrics = lyrics,
-                    ChordsWordsJson = ChordsWordsJson
-                )
-                var audio = AudioProc(
-                    id = id,
-                    displayName = displayName,
-                    artist = artist,
-                    data = data,
-                    duration = duration,
-                    title = title,
-                    english_nomenclature = english_nomenclature,
-                    latin_nomenclature = latin_nomenclature,
-                    chords_lyrics_e = chords_lyrics_e,
-                    chords_lyrics_l = chords_lyrics_l,
-                    lyrics = lyrics,
-                )
+        var audio = AudioProc(
+            id = id,
+            displayName = displayName,
+            artist = artist,
+            data = data,
+            duration = duration,
+            title = title,
+            english_nomenclature = english_nomenclature,
+            latin_nomenclature = latin_nomenclature,
+            chords_lyrics_e = chords_lyrics_e,
+            chords_lyrics_l = chords_lyrics_l,
+            lyrics = lyrics,
+        )
         var listPre =
             mutableListOf<String>("Lyrics", "LyricChordE", "LyricChordL", "ChordsE", "ChordsL")
         var cont = 0
 
+        println("isUploadingCompletedOnDB.value >>>>>> ${isUploadingCompletedOnDB.value} ")
         for (item in listPDF) {
             println("Archivos: ${item.toPath()}")
-            audio =  generatedFilesRepository.addNewGeneratedFiles(
-                audio = audio,
-                item.toUri(),
-                listPre[cont],
-                item
-            )
+            kotlin.runCatching {
+                generatedFilesRepository.addNewGeneratedFiles(
+                    audio = audio,
+                    item.toUri(),
+                    listPre[cont],
+                    item
+                )
+
+            }.onSuccess {
+                audiosProc.add(it)
+            }.onFailure {
+                println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
+            }
+
+
+            println("AUDIO CHORDS E $cont >>>>>>>>>>> ${audio.chords_lyrics_e}")
+            println("AUDIO >>>>>>>>>>> ${audio}")
             cont++
         }
-        println("Terminé ${isCreatingPDFs.value}")
+
+        isUploadingCompletedOnDB.value = false
+        println("isUploadingCompletedOnDB.value ACABE >>>>>> ${isUploadingCompletedOnDB.value} ")
 
     }
 
- fun update(  id: Long,
-              displayName: String,
-              artist: String,
-              data: String,
-              duration: Int,
-              title: String,
-              english_nomenclature: String,
-              latin_nomenclature: String,
-              chords_lyrics_e: String,
-              chords_lyrics_l: String,
-              lyrics: String,):AudioProc{
-
-     var audioT = AudioProc(
-         id = id,
-         displayName = displayName,
-         artist = artist,
-         data = data,
-         duration = duration,
-         title = title,
-         english_nomenclature = english_nomenclature,
-         latin_nomenclature = latin_nomenclature,
-         chords_lyrics_e = chords_lyrics_e,
-         chords_lyrics_l = chords_lyrics_l,
-         lyrics = lyrics,
-     )
 
 
-     return audioT
 
 
- }
+
     fun deletePDF(audioProc: AudioProc) {
         generatedFilesRepository.deleteData(audioProc = audioProc)
     }
