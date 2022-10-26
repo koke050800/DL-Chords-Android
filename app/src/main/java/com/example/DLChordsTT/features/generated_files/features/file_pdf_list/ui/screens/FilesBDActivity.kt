@@ -98,6 +98,7 @@ class FilesBDActivity : ComponentActivity() {
                             )
                             contador++
                         }
+
                     } else {
                         Column() {
                             Card() {
@@ -109,8 +110,10 @@ class FilesBDActivity : ComponentActivity() {
 
                     if (!generatedFilesViewModel.isUploadingPDFsOnDB.value) {
                         audioFinal.value = generatedFilesViewModel.audiosProc[generatedFilesViewModel.audiosProc.lastIndex]
+                        audioProcViewModel.addNewAudioProc(audioFinal.value)
                         openDialogProcessing.value = false
                     }
+                  //  audioProcViewModel.addNewAudioProc(audioFinal.value)
                     AlertDialogProcessing2(openDialogProcessing = openDialogProcessing)
                     FilesBDScreen(audio = audioFinal.value, generatedFilesViewModel)
                 }

@@ -56,11 +56,6 @@ class holiActivity : ComponentActivity() {
         )
 
         setContent {
-            if (responseWhitLyricChords != null) {
-                audioViewModel.addNewAudioProc(audioP)
-                generatedFilesViewModel.generatePDFs(LocalContext.current,audioP.id,audioP.displayName,audioP.artist,audioP.data,audioP.duration,
-                    audioP.title,"","","","","",responseWhitLyricChords)
-            }
 
             DLChordsTheme {
 

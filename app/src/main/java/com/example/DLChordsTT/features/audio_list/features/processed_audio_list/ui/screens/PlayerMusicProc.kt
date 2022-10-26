@@ -96,7 +96,7 @@ fun PlayerMusicProcessed(
                                 displayName = audio.displayName,
                                 artist = audio.artist,
                                 data = audio.data,
-                                duration = 344324,
+                                duration = audio.duration,
                                 title = audio.title,
 
                                 )

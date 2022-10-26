@@ -35,7 +35,19 @@ class GeneratedFilesRepository
 constructor(
     private val processedAudioList: CollectionReference
 ) {
-
+    var audioFinal = AudioProc(
+        id = 0,
+        displayName = "displayName",
+        artist = "artist",
+        data = "data",
+        duration = 0,
+        title = "title",
+        english_nomenclature = "english_nomenclature",
+        latin_nomenclature = "latin_nomenclature",
+        chords_lyrics_e = "chords_lyrics_e",
+        chords_lyrics_l = "chords_lyrics_l",
+        lyrics = "lyrics"
+    )
 
     suspend fun addNewGeneratedFiles(
         audio: AudioProc,
@@ -99,12 +111,20 @@ constructor(
                 audioP.lyrics = "${audio.lyrics}"
             }
         }
+        audioFinal = audioP
+        println("Entre aqui 7 : $audioFinal")
+        return audioFinal
+    }
+
+    suspend fun uploadtoFirebase(audioP: AudioProc){
         try {
+            if(audioP.lyrics.isNotEmpty()){
             processedAudioList.document("${audioP.id}").set(audioP).await()
+                println("Subí el archivo")
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        return audioP
     }
 
     fun getJsonDataFramAsset(context: Context, fileName: String): String? {
@@ -319,7 +339,6 @@ constructor(
         try {
             pdfDocument.writeTo(FileOutputStream(file))
             return file
-            //  addNewGeneratedFiles(audio = audio, file.toUri(), "Lyrics", file)
         } catch (e: Exception) {
             e.printStackTrace()
             return file
@@ -560,7 +579,6 @@ constructor(
         try {
             pdfDocument.writeTo(FileOutputStream(file))
            return file
-            //addNewGeneratedFiles(audio = audio, file.toUri(), pre, file)
         } catch (e: Exception) {
             e.printStackTrace()
             return file
@@ -788,7 +806,6 @@ constructor(
         try {
             pdfDocument.writeTo(FileOutputStream(file))
             return file
-            //  addNewGeneratedFiles(audio = audio, file.toUri(), pre, file)
         } catch (e: Exception) {
             e.printStackTrace()
             return file
@@ -837,7 +854,7 @@ constructor(
         pdfList.add(createLyricsChordsPDF(context, audio, modelChordsEList, modelWordsList))
         pdfList.add(createLyricsChordsPDF(context, audio, modelChordsLList, modelWordsList, false))
 
-        println("getfinalaudio  en el generate${audio}")
+
 
         return pdfList
 

@@ -32,9 +32,9 @@ constructor(
         }
     }
 
-    fun addNewProcessedAudio(audioP: AudioProc) {
+   suspend fun addNewProcessedAudio(audioP: AudioProc) {
         try {
-            processedAudioList.document("" + audioP.id).set(audioP)
+            processedAudioList.document("" + audioP.id).set(audioP).await()
         } catch (e: Exception) {
             e.printStackTrace()
         }

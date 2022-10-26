@@ -94,7 +94,7 @@ class GeneratedFilesViewModel @Inject constructor(
         println("isUploadingPDFsOnDB.value >>>>>> ${isUploadingPDFsOnDB.value} ")
         for (item in listPDF) {
             kotlin.runCatching {
-                generatedFilesRepository.addNewGeneratedFiles(
+              generatedFilesRepository.addNewGeneratedFiles(
                     audio = audio,
                     item.toUri(),
                     listPre[cont],
@@ -102,6 +102,8 @@ class GeneratedFilesViewModel @Inject constructor(
                 )
             }.onSuccess {
                 audiosProc.add(it)
+                println("ya asigne archivo")
+                generatedFilesRepository.uploadtoFirebase(it)
             }.onFailure {
                 println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
             }
@@ -109,15 +111,11 @@ class GeneratedFilesViewModel @Inject constructor(
             cont++
         }
 
+
         isUploadingPDFsOnDB.value = false
         println("isUploadingPDFsOnDB.value ACABE >>>>>> ${isUploadingPDFsOnDB.value} ")
 
     }
-
-
-
-
-
 
     fun deletePDF(audioProc: AudioProc) {
         generatedFilesRepository.deleteData(audioProc = audioProc)

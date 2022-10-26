@@ -3,6 +3,7 @@ package com.example.DLChordsTT.features.audio_list.features.processed_audio_list
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -37,18 +39,16 @@ class AudioProcViewModel @Inject constructor(
     }
 
 
-    fun addNewAudioProc(audioP: AudioProc) {
+    fun addNewAudioProc(audioP: AudioProc)  = viewModelScope.launch  {
 
-        val audio = AudioProc(
-            id = audioP.id,
-            displayName = audioP.displayName,
-            artist = audioP.artist,
-            data = audioP.data,
-            duration = audioP.duration,
-            title = audioP.title,
-        )
-
-        audioprocRepository.addNewProcessedAudio(audio)
+        kotlin.runCatching {
+            println("addNewProc: $audioP")
+            audioprocRepository.addNewProcessedAudio(audioP)
+        }.onSuccess {
+            println("Ya agregué el rimer audio")
+        }.onFailure {
+            println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
+        }
 
     }
 
