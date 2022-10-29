@@ -104,6 +104,7 @@ class GeneratedFilesViewModel @Inject constructor(
                 audiosProc.add(it)
                 println("ya asigne archivo")
                 generatedFilesRepository.uploadtoFirebase(it)
+
             }.onFailure {
                 println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
             }
