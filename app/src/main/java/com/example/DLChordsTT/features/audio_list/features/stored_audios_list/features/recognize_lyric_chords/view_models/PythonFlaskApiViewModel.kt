@@ -19,7 +19,6 @@ class PythonFlaskApiViewModel @Inject constructor(
 
     val isScopeCompleted = mutableStateOf<Boolean?>(value = null)
     var responseUploadAudio = mutableStateOf<String?>(value = null)
-    //val haveErrorInPrediction = mutableStateOf<Boolean?>(value = null) TODO: Manejar errores onFailure
 
 
     fun uploadAudio(audio: Audio) = vmScope.launch {
@@ -37,11 +36,9 @@ class PythonFlaskApiViewModel @Inject constructor(
 
         }.onFailure {
             isScopeCompleted.value = true
-            //haveErrorInPrediction.value = true
 
             delay(100)
             isScopeCompleted.value = null
-            // haveErrorInPrediction.value = null
             println("Hubo un error al subir el audio $it")
         }
     }
@@ -66,11 +63,9 @@ class PythonFlaskApiViewModel @Inject constructor(
 
         }.onFailure {
             isScopeCompleted.value = true
-            //haveErrorInPrediction.value = true
 
             delay(100)
             isScopeCompleted.value = null
-            // haveErrorInPrediction.value = null
             println("Hubo un error al subir el audio $it")
         }
     }

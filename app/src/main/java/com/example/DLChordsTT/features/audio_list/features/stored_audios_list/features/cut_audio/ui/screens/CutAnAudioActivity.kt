@@ -26,7 +26,7 @@ class CutAnAudioActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
         val musicData = receiveMusic?.getLong("AudioId")
-        println(musicData)
+
         var cont = 0
         val isAscending = receiveMusic?.getBoolean("isAscending")
         val isAlreadyProcessed = receiveMusic?.getBoolean("isAlreadyProcessed") ?: false
@@ -56,7 +56,7 @@ class CutAnAudioActivity : ComponentActivity() {
                             }
                             cont += 1
                             if (!audioViewModel.isAudioPlaying && cont == 1) {
-                                println("ANDO PLAYEANDO DESDE LA ACTIVITY")
+
                                 audioProcessed?.let { it1 ->
                                     audioViewModel.playAudio(it1, false)
                                 }

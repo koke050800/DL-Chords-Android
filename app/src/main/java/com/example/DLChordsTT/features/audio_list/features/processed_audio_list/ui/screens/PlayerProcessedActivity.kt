@@ -26,7 +26,6 @@ class PlayerMusicProcessedActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val receiveMusic = intent.extras
         val musicData = receiveMusic?.getLong("AudioId")
-        println(musicData)
         var cont = 0
         val isAscending = receiveMusic?.getBoolean("isAscending")
         val isAlreadyProcessed = receiveMusic?.getBoolean("isAlreadyProcessed") ?: false

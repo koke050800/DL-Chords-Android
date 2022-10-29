@@ -124,7 +124,7 @@ fun PlayerMusicStored(
                 onClick = {
                     if (!isAlreadyProcessed) {
                      audioViewModel.playAudio(audio, false)
-                    println("Hellou man voy a pausar")
+
                     audioViewModel.playAudio(audio, true)
                     audioViewModel.isPlayingAgain.value = true
                     val cutAudio = Intent(context, CutAnAudioActivity::class.java)
@@ -215,66 +215,6 @@ fun PlayerMusicStored(
                         pdfScreenIntent.putExtra("Audio", audioP)
 
                         startActivity(context, pdfScreenIntent, null)
-
-
-                        /*var audioP = AudioProc(
-                            id = audio.id,
-                            displayName = audio.displayName,
-                            artist = audio.artist,
-                            data = audio.data,
-                            duration = audio.duration,
-                            title = audio.title,
-                            english_nomenclature = "",
-                            latin_nomenclature = "",
-                            chords_lyrics_e = "",
-                            chords_lyrics_l = "",
-                            lyrics = "",
-
-                            )
-                        audioProcViewModel.addNewAudioProc(audioP)
-                        generatedFilesViewModel.generatePDFs(
-                            context,
-                            audioP.id,
-                            audioP.displayName,
-                            audioP.artist,
-                            audioP.data,
-                            audioP.duration,
-                            audioP.title,
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            response
-                        )
-
-                        if (generatedFilesViewModel.isCreationCompletedOfPDFs.value) {
-                            generatedFilesViewModel.UploadPDFsInBD(
-                                audioP.id,
-                                audioP.displayName,
-                                audioP.artist,
-                                audioP.data,
-                                audioP.duration,
-                                audioP.title,
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                generatedFilesViewModel.listPDF
-                            )
-
-                            if (!generatedFilesViewModel.isUploadingPDFsOnDB.value){
-                                println("ENTRE A LANZAR")
-                                pdfScreenIntent.putExtra("Audio",
-                                    generatedFilesViewModel.audiosProc[generatedFilesViewModel.audiosProc.lastIndex]
-                                )
-                                startActivity(context, pdfScreenIntent, null)
-                            }
-
-
-                        }*/
-
                     }
                 } ?: Text(
                     text = "AUDIO COMPLETO",

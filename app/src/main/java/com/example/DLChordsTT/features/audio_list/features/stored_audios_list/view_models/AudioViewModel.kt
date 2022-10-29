@@ -119,7 +119,6 @@ class AudioViewModel @Inject constructor(
 
             isConnected.collect {
                 if (it) {
-                    println("EL COLLECT")
                     rootMediaId = serviceConnection.rootMediaId
                     serviceConnection.plaBackState.value?.apply {
                         currentPlayBackPosition = position
@@ -137,24 +136,21 @@ class AudioViewModel @Inject constructor(
 
     fun playAudio(currentAudio: Audio, isBack: Boolean) {
         serviceConnection.playAudio(storedAudioList)
-        println("currentAudioId ${currentAudio.id} and ${isPlayingAgain.value}")
         if (currentAudio.id == currentPlayingAudio.value?.id) {
-            println("entro aquí")
+
             if (isAudioPlaying) {
-                println("Hola pause")
+
                 serviceConnection.transportControl.stop()
             } else {
                 if (!isBack) {
                     serviceConnection.transportControl.play()
-                    println("si playé qlo")
+
                 } else {
                     println("ANDO QUERIENDO PLAYEAR DE NUEVO ${isBack}")
                 }
 
             }
         } else {
-            println("Ando acá")
-            println("currentPlayingAudioId ${currentPlayingAudio.value?.id}")
             if (!isBack) {
                 serviceConnection.transportControl
                     .playFromMediaId(
@@ -174,7 +170,6 @@ class AudioViewModel @Inject constructor(
                 currentPlayBackPosition = position
             }
             if ((lastPosition > position) && !isPlayingAgain.value) {
-                println("Last Position ${lastPosition} y la Position ${position} y quiero playear ${isPlayingAgain.value}")
                 currentPlayingAudio.value?.let {
                     playAudio(
                         it,
@@ -202,7 +197,7 @@ class AudioViewModel @Inject constructor(
     }
 
     fun seekTo(value: Float) {
-        println("HELLOUUUUUUU $value")
+
         serviceConnection.transportControl.seekTo(
             (currentDuration * value / 100f).toLong()
         )
