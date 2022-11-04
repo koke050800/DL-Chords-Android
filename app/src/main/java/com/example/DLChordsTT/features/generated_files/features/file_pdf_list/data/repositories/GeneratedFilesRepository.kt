@@ -97,7 +97,9 @@ constructor(
                 audio.lyrics = audio.lyrics
             }
         }
+
         audioFinal = audio
+
         return audioFinal
     }
 
@@ -105,7 +107,7 @@ constructor(
         try {
             if (audioP.lyrics.isNotEmpty()) {
                 processedAudioList.document("${audioP.id}").set(audioP).await()
-            }
+        }
         } catch (e: Exception) {
             e.printStackTrace()
         }
@@ -488,55 +490,96 @@ constructor(
         nom: Boolean = true
     ): File {
 
-        val wordsList = mutableListOf<String>()
 
-        for (i in 0 until (modelWordsList[modelWordsList.lastIndex].time_final * 10).roundToInt()) {
-            wordsList.add(i, " ")
+        val wordList = mutableListOf<Word>()
+
+        for (i in 0 .. (modelWordsList[modelWordsList.lastIndex].time_final * 10).roundToInt()) {
+            wordList.add(i, Word(" ",0.0,0.0))
         }
 
         for (i in 0 until modelWordsList.size) {
-            wordsList[(modelWordsList[i].time_init * 10).roundToInt()] = modelWordsList[i].word_result
-           }
-
-        var tamMax = 0
-        var comp = ""
-        var stringWords = ""
-
-        for (i in 0 until wordsList.size) {
-            if (i % 50 == 0 && i != 0) {
-                stringWords += wordsList[i] + "\n"
-                comp += wordsList[i] + "\n"
-                if (tamMax < comp.length) {
-                    tamMax = comp.length
-                }
-                comp = ""
-            } else {
-                stringWords += wordsList[i] +" "
-                comp += wordsList[i] +" "
+            if(wordList[(modelWordsList[i].time_init * 10).roundToInt()].word_result == " "){
+                wordList[(modelWordsList[i].time_init * 10).roundToInt()] = modelWordsList[i]
             }
-
+            else{
+                if((modelWordsList[i].time_init * 10).roundToInt()+1<wordList.size){
+                wordList[(modelWordsList[i].time_init * 10).roundToInt()+1] = modelWordsList[i]}
+                else{
+                    wordList.add((modelWordsList[i].time_init * 10).roundToInt()+1,modelWordsList[i])
+                }
+            }
         }
 
-        val arrayText = stringWords.split("\n")
+
+        var tamMax = 0
+        var stringWords = " "
+        var stringTemp = " "
+        for((i, item) in wordList.withIndex()){
+            if(i%50 == 0 && i!=0 ){
+                stringWords+= item.word_result +"\n"
+                stringTemp+= item.word_result +"\n"
+                if(tamMax<stringTemp.length){
+                    tamMax=stringTemp.length
+                }
+                stringTemp=""
+            }else if(i==wordList.size-1){
+                stringWords+= item.word_result+"\n"
+                stringTemp+= item.word_result+"\n"
+                if(tamMax<stringTemp.length){
+                    tamMax=stringTemp.length
+                }
+                stringTemp=""
+            }
+            else{
+                stringWords+= item.word_result
+                stringTemp+= item.word_result
+            }
+        }
+
+        val arrayWord = stringWords.split("\n")
 
         val chordsList2 = mutableListOf<String>()
-
         for (i in 0 until (modelChordsList[modelChordsList.lastIndex].time_final * 10).roundToInt()) {
             chordsList2.add(i, " ")
         }
-        var lineschord=0
         for (i in 0 until modelChordsList.size) {
             chordsList2[(modelChordsList[i].time_init * 10).roundToInt()] = modelChordsList[i].chord_result
         }
+        var lineschord=0
         for (i in 0 until chordsList2.size){
             if(i%50==0 && i!=0){
                 lineschord++
             }
         }
 
+        var stringtemp2 = ""
+        var stringChords2 = ""
+        for (i in 0 until tamMax * lineschord) {
+            if(i<chordsList2.size){
+                if (i % 50 == 0 && i != 0) {
+                    stringtemp2 += "${chordsList2[i]} \n"
+                    stringChords2 += stringtemp2
+                    stringtemp2 = " "
+                } else {
+                    stringtemp2 += chordsList2[i]
+                }
+            }
+            else{
+                chordsList2.add(i," ")
+                if (i % 50 == 0 && i != 0) {
+                    stringtemp2 += "  \n"
+                    stringChords2 += stringtemp2
+                    stringtemp2 = " "
+                } else {
+                    stringtemp2 += " "
+                }
+            }
 
+        }
+        val arrayChords2 = stringChords2.split("\n")
+
+        val lines = Math.max(lineschord,arrayWord.size)
         var stringtimeline = " "
-        val lines = Math.max(lineschord,arrayText.size)
         for (i in 0..lines) {
             when ((i * 5).toString().length) {
                 1 -> {
@@ -548,14 +591,14 @@ constructor(
                 }
                 2 -> {
                     stringtimeline += " ${i * 5}  < "
-                    for (s: Int in 0 until tamMax) {
+                    for (s in 0 until tamMax) {
                         stringtimeline += "-"
                     }
                     stringtimeline += " > ${(i + 1) * 5}  \n "
                 }
                 3 -> {
                     stringtimeline += " ${i * 5} < "
-                    for (s: Int in 0 until tamMax) {
+                    for (s in 0 until tamMax) {
                         stringtimeline += "-"
                     }
                     stringtimeline += " > ${(i + 1) * 5} \n "
@@ -565,40 +608,40 @@ constructor(
 
         val arraytimeline = stringtimeline.split("\n")
 
+
         val chordsList = mutableListOf<String>()
 
-        for (i in 0 until (tamMax * lines)) {
+        for (i in 0 until arrayChords2.size*tamMax) {
             chordsList.add(i, " ")
         }
 
-        for (i in 0 until chordsList2.size) {
-            chordsList[i * chordsList.size / chordsList2.size] = chordsList2[i]
+        for( i in 0 until chordsList2.size){
+            chordsList[i*chordsList.size/chordsList2.size] = chordsList2[i]
         }
+
 
 
         var stringtemp = ""
         var stringChords = ""
         for (i in 0 until chordsList.size) {
             if (i % tamMax == 0 && i != 0) {
-                stringtemp += "\n"
+                stringtemp += "${chordsList[i]} \n"
                 stringChords += stringtemp
                 stringtemp = ""
             } else {
                 stringtemp += chordsList[i]
-
             }
         }
         val arrayChords = stringChords.split("\n")
 
-
-        val h = (tamMax * 7)
+        val h: Int = (tamMax * 7)
         val pdfDocument = PdfDocument()
         val title = TextPaint()
         val text = TextPaint()
         val chords = TextPaint()
         val timeline = TextPaint()
         var npage = 0
-        var pageInfo = PdfDocument.PageInfo.Builder(h + 80, 1700, npage).create()
+        var pageInfo = PdfDocument.PageInfo.Builder(1054 + 80, 1700, npage).create()
         var page = pdfDocument.startPage(pageInfo)
         var canvas = page.canvas
 
@@ -617,7 +660,7 @@ constructor(
         text.textSize = 12f
 
         //  var arrayChords = stringChords.split("\n")
-        val tam = Math.max(Math.max(arrayChords.size, arrayText.size), arraytimeline.size)
+        val tam = Math.max(arrayWord.size, arraytimeline.size)
         var contC = 0
         var x: Float
         var y = 130f
@@ -632,11 +675,11 @@ constructor(
                 y += 10
                 x = 85f
                 if (i < arrayChords.size) {
-                    canvas.drawText(arrayChords[i], x, y, chords)
+                   canvas.drawText(arrayChords[i], x, y, chords)
                 }
                 y += 12
-                if (i < arrayText.size) {
-                    canvas.drawText(arrayText[i], x, y, text)
+                if (i < arrayWord.size) {
+                    canvas.drawText(arrayWord[i], x, y, text)
                 }
                 y += 30
             } else {
@@ -647,11 +690,11 @@ constructor(
                 y += 10
                 x = 85f
                 if (i < arrayChords.size) {
-                    canvas.drawText(arrayChords[i], x, y, chords)
+                   canvas.drawText(arrayChords[i], x, y, chords)
                 }
                 y += 12
-                if (i < arrayText.size) {
-                    canvas.drawText(arrayText[i], x, y, text)
+                if (i < arrayWord.size) {
+                    canvas.drawText(arrayWord[i], x, y, text)
                 }
                 y += 40
                 if (y >= 1500f) {
@@ -707,7 +750,7 @@ constructor(
         val modelWordsList: MutableList<Word> = getListModelWord(context, ChordsWordsJson)
         val modelChordsLList: MutableList<Chord> = getListModelChordLat(context, ChordsWordsJson)
 
-      /*  println("Tamaño modelChordsE: ${modelChordsEList.size}")
+     /*  println("Tamaño modelChordsE: ${modelChordsEList.size}")
         for (i in 0 until modelChordsEList.size) {
             println(
                 "getListModel -- ChordsE: ${modelChordsEList[i].chord_result} -- ${
