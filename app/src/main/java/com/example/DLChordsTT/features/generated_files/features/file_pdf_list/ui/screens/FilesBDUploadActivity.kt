@@ -6,15 +6,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.*
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.data.models.AudioProc
 import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.view_models.AudioProcViewModel
-import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
-import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing2
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogErrorResponse
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogGeneratorOfPDFs
 import com.example.DLChordsTT.features.audio_list.ui.screens.FilesBDScreen
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.view_models.GeneratedFilesViewModel
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
@@ -52,7 +50,8 @@ class FilesBDUploadActivity : ComponentActivity() {
 
 
         setContent {
-            val openDialogProcessing = remember { mutableStateOf(true) }
+            val openDialogGeneratorOfPDFs = remember { mutableStateOf(true) }
+            val openDialogError= remember { mutableStateOf(false) }
             val audioFinal = mutableStateOf<AudioProc>(audioP)
             var contador = 0
 
@@ -107,13 +106,22 @@ class FilesBDUploadActivity : ComponentActivity() {
                         }
                     }
 
-                    if (!generatedFilesViewModel.isUploadingPDFsOnDB.value) {
+                    if (!generatedFilesViewModel.isUploadingPDFsOnDB.value && !generatedFilesViewModel.errorUploadPDFsOnDB.value) {
                         audioFinal.value = generatedFilesViewModel.audiosProc[generatedFilesViewModel.audiosProc.lastIndex]
                         audioProcViewModel.addNewAudioProc(audioFinal.value)
-                        openDialogProcessing.value = false
+                        openDialogGeneratorOfPDFs.value = false
+                    }else if (!generatedFilesViewModel.isUploadingPDFsOnDB.value && generatedFilesViewModel.errorUploadPDFsOnDB.value){
+                        openDialogGeneratorOfPDFs.value = false
+                        openDialogError.value = true
                     }
-                  //  audioProcViewModel.addNewAudioProc(audioFinal.value)
-                    AlertDialogProcessing2(openDialogProcessing = openDialogProcessing)
+                    //  audioProcViewModel.addNewAudioProc(audioFinal.value)
+                    AlertDialogGeneratorOfPDFs(openDialogGeneratorOfPDFs = openDialogGeneratorOfPDFs)
+                    AlertDialogErrorResponse(
+                        openDialogError = openDialogError,
+                        errorString = "Ocurrio un error de conexión con la base de datos, es posible que" +
+                                " uno o varios archivos no se puedan abrir o descargar. Procese el audio" +
+                                " nuevamente para mejores resultados."
+                    )
                     FilesBDScreen(audio = audioFinal.value, generatedFilesViewModel)
                 }
             }

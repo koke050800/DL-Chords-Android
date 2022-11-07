@@ -29,6 +29,7 @@ fun MenuStoredCards(
     expandedMenu: MutableState<Boolean>,
     openDialogProcessedAudio: MutableState<Boolean>,
     openDialogProcessing: MutableState<Boolean>,
+    openDialogError: MutableState<Boolean>,
     isAscending: Boolean
 ) {
     val context = LocalContext.current
@@ -77,7 +78,11 @@ fun MenuStoredCards(
                     } else {
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION"
-                        openDialogProcessing.value = false //cerrar el progressIndicator
+                        if (response.contains("RESPONSE NULL DESDE PREDICCION")){
+                            openDialogProcessing.value = false //cerrar el progressIndicator
+                            openDialogError.value = true
+                        }else{
+                            openDialogProcessing.value = false //cerrar el progressIndicator
                             pdfScreenIntent.putExtra("response", response)
                             var audioP = AudioProc(
                                 id = audio.id,
@@ -91,9 +96,11 @@ fun MenuStoredCards(
                                 chords_lyrics_e = "",
                                 chords_lyrics_l = "",
                                 lyrics ="",
-                                )
+                            )
                             pdfScreenIntent.putExtra("Audio", audioP)
-                        startActivity(context, pdfScreenIntent, null)
+                            startActivity(context, pdfScreenIntent, null)
+                        }
+
                     }
                 } ?: Text("Procesar audio completo", style = DLChordsTheme.typography.caption)
             }
