@@ -24,6 +24,7 @@ import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.da
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.cut_audio.ui.screens.CutAnAudioActivity
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogErrorResponse
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessedAudio
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
@@ -40,17 +41,19 @@ fun PlayerMusicStored(
     onProgressChange: (Float) -> Unit,
     audio: Audio,
     audioViewModel: AudioViewModel,
-    generatedFilesViewModel: GeneratedFilesViewModel,
-    audioProcViewModel: AudioProcViewModel,
     isAlreadyProcessed: Boolean,
     context: Context,
     pythonFlaskApiViewModel: PythonFlaskApiViewModel,
 ) {
     val openDialog = remember { mutableStateOf(false) }
+    val openDialogError = remember { mutableStateOf(false) }
     var scope = rememberCoroutineScope()
     val openDialogProcessing = remember { mutableStateOf(false) }
     val pdfScreenIntent =
-        Intent(context, FilesBDUploadActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+        Intent(
+            context,
+            FilesBDUploadActivity::class.java
+        ) // TODO: quitar holis activity y poner la de pdfs
     val activity = (LocalContext.current as? Activity)
 
     DLChordsTheme {
@@ -62,7 +65,12 @@ fun PlayerMusicStored(
                 .fillMaxWidth()
                 .padding(20.dp)
         ) {
-            TopAppBarPlayer(textOnTop = audio.title, audio = audio, audioViewModel = audioViewModel, isBack = true)
+            TopAppBarPlayer(
+                textOnTop = audio.title,
+                audio = audio,
+                audioViewModel = audioViewModel,
+                isBack = true
+            )
 
             Card(
                 shape = DLChordsTheme.shapes.medium,
@@ -72,7 +80,7 @@ fun PlayerMusicStored(
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 38.dp, bottom = 25.dp),
                 backgroundColor = Color(0xFFD9D9D9)
-                ) {
+            ) {
                 Image(
                     painter = painterResource(id = R.drawable.musicplayer_image),
                     "Player",
@@ -99,7 +107,10 @@ fun PlayerMusicStored(
                 Row(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = timeStampToDuration((progress.toLong() * audio.duration) / 100), style = DLChordsTheme.typography.caption)
+                    Text(
+                        text = timeStampToDuration((progress.toLong() * audio.duration) / 100),
+                        style = DLChordsTheme.typography.caption
+                    )
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         text = timeStampToDuration(audio.duration.toLong()),
@@ -109,6 +120,10 @@ fun PlayerMusicStored(
             }
 
             AlertDialogProcessedAudio(openDialogProcessedAudio = openDialog)
+            AlertDialogErrorResponse(
+                openDialogError = openDialogError,
+                errorString = "Error de conexión con el servidor"
+            )
 
             Text(
                 modifier = Modifier.padding(start = 45.dp),
@@ -123,14 +138,14 @@ fun PlayerMusicStored(
             Button(
                 onClick = {
                     if (!isAlreadyProcessed) {
-                     audioViewModel.playAudio(audio, false)
+                        audioViewModel.playAudio(audio, false)
 
-                    audioViewModel.playAudio(audio, true)
-                    audioViewModel.isPlayingAgain.value = true
-                    val cutAudio = Intent(context, CutAnAudioActivity::class.java)
-                    cutAudio.putExtra("AudioId", audio.id)
-                    cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
-                    context.startActivity(cutAudio)
+                        audioViewModel.playAudio(audio, true)
+                        audioViewModel.isPlayingAgain.value = true
+                        val cutAudio = Intent(context, CutAnAudioActivity::class.java)
+                        cutAudio.putExtra("AudioId", audio.id)
+                        cutAudio.putExtra("isAscending", audioViewModel.isAscending.value)
+                        context.startActivity(cutAudio)
                         activity?.finish()
 
                     } else {
@@ -193,28 +208,34 @@ fun PlayerMusicStored(
 
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION EN PLAYER MUSIC"
-                        openDialogProcessing.value = false //cerrar el progressIndicator
+                        if (response.contains("RESPONSE NULL DESDE PREDICCION")) {
+                            openDialogProcessing.value = false //cerrar el progressIndicator
+                            openDialogError.value = true
+                        } else {
+
+                            openDialogProcessing.value = false //cerrar el progressIndicator
 
 
-                        pdfScreenIntent.putExtra("response", response)
+                            pdfScreenIntent.putExtra("response", response)
 
-                        var audioP = AudioProc(
-                            id = audio.id,
-                            displayName = audio.displayName,
-                            artist = audio.artist,
-                            data = audio.data,
-                            duration = audio.duration,
-                            title = audio.title,
-                            english_nomenclature = "",
-                            latin_nomenclature = "",
-                            chords_lyrics_e = "",
-                            chords_lyrics_l = "",
-                            lyrics = "",
-                        )
+                            var audioP = AudioProc(
+                                id = audio.id,
+                                displayName = audio.displayName,
+                                artist = audio.artist,
+                                data = audio.data,
+                                duration = audio.duration,
+                                title = audio.title,
+                                english_nomenclature = "",
+                                latin_nomenclature = "",
+                                chords_lyrics_e = "",
+                                chords_lyrics_l = "",
+                                lyrics = "",
+                            )
 
-                        pdfScreenIntent.putExtra("Audio", audioP)
+                            pdfScreenIntent.putExtra("Audio", audioP)
 
-                        startActivity(context, pdfScreenIntent, null)
+                            startActivity(context, pdfScreenIntent, null)
+                        }
                     }
                 } ?: Text(
                     text = "AUDIO COMPLETO",

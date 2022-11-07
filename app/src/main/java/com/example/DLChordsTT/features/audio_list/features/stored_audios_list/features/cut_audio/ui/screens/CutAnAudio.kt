@@ -18,11 +18,11 @@ import com.example.DLChordsTT.features.audio_list.features.processed_audio_list.
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.data.models.Audio
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.features.recognize_lyric_chords.view_models.PythonFlaskApiViewModel
 import com.example.DLChordsTT.features.audio_list.features.stored_audios_list.view_models.AudioViewModel
+import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogErrorResponse
 import com.example.DLChordsTT.features.audio_list.ui.components.AlertDialogProcessing
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToDuration
 import com.example.DLChordsTT.features.audio_list.ui.components.timeStampToSeconds
 import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.FilesBDUploadActivity
-import com.example.DLChordsTT.features.generated_files.features.file_pdf_list.ui.screens.holiActivity
 import com.example.DLChordsTT.features.music_player.ui.components.TopAppBarPlayer
 import com.example.DLChordsTT.ui.theme.DLChordsTheme
 import kotlinx.coroutines.launch
@@ -37,11 +37,13 @@ fun CutAnAudioScreen(
     pythonFlaskApiViewModel: PythonFlaskApiViewModel,
 ) {
     val openDialogProcessing = remember { mutableStateOf(false) }
+    val openDialogError = remember { mutableStateOf(false) }
+
     var scope = rememberCoroutineScope()
 
     val context = LocalContext.current
     val pdfScreenIntent =
-        Intent(context, FilesBDUploadActivity::class.java) // TODO: quitar holis activity y poner la de pdfs
+        Intent(context, FilesBDUploadActivity::class.java)
 
     DLChordsTheme {
 
@@ -169,6 +171,7 @@ fun CutAnAudioScreen(
             }
 
             AlertDialogProcessing(openDialogProcessing = openDialogProcessing)
+            AlertDialogErrorResponse(openDialogError = openDialogError, errorString = "Error de conexión con el servidor")
 
             Button(
                 onClick = {
@@ -206,27 +209,32 @@ fun CutAnAudioScreen(
 
                         var response = pythonFlaskApiViewModel.responseUploadAudio?.value
                             ?: "RESPONSE NULL DESDE PREDICCION CUT AUDIO"
-                        openDialogProcessing.value = false //cerrar el progressIndicator
-                        pdfScreenIntent.putExtra("response", response)
+                        if (response.contains("RESPONSE NULL DESDE PREDICCION")){
+                            openDialogProcessing.value = false //cerrar el progressIndicator
+                            openDialogError.value = true
+                        }else {
+                            openDialogProcessing.value = false //cerrar el progressIndicator
+                            pdfScreenIntent.putExtra("response", response)
 
-                        var audioP = AudioProc(
-                            id = audio.id,
-                            displayName = audio.displayName,
-                            artist = audio.artist,
-                            data = audio.data,
-                            duration = audio.duration,
-                            title = audio.title,
-                            english_nomenclature = "",
-                            latin_nomenclature = "" ,
-                            chords_lyrics_e = "",
-                            chords_lyrics_l = "",
-                            lyrics ="",
+                            var audioP = AudioProc(
+                                id = audio.id,
+                                displayName = audio.displayName,
+                                artist = audio.artist,
+                                data = audio.data,
+                                duration = audio.duration,
+                                title = audio.title,
+                                english_nomenclature = "",
+                                latin_nomenclature = "",
+                                chords_lyrics_e = "",
+                                chords_lyrics_l = "",
+                                lyrics = "",
 
-                            )
-                        pdfScreenIntent.putExtra("Audio", audioP)
+                                )
+                            pdfScreenIntent.putExtra("Audio", audioP)
 
-                        //lanzamos actividad
-                        ContextCompat.startActivity(context, pdfScreenIntent, null)
+                            //lanzamos actividad
+                            ContextCompat.startActivity(context, pdfScreenIntent, null)
+                        }
                     }
                 } ?: Text(
                     text = "PROCESAR SELECCION",

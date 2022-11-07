@@ -42,6 +42,7 @@ fun StoredCard(
     var expandedMenu = remember { mutableStateOf(false) }
     val openDialogProcessedAudio = remember { mutableStateOf(false) }
     val openDialogProcessing = remember { mutableStateOf(false) }
+    val openDialogError= remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
@@ -111,12 +112,14 @@ fun StoredCard(
                     expandedMenu = expandedMenu,
                     openDialogProcessedAudio = openDialogProcessedAudio,
                     openDialogProcessing = openDialogProcessing,
+                    openDialogError = openDialogError,
                     isAscending = isAscending
                 )
 
             }
             AlertDialogProcessedAudio(openDialogProcessedAudio, expandedMenu)
             AlertDialogProcessing(openDialogProcessing = openDialogProcessing)
+            AlertDialogErrorResponse(openDialogError = openDialogError, errorString = "Error de conexión con el servidor")
         }
     }
 }
