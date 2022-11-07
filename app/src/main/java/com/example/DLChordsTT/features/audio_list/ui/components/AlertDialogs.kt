@@ -110,11 +110,11 @@ fun AlertDialogProcessing(
     }
 }
 @Composable
-fun AlertDialogProcessing2(
-    openDialogProcessing: MutableState<Boolean>,
+fun AlertDialogGeneratorOfPDFs(
+    openDialogGeneratorOfPDFs: MutableState<Boolean>,
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        if (openDialogProcessing.value) {
+        if (openDialogGeneratorOfPDFs.value) {
             Dialog(onDismissRequest = {},
                 content = {
                     Column(
@@ -143,6 +143,53 @@ fun AlertDialogProcessing2(
                                 )
                             }
 
+                        }
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun AlertDialogErrorResponse(
+    openDialogError: MutableState<Boolean>,
+    errorString: String,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        if (openDialogError.value) {
+            Dialog(onDismissRequest = {},
+                content = {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(1f)
+                            .fillMaxHeight(0.5f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        //CircularProgressIndicator()
+                        Card(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                            Column(Modifier.padding(all = 4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(
+                                    text = errorString,
+                                    style = DLChordsTheme.typography.caption,
+                                    color = DLChordsTheme.colors.onSurface,
+                                    modifier = Modifier.padding(all = 12.dp)
+                                )
+                                Button(
+                                    modifier = Modifier
+                                        .padding(bottom = 4.dp),
+                                    shape = CircleShape,
+                                    onClick = {
+                                        openDialogError.value = false
+                                    }) {
+                                    Text(
+                                        text = "Entendido",
+                                        style = DLChordsTheme.typography.button,
+                                        maxLines = 1,
+                                        color = DLChordsTheme.colors.onPrimary
+                                    )
+                                }
+                            }
                         }
                     }
                 }

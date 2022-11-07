@@ -21,6 +21,7 @@ class GeneratedFilesViewModel @Inject constructor(
     //val isCreationCompletedOfPDFs = mutableStateOf<Boolean>(value = false)
     var audiosProc = mutableStateListOf<AudioProc>()
     val isUploadingPDFsOnDB = mutableStateOf<Boolean>(value = true)
+    val errorUploadPDFsOnDB = mutableStateOf<Boolean>(value = false)
     var listPDF = emptyList<File>()
 
 
@@ -105,7 +106,7 @@ class GeneratedFilesViewModel @Inject constructor(
                 generatedFilesRepository.uploadtoFirebase(it)
 
             }.onFailure {
-                println("HUBO ERROR EN EL GENERATED FILES VIEW MODEL")
+                errorUploadPDFsOnDB.value = true
             }
             cont++
         }
