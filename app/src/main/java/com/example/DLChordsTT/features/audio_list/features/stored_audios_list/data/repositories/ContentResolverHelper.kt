@@ -22,6 +22,7 @@ constructor(@ApplicationContext val context: Context) {
         MediaStore.Audio.AudioColumns.DATA,
         MediaStore.Audio.AudioColumns.DURATION,
         MediaStore.Audio.AudioColumns.TITLE,
+        MediaStore.Audio.AudioColumns.SIZE,
     )
 
     private var selectionClause: String? =
@@ -62,6 +63,8 @@ constructor(@ApplicationContext val context: Context) {
                 cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.DURATION)
             val titleColumn =
                 cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.TITLE)
+            val sizeColumn =
+                cursor.getColumnIndexOrThrow(MediaStore.Audio.AudioColumns.SIZE)
 
             cursor.apply {
                 if (count == 0) {
@@ -78,17 +81,22 @@ constructor(@ApplicationContext val context: Context) {
                             MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                             id
                         )
+                        val size = getString(sizeColumn)
 
                         val audioTemp = Audio(
                             uri, displayName, id, artist, data, duration, title
                         )
 
+                        if(size.isNotEmpty())println("SIZE AUDIOS: $size -- $title")
+
                         if (audioTemp.data.contains("/storage/emulated/0/Music/DLChords")) {
+                            if(size.toInt() <= 50000000){
                             if (audioTemp.data.substring(audioTemp.data.length - 4).equals(".mp3")
                                 || (audioTemp.data.substring(audioTemp.data.length - 5).equals(".flac"))
                             ) {
                                 audioList += audioTemp
                             }
+                        }
                         }
                     }
 
