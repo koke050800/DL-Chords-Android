@@ -30,12 +30,12 @@ fun StoredAudiosScreen(
     audioStoredViewModel: AudioViewModel,
     pythonFlaskApiViewModel: PythonFlaskApiViewModel,
     alreadyProccessedAudios: AudioProcViewModel,
-    stateAlreadyProccessedAudios : AudioProcessedListState,
+    stateAlreadyProccessedAudios: AudioProcessedListState,
 ) {
     var storedAudioList = audioStoredViewModel.storedAudioList
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val focusManager = LocalFocusManager.current
-    var alreadyProccessedAudiosList =  stateAlreadyProccessedAudios.audioProcessedList
+    var alreadyProccessedAudiosList = stateAlreadyProccessedAudios.audioProcessedList
 
 
     Column(
@@ -78,14 +78,32 @@ fun StoredAudiosScreen(
                         }
                         resultList
                     }
-                    items(storedAudioListFiltered) { audioElementList: Audio ->
-                        StoredCard(
-                            audio = audioElementList,
-                            indexAudio = storedAudioList.indexOf(audioElementList),
-                            isAscending = audioStoredViewModel.isAscending.value,
-                            pythonFlaskApiViewModel = pythonFlaskApiViewModel,
-                            alreadyProcessedAudiosList = alreadyProccessedAudiosList,
-                        )
+                    if (storedAudioListFiltered.isEmpty()) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "No hay coincidencias",
+                                    style = DLChordsTheme.typography.h4,
+                                    color = DLChordsTheme.colors.primaryText,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
+                            }
+                        }
+                    } else {
+                        items(storedAudioListFiltered) { audioElementList: Audio ->
+                            StoredCard(
+                                audio = audioElementList,
+                                indexAudio = storedAudioList.indexOf(audioElementList),
+                                isAscending = audioStoredViewModel.isAscending.value,
+                                pythonFlaskApiViewModel = pythonFlaskApiViewModel,
+                                alreadyProcessedAudiosList = alreadyProccessedAudiosList,
+                            )
+                        }
                     }
                 } else {
                     item {

@@ -66,7 +66,6 @@ fun ProcessedAudiosScreen(
                 item { LabelAndDividerOfLists(label = "Audios Procesados") }
 
                 if (state.audioProcessedList.isNotEmpty()) {
-
                     val searchedText = textState.value.text
                     var processedAudioListFiltered = if (searchedText.isEmpty()) {
                         if (audioProcessedViewModel.isDescending.value) state.audioProcessedList else state.audioProcessedListInverted
@@ -82,20 +81,37 @@ fun ProcessedAudiosScreen(
                         resultList
                     }
 
-
-
-                    items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
-                        ProcessedCard(
-                            audio = audioElementList,
-                            index = audioElementList.id,
-                            isAscending = audioViewModel.isAscending.value,
-                            generatedFilesViewModel = generatedFilesViewModel,
-                            onClick = {
-                                generatedFilesViewModel.deletePDF(audioElementList)
-                                audioProcessedViewModel.getAudiosProcessedBD()
-                                audioProcessedViewModel.deletedElement.value = true
+                    if (processedAudioListFiltered.isEmpty()) {
+                        item {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = "No hay coincidencias",
+                                    style = DLChordsTheme.typography.h4,
+                                    color = DLChordsTheme.colors.primaryText,
+                                    modifier = Modifier.padding(vertical = 16.dp)
+                                )
                             }
-                        )
+                        }
+                    } else {
+
+                        items(items = processedAudioListFiltered) { audioElementList: AudioProc ->
+                            ProcessedCard(
+                                audio = audioElementList,
+                                index = audioElementList.id,
+                                isAscending = audioViewModel.isAscending.value,
+                                generatedFilesViewModel = generatedFilesViewModel,
+                                onClick = {
+                                    generatedFilesViewModel.deletePDF(audioElementList)
+                                    audioProcessedViewModel.getAudiosProcessedBD()
+                                    audioProcessedViewModel.deletedElement.value = true
+                                }
+                            )
+                        }
                     }
                 } else {
                     item {
