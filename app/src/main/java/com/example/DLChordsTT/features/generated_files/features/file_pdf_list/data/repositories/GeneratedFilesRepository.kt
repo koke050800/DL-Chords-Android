@@ -531,8 +531,8 @@ constructor(
                 stringTemp=""
             }
             else{
-                stringWords+= item.word_result
-                stringTemp+= item.word_result
+                stringWords+= item.word_result+" "
+                stringTemp+= item.word_result+" "
             }
         }
 
