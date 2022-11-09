@@ -641,7 +641,7 @@ constructor(
         val chords = TextPaint()
         val timeline = TextPaint()
         var npage = 0
-        var pageInfo = PdfDocument.PageInfo.Builder(1054 + 80, 1700, npage).create()
+        var pageInfo = PdfDocument.PageInfo.Builder(h + 80, 1700, npage).create()
         var page = pdfDocument.startPage(pageInfo)
         var canvas = page.canvas
 
