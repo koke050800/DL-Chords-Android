@@ -91,10 +91,10 @@ constructor(@ApplicationContext val context: Context) {
                         if (audioTemp.data.contains("/storage/emulated/0/Music/DLChords")) {
                             if (
                                 (audioTemp.data.substring(audioTemp.data.length - 4).equals(".mp3")
-                                        && size.toInt() <= 15000000)
+                                        && size.toInt() <= 15728640)
                                 || (audioTemp.data.substring(audioTemp.data.length - 5)
                                     .equals(".flac")
-                                        && size.toInt() <= 45000000)
+                                        && size.toInt() <= 47185920)
                             ) {
                                 audioList += audioTemp
                             }
