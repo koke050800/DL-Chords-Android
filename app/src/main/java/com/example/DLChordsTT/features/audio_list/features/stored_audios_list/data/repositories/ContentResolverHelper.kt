@@ -38,7 +38,6 @@ constructor(@ApplicationContext val context: Context) {
     }
 
 
-
     private fun getCursorData(): MutableList<Audio> {
         val audioList = mutableListOf<Audio>()
 
@@ -87,16 +86,19 @@ constructor(@ApplicationContext val context: Context) {
                             uri, displayName, id, artist, data, duration, title
                         )
 
-                        if(size.isNotEmpty())println("SIZE AUDIOS: $size -- $title")
+                        if (size.isNotEmpty()) println("SIZE AUDIOS: $size -- $title")
 
                         if (audioTemp.data.contains("/storage/emulated/0/Music/DLChords")) {
-                            if(size.toInt() <= 50000000){
-                            if (audioTemp.data.substring(audioTemp.data.length - 4).equals(".mp3")
-                                || (audioTemp.data.substring(audioTemp.data.length - 5).equals(".flac"))
+                            if (
+                                (audioTemp.data.substring(audioTemp.data.length - 4).equals(".mp3")
+                                        && size.toInt() <= 15000000)
+                                || (audioTemp.data.substring(audioTemp.data.length - 5)
+                                    .equals(".flac")
+                                        && size.toInt() <= 45000000)
                             ) {
                                 audioList += audioTemp
                             }
-                        }
+
                         }
                     }
 
