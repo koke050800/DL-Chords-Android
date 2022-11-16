@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 private const val URL = "http://192.168.43.156/"
 
 var client = OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS)
-    .readTimeout(360, TimeUnit.SECONDS).build();
+    .readTimeout(600, TimeUnit.SECONDS).build();
 
 
 interface PythonFlaskApi {
